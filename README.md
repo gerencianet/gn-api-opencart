@@ -1,4 +1,4 @@
-# Módulo Oficial da Gerencianet para o OpenCart - Versão 0.1.0 Beta #
+# Módulo de Integração Gerencianet para OpenCart - Versão 0.1.0 Beta #
 
 Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.1, 2.0.2.0, 2.0.3.1, 2.1.0.1 e 2.1.0.2.
 
