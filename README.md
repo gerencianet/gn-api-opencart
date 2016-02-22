@@ -4,9 +4,9 @@ Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.
 
 ## Instalação
 
-# Automática
+### Automática
 
-1. Baixe a [última versão](oc2.x/auto/gerencianet.ocmod.zip) do instalador automático do módulo.
+1. Baixe a [última versão](opencart-2.x/auto/gerencianet.ocmod.zip) do instalador automático do módulo.
 2. Na administração da loja OpenCart acesse o menu `System > Settings` (`Configurações > Lojas`), clique no botão `Edit` (`Editar`), e na aba **FTP**, preencha as informações de acesso ao ftp de sua hospedagem, com atenção especial ao campo FTP Root (Diretório FTP), que é caminho completo para o diretório raiz onde está instalado o seu OpenCart, depois clique no botão `Save` (`Salvar`).
 3. Acesse o menu `Extensions > Extension Installer` (`Extensões > Instalador`), clique no botão Upload e selecione o arquivo 'gn-api-opencart.ocmod.zip' (que você baixou no link citado anteriormente), e aguarde a conclusão da instalação automática.
 
@@ -15,9 +15,9 @@ Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.
 Atenção: Devido ao tamanho do arquivo de instalação do módulo, talvez seja necessário alterar o parâmetro `php_max_upload` do `php.ini` para no mínimo 3mb.
 
 
-# Manual
+### Manual
 
-1. Baixe a [última versão](oc2.x/manual/) dos arquivos do módulo.
+1. Baixe a [última versão](opencart-2.x/manual/) dos arquivos do módulo.
 2. Descompacte o arquivo baixado e realize o upload das pastas admin, catalog e lib para dentro do diretório principal do OpenCart*.
 
 *Caso você já tenha instalado o módulo da Gerencianet anteriormente, o sistema poderá informar que alguns arquivos serão sobrescritos. Não se preocupe, pois a instalação não afeterá nenhum arquivo que não seja do módulo da Gerencianet já existente em sua loja.
@@ -33,7 +33,7 @@ Três abas estarão disponíveis para realizar a configuração do módulo:
 * Credenciais
 * Status da Compra
 
-# Configurações Gerais
+### Configurações Gerais
 
 Nesta aba pode ser configurado as seguintes propriedades:
 * Modo: Determina se o módulo está em modo de testes. Em modo de teste você poderá gerar cobranças fictícias para testar o fluxo.
@@ -44,11 +44,11 @@ Nesta aba pode ser configurado as seguintes propriedades:
 * Ao atualizar, enviar email da sua loja automaticamente notificando o cliente: Notifica o cliente através de um email da sua loja quando uma atualização do status automática for realizada. Independente da opção, a Gerencianet enviará um email para o cliente informando sobre a cobrança.
 * Status: Determina se o módulo de pagamentos da Gerencianet está Ativo ou Inativo.
 
-# Credenciais
+### Credenciais
 
 Nesta aba é necessário informar as credenciais da sua aplicação e o identificador da conta, obtidos em sua Aplicação criada na Gerencianet.
 
-# Status da Compra
+### Status da Compra
 
 Nesta aba é realizada a configuração os Status de pagamento da Gerencianet com os Status de pagamento de sua loja. Assim, quando houver a alteração do status do pagamento na Gerencianet, automaticamente o status do pedido em sua loja será atualizado de acordo com as configurações definidas.
 
