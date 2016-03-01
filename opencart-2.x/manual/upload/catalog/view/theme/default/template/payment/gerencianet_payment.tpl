@@ -27,25 +27,73 @@
         </p>
 
       <?php } else { ?>
-      <div class="panel-group" id="accordion">
+      <div class="panel-group">
         <?php if ($gerencianet_payment_option_billet && $total_with_discount>5) { ?>
+
         <div class="panel panel-default" id="billet-option">
-          <div class="panel-heading panel-gerencianet gn-accordion-option-background" id="background-billet" name="background-billet">
-            <h4 class="panel-title"><i class="fa fa-credit-card"></i><?php echo $gn_pay_billet; ?></h4>
-          </div>
-          <div id="collapse-payment-billet" <?php if (!$gerencianet_payment_option_card) { ?>class="panel-collapse"<?php } else { ?>class="panel-collapse collapse in" style="height: 0px;" <?php } ?> >
-            <div class="panel-body"></div>
-          </div>
+          
+            <div class='panel-title gn-row' id="background-billet" name="background-billet">
+            <div class="gn-row-left panel-heading panel-gerencianet gn-accordion-option-background">
+                <div id="billet-radio-button" class="gn-left">
+                    <input type="radio" name="paymentMethodBilletRadio" id="paymentMethodBilletRadio" value="0" />
+                </div>
+                <div class="gn-left icon-gerencianet">
+                    <span class="icon-icones-personalizados_boleto"></span>
+                </div>
+                <div class="gn-left payment-option-gerencianet">
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="gn-row-right">
+                <div>
+                    <div class="gn-left gn-price-payment-info">
+                        <center><span class="payment-old-price-gerencianet"></span><br><span class="payment-discount-gerencianet"><b></b></span></center>
+                    </div>
+                    <div class="gn-right gn-price-payment-selected">
+                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            </div>
+            <div id="collapse-payment-billet" <?php if ($gerencianet_payment_option_card) { ?>class="gn-hide"<?php } ?> >
+                <div class="panel-body"></div>
+              </div>
+
         </div>
         <?php } ?>
         <?php if ($gerencianet_payment_option_card) { ?>
-        <div class="panel panel-default" id="card-option">
-          <div class="panel-heading panel-gerencianet gn-accordion-option-background" id="background-card" name="background-card">
-            <h4 class="panel-title"><?php echo $gn_pay_card; ?></h4>
-          </div>
-          <div id="collapse-payment-card" <?php if (!$gerencianet_payment_option_billet) { ?>class="panel-collapse"<?php } else { ?>class="panel-collapse collapse in" style="height: 0px;" <?php } ?> >
-            <div class="panel-body"></div>
-          </div>
+        <div class="panel panel-default gn-row gn-row-payment-method" id="card-option">
+
+          <div class='panel-title gn-row' id="background-card" name="background-card">
+            <div class="gn-row-left panel-heading panel-gerencianet gn-accordion-option-background">
+                <div id="card-radio-button" class="gn-left">
+                    <input type="radio" name="paymentMethodCardRadio" id="paymentMethodCardRadio" value="0" />
+                </div>
+                <div class="gn-left icon-gerencianet">
+                    <span class="icon-icones-personalizados_boleto"></span>
+                </div>
+                <div class="gn-left payment-option-gerencianet">
+                    
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="gn-row-right">
+                <div>
+                    <div class="gn-left gn-price-payment-info">
+                        <center><span class="payment-old-price-gerencianet"></span><br><span class="payment-discount-gerencianet"><b></b></span></center>
+                    </div>
+                    <div class="gn-right gn-price-payment-selected">
+                        
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            </div>
+            <div id="collapse-payment-card" <?php if ($gerencianet_payment_option_billet) { ?>class="gn-hide"<?php } ?> >
+                <div class="panel-body"></div>
+            </div>
         </div>
         <?php } ?>
         </div>
@@ -140,6 +188,8 @@
 
 $(document).ready(function() {
 
+    var active=0;
+
     $.ajax({
         url: 'index.php?route=payment/gerencianet/payment_billet_option',
         dataType: 'html',
@@ -196,33 +246,57 @@ $(document).ready(function() {
                 placeholder: "__/__/____"
             });
 
-            $('#collapse-payment-billet').parent().find('.panel-heading .panel-title').html('<div class="row row-select-payment-methods"><div id="billet-radio-button" class="pull-left payment-radio-option-gerencianet"><input type="radio" name="paymentMethodBilletRadio" id="paymentMethodBilletRadio" value="0" /></div><div class="pull-left icon-gerencianet"><span class="icon-icones-personalizados_boleto"></span></div><div class="pull-left payment-option-gerencianet"><a id="accordion-billet-click" href="#collapse-payment-billet" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $gn_pay_billet; ?></a></div><div class="pull-right"><div class="row"><div class="pull-left"><center><span class="payment-old-price-gerencianet"><?php if ($discount_span) { echo $total_paying_without_discount; } ?></span><br><span class="payment-discount-gerencianet"><b><?php echo $discount_span; ?></b></span></center></div><div class="pull-right total-gerencianet"><?php echo $total_paying_with_discount; ?></div></div></div></div>');
+            $('#billet-option').html('<div id="background-billet" name="background-billet" class="gn-accordion-option-background">' +
+                '<div class="gn-row-left panel-heading panel-gerencianet "' + 
+                '>' +
+                '<div id="billet-radio-button" class="gn-left">' +
+                    '<input type="radio" name="paymentMethodBilletRadio" id="paymentMethodBilletRadio" value="0" />' +
+                '</div>' +
+                '<div class="gn-left icon-gerencianet">' +
+                    '<span class="icon-icones-personalizados_boleto"></span>' +
+                '</div>' +
+                '<div class="gn-left payment-option-gerencianet">' +
+                    '<?php echo $gn_pay_billet; ?>' +
+                '</div>' +
+                '<div class="clear"></div>' +
+            '</div>' +
+            '<div class="gn-row-right">' +
+                '<div>' +
+                    '<div class="gn-left gn-price-payment-info">' +
+                        '<center><span class="payment-old-price-gerencianet"><?php if ($discount_span) { echo $total_paying_without_discount; } ?></span><br><span class="payment-discount-gerencianet"><b><?php echo $discount_span; ?></b></span></center>' +
+                    '</div>' +
+                    '<div class="gn-right gn-price-payment-selected total-gerencianet">' +
+                       '<?php echo $total_paying_with_discount; ?>' +
+                    '</div>' +
+                    '<div class="clear"></div>' +
+                '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div id="collapse-payment-billet" <?php if ($gerencianet_payment_option_card) { ?>class="gn-hide"<?php } ?>>' +
+                '<div class="panel-body">' + html + '</div>' +
+            '</div>');
 
-            $('a[href=\'#collapse-payment-billet\']').trigger('click');
-
-            $("#billet-radio-button").click(function() {
-                $('#accordion-billet-click').click();
-            });
-
-            var firstClickBillet=true;
-            $("#accordion-billet-click").click(function() {
-                if (firstClickBillet) {
-                    if ($('#collapse-payment-billet').height()>50) {
-                        $('#paymentMethodBilletRadio').prop('checked', false);
-                        $("#background-billet").css("background-color", "#FFFFFF");
-                        $('#price-no-payment-selected').show();
-                        $('#price-billet').hide();
-                    } else {
-                        $("#background-billet").css("background-color", "#f5f5f5");
-                        $('#paymentMethodBilletRadio').prop('checked', true);
-                        $('#price-billet').show();
-                        $('#price-card').hide();
-                        $('#price-no-payment-selected').hide();
-                        $('#paymentMethodCardRadio').prop('checked', false);
-                        $("#background-card").css("background-color", "#FFFFFF");
-                    }
+            $('#background-billet').click(function(e){
+                if (active!=1) {
+                    $('#collapse-payment-billet').slideDown();
+                    $('#collapse-payment-card').slideUp();
+                    $('#paymentMethodCardRadio').prop('checked', false);
+                    $('#paymentMethodBilletRadio').prop('checked', true);
+                    $("#background-card").css("background-color", "#ffffff");
+                    $("#background-billet").css("background-color", "#f5f5f5");
+                    $('#price-billet').show();
+                    $('#price-card').hide();
+                    $('#price-no-payment-selected').hide();
+                    active = 1;
                 } else {
-                    firstClickBillet=true;
+                    $('#collapse-payment-billet').slideUp();
+                    $('#paymentMethodCardRadio').prop('checked', false);
+                    $('#paymentMethodBilletRadio').prop('checked', false);
+                    $("#background-card").css("background-color", "#ffffff");
+                    $("#background-billet").css("background-color", "#ffffff");
+                    $('#price-billet').hide();
+                    $('#price-no-payment-selected').show();
+                    active = 0;
                 }
             });
 
@@ -251,46 +325,60 @@ $(document).ready(function() {
         url: 'index.php?route=payment/gerencianet/payment_card_option',
         dataType: 'html',
         success: function(html) {
-            $('#collapse-payment-card .panel-body').html(html);
+            $('#card-option').html('<div id="background-card" name="background-card" class="gn-accordion-option-background">' +
+                '<div class="gn-row-left panel-heading panel-gerencianet "' + 
+                '>' +
+                '<div id="card-radio-button" class="gn-left">' +
+                    '<input type="radio" name="paymentMethodCardRadio" id="paymentMethodCardRadio" value="0" />' +
+                '</div>' +
+                '<div class="gn-left icon-gerencianet">' +
+                    '<span class="icon-credit-card2"></span>' +
+                '</div>' +
+                '<div class="gn-left payment-option-gerencianet">' +
+                    '<?php echo $gn_pay_card; ?>' +
+                '</div>' +
+                '<div class="clear"></div>' +
+            '</div>' +
+            '<div class="gn-row-right">' +
+                '<div>' +
+                    '<div class="gn-left gn-price-payment-info">' +
+                        '<center><span class="payment-installments-gerencianet">Pague em até</span><br><span class="payment-discount-gerencianet"><b><?php echo $max_installments; ?></b></span></center>' +
+                    '</div>' +
+                    '<div class="gn-right gn-price-payment-selected total-gerencianet">' +
+                       '<?php echo $total_paying_without_discount; ?>' +
+                    '</div>' +
+                    '<div class="clear"></div>' +
+                '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div id="collapse-payment-card" <?php if ($gerencianet_payment_option_billet) { ?>class="gn-hide"<?php } ?>>' +
+                '<div class="panel-body">' + html + '</div>' +
+            '</div>');
 
-            $('#collapse-payment-card').parent().find('.panel-heading .panel-title').html('<div class="row row-select-payment-methods"><div id="card-radio-button" class="pull-left payment-radio-option-gerencianet"><input type="radio" name="paymentMethodCardRadio" id="paymentMethodCardRadio" value="0" /></div><div class="pull-left icon-gerencianet"><span class="icon-credit-card2"></span></div><div class="pull-left payment-option-gerencianet"><a id="accordion-card-click" href="#collapse-payment-card" data-toggle="collapse" data-parent="#accordion" class="accordion-toggle"><?php echo $gn_pay_card; ?></a></div><div class="pull-right"><div class="row"><div class="pull-left"><center><span class="payment-installments-gerencianet">Pague em até</span><br><span class="payment-discount-gerencianet"><b><?php echo $max_installments; ?></b></span></center></div><div class="pull-right total-gerencianet"><?php echo $total_paying_without_discount; ?></div></div></div></div>');
-
-            $('a[href=\'#collapse-payment-card\']').trigger('click');
-
-            $("#card-radio-button").click(function() {
-                $('#accordion-card-click').click();
-            });
-
-            var firstClickCard=true;
-            $("#accordion-card-click").click(function() {
-                if (firstClickCard) {
-                    if ($('#collapse-payment-card').height()>50) {
-                        $('#paymentMethodCardRadio').prop('checked', false);
-                        $("#background-card").css("background-color", "#FFFFFF");
-                        $('#price-no-payment-selected').show();
-                        $('#price-card').hide();
-                    } else {
-                        $("#background-card").css("background-color", "#f5f5f5");
-                        $('#paymentMethodCardRadio').prop('checked', true);
-                        $('#price-card').show();
-                        $('#price-billet').hide();
-                        $('#price-no-payment-selected').hide();
-                        $('#paymentMethodBilletRadio').prop('checked', false);
-                        $("#background-billet").css("background-color", "#FFFFFF");
-                    }
+            $('#background-card').click(function(e){
+                if (active!=2) {
+                    $('#collapse-payment-card').slideDown();
+                    $('#collapse-payment-billet').slideUp();
+                    $('#paymentMethodCardRadio').prop('checked', true);
+                    $('#paymentMethodBilletRadio').prop('checked', false);
+                    $("#background-card").css("background-color", "#f5f5f5");
+                    $("#background-billet").css("background-color", "#ffffff");
+                    $('#price-billet').hide();
+                    $('#price-card').show();
+                    $('#price-no-payment-selected').hide();
+                    active = 2;
                 } else {
-                    firstClickCard=true;
+                    $('#collapse-payment-card').slideUp();
+                    $('#paymentMethodCardRadio').prop('checked', false);
+                    $('#paymentMethodBilletRadio').prop('checked', false);
+                    $("#background-card").css("background-color", "#ffffff");
+                    $("#background-billet").css("background-color", "#ffffff");
+                    $('#price-card').hide();
+                    $('#price-no-payment-selected').show();
+                    active = 0;
                 }
             });
 
-            $("#background-card").css("background-color", "#FFFFFF");
-
-
-            <?php 
-            if (!isset($gerencianet_payment_option_billet) && isset($gerencianet_payment_option_card)) {?>
-                $('#accordion-card-click').click();
-            <?php } ?>
-            
 
             $('#pay_card_with_cnpj').click(function() {
                 if ($(this).is(':checked')) {
@@ -306,9 +394,6 @@ $(document).ready(function() {
 
             $('#input-payment-card-number').mask('0000000000000000000');
             $('#input-payment-card-cvv').mask('000000');
-
-
-
 
         },
         error: function(xhr, ajaxOptions, thrownError) {
@@ -407,175 +492,89 @@ $(document).delegate('#button-payment-billet', 'click', function() {
 });
 
 
-$(document).delegate('#button-payment-card', 'click', function() {
-    
-    if (($("#pay_card_with_cnpj").is(':checked') && verifyCNPJ($('#cnpj_card').val())) || !($("#pay_card_with_cnpj").is(':checked'))) {
-        if (($("#pay_card_with_cnpj").is(':checked') && $('#corporate_name_card').val()!="") || !($("#pay_card_with_cnpj").is(':checked'))) {
-            if (verifyCPF($('#input-payment-card-cpf').val())) {
-                if (verifyPhone($('#input-payment-card-phone').val())) {
-                    if (verifyEmail($('#input-payment-card-email').val())) {
-                        if (verifyBirthDate($('#input-payment-card-birth').val())) {
-                            if ($('#input-payment-card-street').val()!="") {
-                                if ($('#input-payment-card-address-number').val()!="") {
-                                    if ($('#input-payment-card-neighborhood').val()!="") {
-                                        if ($('#input-payment-card-zipcode').val()!="") {
-                                            if ($('#input-payment-card-city').val()!="") {
-                                                if ($('#input-payment-card-state').val()!="") {
-                                                    if ($('input[name=input-payment-card-brand]:checked', '#payment-card-form').val()!="") {
-                                                        if ($('#input-payment-card-installments').val()!="") {
-                                                            if ($('#input-payment-card-number').val()!="") {
-                                                                if ($('#input-payment-card-cvv').val()!="") {
-                                                                    if ($('#input-payment-card-expiration-month').val()!="" && $('#input-payment-card-expiration-year').val()!="") {
-                                                                        if (id_charge!=0) {
-                                                                            payCardCharge('card');
-                                                                        } else {
-                                                                            createCharge('card');
-                                                                        }
-                                                                    } else {
-                                                                        if (!$('.warning-payment').is(":visible")) {
-                                                                            $('.warning-payment').slideDown();
-                                                                            scrollToTop();
-                                                                        }
-                                                                        $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_expiration; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                                    }
-                                                                } else {
-                                                                    if (!$('.warning-payment').is(":visible")) {
-                                                                        $('.warning-payment').slideDown();
-                                                                        scrollToTop();
-                                                                    }
-                                                                    $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_cvv; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                                }
-                                                            } else {
-                                                                if (!$('.warning-payment').is(":visible")) {
-                                                                    $('.warning-payment').slideDown();
-                                                                    scrollToTop();
-                                                                }
-                                                                $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                            }
-                                                        } else {
-                                                            if (!$('.warning-payment').is(":visible")) {
-                                                                $('.warning-payment').slideDown();
-                                                                scrollToTop();
-                                                            }
-                                                            $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_installments; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                        }
-                                                    } else {
-                                                        if (!$('.warning-payment').is(":visible")) {
-                                                            $('.warning-payment').slideDown();
-                                                            scrollToTop();
-                                                        }
-                                                        $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_brand; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                    }
-                                                } else {
-                                                    if (!$('.warning-payment').is(":visible")) {
-                                                        $('.warning-payment').slideDown();
-                                                        scrollToTop();
-                                                    }
-                                                    $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_state; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                                }
-                                            } else {
-                                                if (!$('.warning-payment').is(":visible")) {
-                                                    $('.warning-payment').slideDown();
-                                                    scrollToTop();
-                                                }
-                                                $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_city; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                            }
-                                        } else {
-                                            if (!$('.warning-payment').is(":visible")) {
-                                                $('.warning-payment').slideDown();
-                                                scrollToTop();
-                                            }
-                                            $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cep; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                        }
-                                    } else {
-                                        if (!$('.warning-payment').is(":visible")) {
-                                            $('.warning-payment').slideDown();
-                                            scrollToTop();
-                                        }
-                                        $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_neighborhood; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                    }
-
-                                } else {
-                                    if (!$('.warning-payment').is(":visible")) {
-                                        $('.warning-payment').slideDown();
-                                        scrollToTop();
-                                    }
-                                    $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                                }
-                            } else {
-                                if (!$('.warning-payment').is(":visible")) {
-                                    $('.warning-payment').slideDown();
-                                    scrollToTop();
-                                }
-                                $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_street; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                            }
-                            
-                        } else {
-                            if (!$('.warning-payment').is(":visible")) {
-                                $('.warning-payment').slideDown();
-                                scrollToTop();
-                            }
-                            $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_birth; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                        }
-
-                    } else {
-                        if (!$('.warning-payment').is(":visible")) {
-                            $('.warning-payment').slideDown();
-                            scrollToTop();
-                        }
-                        $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_email; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-                    }
-                } else {
-                if (!$('.warning-payment').is(":visible")) {
-                    $('.warning-payment').slideDown();
-                    scrollToTop();
-                }
-                $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_phone_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-            }
-            
-            } else {
-                if (!$('.warning-payment').is(":visible")) {
-                    $('.warning-payment').slideDown();
-                    scrollToTop();
-                }
-                $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cpf; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-            }
-
-        } else {
-            if (!$('.warning-payment').is(":visible")) {
-                $('.warning-payment').slideDown();
-                scrollToTop();
-            }
-            $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_corporate_name; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
-        }
-    } else {
-        if (!$('.warning-payment').is(":visible")) {
-            $('.warning-payment').slideDown();
-            scrollToTop();
-        }
-        $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cnpj; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>');
+var errorMessage;
+function validateCardFields() {
+    errorMessage = '';
+    if (!(($("#pay_card_with_cnpj").is(':checked') && verifyCNPJ($('#cnpj_card').val())) || !($("#pay_card_with_cnpj").is(':checked')))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cnpj; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if (!(($("#pay_card_with_cnpj").is(':checked') && $('#corporate_name_card').val()!="") || !($("#pay_card_with_cnpj").is(':checked')))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_corporate_name; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if (!(verifyCPF($('#input-payment-card-cpf').val()))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cpf; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if (!(verifyPhone($('#input-payment-card-phone').val()))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_phone_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if (!(verifyEmail($('#input-payment-card-email').val()))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_email; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if (!(verifyBirthDate($('#input-payment-card-birth').val()))) {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_birth; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-street').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_street; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-address-number').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-neighborhood').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_neighborhood; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-zipcode').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cep; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-city').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_city; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-state').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_state; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('input[name=input-payment-card-brand]:checked', '#payment-card-form').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_brand; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-installments').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_installments; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-number').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-cvv').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_cvv; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
+    } else if ($('#input-payment-card-expiration-month').val()=="" || $('#input-payment-card-expiration-year').val()=="") {
+        errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_card_expiration; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
     }
-    
-        
-    
 
+    if (errorMessage!='') {
+        showError(errorMessage);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function showError(message) {
+    if (!$('.warning-payment').is(":visible")) {
+        $('.warning-payment').slideDown();
+    }
+    scrollToTop();
+    $('.warning-payment').html(message);
+}
+
+$(document).delegate('#button-payment-card', 'click', function() {
+    if (validateCardFields()) {
+        if (id_charge!=0) {
+            payCardCharge();
+        } else {
+            createCharge('card');
+        }
+    }
 });
-
 
 function payBilletCharge() {
     $('.gn-loading-request').fadeIn();
     $.ajax({
         url: 'index.php?route=payment/gerencianet/pay_billet',
         type: 'POST',
-        data: 'id_charge=' + id_charge + '& cpf='+ $('#cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#phone_number').val().replace(/[^\d]+/g,'') + '& cnpj=' + $('#cnpj').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name').val() + '& pay_billet_with_cnpj=' + $('#pay_billet_with_cnpj').val(),
+        data: 'id_charge=' + id_charge + '& cpf='+ $('#cpf').val().replace(/[^\d]+/g,'') + '& first_name=' + $('#first_name').val() + '& phone_number=' + $('#phone_number').val().replace(/[^\d]+/g,'') + '& cnpj=' + $('#cnpj').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name').val() + '& pay_billet_with_cnpj=' + $('#pay_billet_with_cnpj').val(),
         beforeSend: function() {
             $('.button-payment').button('loading');
         },
         success: function(response) {
-            
             var obj = $.parseJSON(response);
             if (obj.code==200) {
-                window.location.href = "<?php echo $success_url; ?>&payment=billet&order=<?php echo $actual_order_id; ?>&charge=" + obj.data.charge_id + "&billet=" + encodeURIComponent(obj.data.link);
+                var url = encodeURIComponent(obj.data.link);
+                var redirect = $('<form action="' + "<?php echo $success_url; ?>&payment=billet&order=<?php echo $actual_order_id; ?>&charge=" + obj.data.charge_id + '" method="post">' +
+                  '<input type="text" name="billet" value="' + url + '" />' +
+                  '</form>');
+                $('body').append(redirect);
+                redirect.submit();
             } else {
                 $('.warning-payment').slideDown();
                 $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_charge_error; ?> <b>' + obj.message + '</b><button type="button" class="close" data-dismiss="alert">&times;</button>');
@@ -616,7 +615,7 @@ function payCardCharge() {
         $.ajax({
             url: 'index.php?route=payment/gerencianet/pay_card',
             type: 'POST',
-            data: 'id_charge=' + id_charge + '& payment_token='+ response.data.payment_token + '& first_name='+  $('#input-payment-card-name').val() + '& cpf='+ $('#input-payment-card-cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#input-payment-card-phone').val().replace(/[^\d]+/g,'') + '& birth='+  dateBirth[2] + "-" + dateBirth[1] + "-" + dateBirth[0]+ '& email='+  $('#input-payment-card-email').val() + '& street='+  $('#input-payment-card-street').val() + '& number='+  $('#input-payment-card-address-number').val() + '& neighborhood='+  $('#input-payment-card-neighborhood').val() + '& complement='+  $('#input-payment-card-complement').val() + '& zipcode='+  $('#input-payment-card-zipcode').val() + '& city='+  $('#input-payment-card-city').val() + '& state='+  $('#input-payment-card-state').val() + '& installments='+  $('#input-payment-card-installments').val(),
+            data: 'id_charge=' + id_charge + '& payment_token='+ response.data.payment_token + '& first_name='+  $('#input-payment-card-name').val() + '& cpf='+ $('#input-payment-card-cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#input-payment-card-phone').val().replace(/[^\d]+/g,'') + '& birth='+  dateBirth[2] + "-" + dateBirth[1] + "-" + dateBirth[0]+ '& email='+  $('#input-payment-card-email').val() + '& street='+  $('#input-payment-card-street').val() + '& number='+  $('#input-payment-card-address-number').val() + '& neighborhood='+  $('#input-payment-card-neighborhood').val() + '& complement='+  $('#input-payment-card-complement').val() + '& zipcode='+  $('#input-payment-card-zipcode').val() + '& city='+  $('#input-payment-card-city').val() + '& state='+  $('#input-payment-card-state').val() + '& installments='+  $('#input-payment-card-installments').val() + '& cnpj=' + $('#cnpj_card').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name_card').val() + '& pay_card_with_cnpj=' + $('#pay_card_with_cnpj').val(),
             beforeSend: function() {
                 $('.button-payment').button('loading');
             },

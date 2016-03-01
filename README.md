@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para OpenCart - Versão 0.1.0 Beta #
+# Módulo de Integração Gerencianet para OpenCart - Versão 0.1.1 Beta #
 
 Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.1, 2.0.2.0, 2.0.3.1, 2.1.0.1 e 2.1.0.2.
 
@@ -52,3 +52,7 @@ Nesta aba é necessário informar as credenciais da sua aplicação e o identifi
 
 Nesta aba é realizada a configuração os Status de pagamento da Gerencianet com os Status de pagamento de sua loja. Assim, quando houver a alteração do status do pagamento na Gerencianet, automaticamente o status do pedido em sua loja será atualizado de acordo com as configurações definidas.
 
+## Requisitos
+
+* Versão mínima do PHP: 5.4.0
+* Versão mínima do OpenCart: 2.0.0.0

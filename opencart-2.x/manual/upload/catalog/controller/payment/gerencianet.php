@@ -412,7 +412,7 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['generated_payment_type'] = $this->request->get['payment'];
 
 			if ($data['generated_payment_type']=="billet") {
-				$data['generated_billet_url'] = urldecode($this->request->get['billet']);
+				$data['generated_billet_url'] = urldecode($this->request->post['billet']);
 				if (isset($this->session->data['total_values_billet_order_' . $data['generated_order_number']])) {
 					$data['totals_session'] = $this->session->data['total_values_billet_order_' . $data['generated_order_number']];
 				}
@@ -968,7 +968,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$discountFormatedByOC = $this->formatMoney($this->currency->format(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()), true);
 			$discountFormatedByOC_no_currency_format = ($this->getBilletDiscount()/100)*$this->cart->getSubTotal();
-
+			$total_billet_discount_no_currency_format=0;
 			if ($this->getBilletDiscount()>0) {
 				$total_discount = $total_discount + $discountFormatedByOC;
 				$total_billet_discount_no_currency_format = $discountFormatedByOC_no_currency_format;
@@ -1098,7 +1098,10 @@ class ControllerPaymentGerencianet extends Controller {
 				    $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet', total = '" . (float)$totalWithBilletDiscount . "'  WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
 				    $this->db->query("INSERT INTO " . DB_PREFIX . "order_total SET order_id = '" . (int)$this->session->data['order_id'] . "', code = 'voucher', title = 'Desconto de " . $this->config->get('gerencianet_discount_billet_value') . " no Boleto', `value` = '" . -floatval($discountFormatedByOC_no_currency_format) . "', sort_order = '2'");
 				    $this->db->query("UPDATE " . DB_PREFIX . "order_total SET value = '" . (float)$totalWithBilletDiscount . "' WHERE title = 'Total' AND order_id = '" . (int)$this->session->data['order_id'] . "'");
+			    } else {
+			    	$this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet' WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
 			    }
+			    
 			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), '<a href="' . $charge['data']['link'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
 			    $this->session->data['order_id'] = '';
 			    $this->cart->clear();
@@ -1348,13 +1351,48 @@ class ControllerPaymentGerencianet extends Controller {
 			$params = ['id' => $data['id_charge']];
 			$paymentToken = $data['payment_token'];
 
-			$customer = [
-			    'name' => $data['first_name'] . " " . $data['last_name'],
-			    'cpf' => $data['cpf'],
-			    'phone_number' => $data['phone_number'],
-			    'email' => $data['email'],
-			    'birth' => $data['birth']
-			];
+
+			if (isset($this->request->post['pay_card_with_cnpj'])) { 
+				$data['pay_card_with_cnpj'] = $this->request->post['pay_card_with_cnpj'];
+			} else {
+				$data['pay_card_with_cnpj'] = '';
+			}
+
+			if (isset($this->request->post['cnpj'])) { 
+				$data['cnpj'] = $this->request->post['cnpj'];
+			} else {
+				$data['cnpj'] = '';
+			}
+
+			if (isset($this->request->post['corporate_name'])) { 
+				$data['corporate_name'] = $this->request->post['corporate_name'];
+			} else {
+				$data['corporate_name'] = '';
+			}
+
+			if ($data['pay_card_with_cnpj'] && $data['corporate_name'] && $data['cnpj']) {
+				$juridical_data = [
+				  'corporate_name' => $data['corporate_name'],
+				  'cnpj' => $data['cnpj']
+				];
+
+				$customer = [
+				    'name' => $data['first_name'] . " " . $data['last_name'],
+				    'cpf' => $data['cpf'],
+				    'phone_number' => $data['phone_number'],
+				    'email' => $data['email'],
+				    'birth' => $data['birth'],
+  					'juridical_person' => $juridical_data
+				];
+			} else {
+				$customer = [
+				    'name' => $data['first_name'] . " " . $data['last_name'],
+				    'cpf' => $data['cpf'],
+				    'phone_number' => $data['phone_number'],
+				    'email' => $data['email'],
+				    'birth' => $data['birth']
+				];
+			}
 
 			$billingAddress = [
 			    'street' => $data['street'],
@@ -1362,7 +1400,6 @@ class ControllerPaymentGerencianet extends Controller {
 			    'neighborhood' => $data['neighborhood'],
 			    'zipcode' => $data['zipcode'],
 			    'city' => $data['city'],
-			    'state' => $data['state'],
 			    'state' => $data['state'],
 			    'complement' => $data['complement']
 			];
