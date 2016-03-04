@@ -328,28 +328,28 @@
     <img id="imgTutorial" src="view/image/payment/gerencianet-exemplo-chaves-desenvolvimento.png" />
   </div>
 </div>
-<script type="text/javascript"><!--
+<script type="text/javascript">
 
   $(document).ready(function() {
     $("#tutorialGnBox").click(function() {
-      $('#tutorialGnBox').fadeOut();
+      $("#tutorialGnBox").fadeOut();
     });
 
-    $('.percent').mask('##0,00%', {reverse: true, onKeyPress: function(percentage){
+    $(".percent").mask("##0,00%", {reverse: true, onKeyPress: function(percentage){
         if (percentage.length>6) {
-          $('.percent').val("99,99%");
+          $(".percent").val("99,99%");
         }
       }});
-    $('.billet_expiration').mask('999');
+    $(".billet_expiration").mask("999");
   });
 
   function showGnTutorial(tutorial) {
     switch(tutorial) {
-      case 'keysDevelopment': $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-chaves-desenvolvimento.png"); break;
-      case 'keysProduction': $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-chaves-producao.png"); break;
-      case 'payeeCode': $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-identificador-conta.png"); break;
+      case "keysDevelopment": $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-chaves-desenvolvimento.png"); break;
+      case "keysProduction": $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-chaves-producao.png"); break;
+      case "payeeCode": $("#imgTutorial").attr("src","view/image/payment/gerencianet-exemplo-identificador-conta.png"); break;
     }
-    $('#tutorialGnBox').fadeIn();
+    $("#tutorialGnBox").fadeIn();
   }
 
 </script>

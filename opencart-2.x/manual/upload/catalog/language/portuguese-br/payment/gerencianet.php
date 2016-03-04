@@ -91,7 +91,7 @@ $_['gn_billet_oc_order_comment'] = 'Ver Boleto';
 $_['gn_card_oc_order_comment'] = 'Pago com Cartão de Crédito';
 
 $_['gn_show_billet'] = 'Visualizar Boleto';
-$_['gn_billet_payment_method_comments'] = 'Optando pelo pagamento através de boleto, seu pagamento será confirmado em até 1 dia útil após o pagamento.';
+$_['gn_billet_payment_method_comments'] = 'Optando pelo pagamento através de boleto, seu pagamento será confirmado no próximo dia útil após o pagamento.';
 $_['gn_billet_button_continue'] = 'Gerar Boleto';
 $_['gn_billet_button_continue_loading'] = 'Gerando Boleto...';
 
@@ -103,14 +103,14 @@ $_['gn_billing_address_title'] = 'Dados da Cobrança:';
 
 $_['gn_success_payment_title'] = 'Pedido realizado com sucesso.';
 $_['gn_success_payment_order'] = 'Seu pedido';
-$_['gn_success_payment_order_billet_comment'] = 'Seu pedido foi realizado com sucesso e o boleto está disponível para pagamento. Após pagamento a confirmação de pagamento do boleto acontece em até um dia útil.';
+$_['gn_success_payment_order_billet_comment'] = 'Seu pedido foi realizado com sucesso e o boleto está disponível para pagamento. Após o pagamento, a confirmação acontece no próximo dia útil.';
 $_['gn_success_payment_order_card_comment'] = 'Seu pedido foi realizado com sucesso e seu pagamento está sendo processado. Aguarde até que seja informado via e-mail sobre a confirmação do pagamento.';
 $_['gn_success_payment_order_number'] = 'Número do pedido:';
 $_['gn_success_payment_type_billet_title'] = 'Boleto Bancário';
 $_['gn_success_payment_type_card_title'] = 'Informações sobre processamento';
 $_['gn_success_payment_box_title_billet'] = 'Boleto emitido através da Gerencianet';
 $_['gn_success_payment_box_title_card'] = 'O processamento do seu cartão de crédito está sendo realizado por nós, fique tranquilo.';
-$_['gn_success_payment_box_comments_billet'] = 'O Boleto Bancário foi gerado com sucesso. Agora você deve efetuar o pagamento em qualquer banco conveniado, lotéricas, correios ou bankline. Fique atento com a data de vencimento do boleto. Caso o seu boleto tenha vencido, você poderá emitir a segunda via em <a href="http://www.gerencianet.com.br/2via" target="_blank">www.gerencianet.com.br/2via</a>.';
+$_['gn_success_payment_box_comments_billet'] = 'O Boleto Bancário foi gerado com sucesso. Agora você deve efetuar o pagamento em qualquer banco conveniado, lotéricas, correios ou bankline. Fique atento com a data de vencimento do boleto.';
 $_['gn_success_payment_box_comments_card_part1'] = 'A cobrança em seu cartão está sendo processada. Assim que houver a confirmação iremos enviar um e-mail para o endereço <b>';
 $_['gn_success_payment_box_comments_card_part2'] = '</b>, informado em seu cadastro. Caso não receba o produto ou serviço adquirido, você tem o prazo de <b>14 dias à partir da data de confirmação do pagamento</b> para abrir uma contestação.<br>Informe-se em  <a href="http://www.gerencianet.com.br/contestacao" target="_blank">www.gerencianet.com.br/contestacao</a>.';
 $_['gn_success_payment_charge_number'] = 'Número da cobrança:';
