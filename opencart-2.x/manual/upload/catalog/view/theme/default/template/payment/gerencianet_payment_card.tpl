@@ -75,26 +75,23 @@
 	    <div id="billing-adress" class="gn-section">
 		    <p><strong><?php echo $gn_billing_address_title; ?></strong> <a id="showBillingAdress" onclick="showBillingAdress();" class="gn-cursor-pointer"><?php echo $gn_show_shipping_data; ?></a></p>
 
-		    <div class="required">
+		    <div class="required gn-row">
 		      	<label class="gn-col-2 gn-label" for="input-payment-card-street"><?php echo $gn_street; ?></label>
-		      	
-		      	<div class="gn-col-10">
-		      	<div class="gn-row">
-					<div class="gn-col-6 required">
-		        		<input type="text" name="input-payment-card-address-street" id="input-payment-card-street" value="" placeholder="<?php echo $gn_street_placeholder; ?>" class="form-control" />
-	        		</div>
-				    <div class="gn-col-6">
-					    <div class=" required gn-left-space-2">
-					      <label class="gn-col-5 gn-label" for="input-payment-card-address-number"><?php echo $gn_street_number; ?></label>
-					      <div class="gn-col-7">
-					        <input type="text" name="input-payment-card-address-number" id="input-payment-card-address-number" value="" placeholder="<?php echo $gn_street_number_placeholder; ?>" class="form-control" />
-					      </div>
-					    </div>
+
+				<div class="gn-col-5 required">
+	        		<input type="text" name="input-payment-card-address-street" id="input-payment-card-street" value="" placeholder="<?php echo $gn_street_placeholder; ?>" class="form-control" />
+        		</div>
+			    <div class="gn-col-5">
+				    <div class=" required gn-left-space-2">
+				      <label class="gn-col-5 gn-label" for="input-payment-card-address-number"><?php echo $gn_street_number; ?></label>
+				      <div class="gn-col-7">
+				        <input type="text" name="input-payment-card-address-number" id="input-payment-card-address-number" value="" placeholder="<?php echo $gn_street_number_placeholder; ?>" class="form-control" />
+				      </div>
 				    </div>
 			    </div>
-		      </div>
+			    
 		    </div>
-		    <div>
+		    <div class="gn-row">
 		    	<div class="gn-col-2 required">
 		      		<label class="gn-col-12 gn-label required" for="input-payment-card-neighborhood"><?php echo $gn_neighborhood; ?></label>
 		      	</div>
@@ -113,12 +110,11 @@
 			    </div>
 		    </div>
 
-		    <div class="required billing-address-data <?php if ($zipcode && $city) { ?> gn-hide <?php } ?>" >
-		    	<div class="gn-col-2 ">
-		      		<label for="input-payment-card-zipcode" class="gn-label"><?php echo $gn_cep; ?></label>
-		      	</div>
+		    <div class="required billing-address-data gn-row <?php if ($zipcode && $city) { ?> gn-hide <?php } ?>" >
+		    	
+	      		<label for="input-payment-card-zipcode" class="gn-col-2 gn-label"><?php echo $gn_cep; ?></label>
+		      	
 		      	<div class="gn-col-10">
-		      	<div class="gn-row">
 					<div class="gn-col-4 required">
 		        		
 		        		<input type="text" name="input-payment-card-zipcode" id="input-payment-card-zipcode" value="<?php echo $zipcode; ?>" placeholder="<?php echo $gn_cep_placeholder; ?>" class="form-control" />
@@ -132,10 +128,9 @@
 					    </div>
 				    </div>
 			    </div>
-		      </div>
 		    </div>
 
-		    <div class=" required billing-address-data <?php if ($state) { ?> gn-hide <?php } ?>" >
+		    <div class=" required billing-address-data gn-row <?php if ($state) { ?> gn-hide <?php } ?>" >
 		      <label class="gn-col-2 gn-label" for="input-payment-card-state"><?php echo $gn_state; ?></label>
 		      <div class="gn-col-10">
 		        <select name="input-payment-card-state" id="input-payment-card-state" class="form-control gn-form-select">
@@ -175,7 +170,7 @@
 	    <div class="gn-section">
 		    <p><strong><?php echo $gn_card_title; ?></strong></p>
 
-		    <div class=" required gn-row">
+		    <div class="required gn-row">
 		    	<div>
 			    <label class="" for="input-payment-card-brand"><?php echo $gn_card_brand; ?></label>
 			    </div>
