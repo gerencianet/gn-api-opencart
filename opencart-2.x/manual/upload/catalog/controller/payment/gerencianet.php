@@ -54,9 +54,9 @@ class ControllerPaymentGerencianet extends Controller {
 
 			if ($token) {
 			 
-				$params = [
+				$params = array(
 				  'token' => $token
-				];
+				);
 				 
 				try {
 				    $api = new Gerencianet($options);
@@ -321,7 +321,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$options = $this->gerencianet_config_payment_api();
 
-			$params = ['total' => (floatval($order_info['total'])*100), 'brand' => 'visa'];
+			$params = array('total' => (floatval($order_info['total'])*100), 'brand' => 'visa');
 
 			try {
 			    $api = new Gerencianet($options);
@@ -742,18 +742,18 @@ class ControllerPaymentGerencianet extends Controller {
 	    $this->load->model('setting/setting');
 
     	if ($this->config->get('gerencianet_sandbox')) {
-			$options = [
+			$options = array(
 			  'client_id' => $this->config->get('gerencianet_client_id_development'),
 			  'client_secret' => $this->config->get('gerencianet_client_secret_development'),
 			  'sandbox' => true
-			];
+			);
 
 		} else {
-			$options = [
+			$options = array(
 			  'client_id' => $this->config->get('gerencianet_client_id_production'),
 			  'client_secret' => $this->config->get('gerencianet_client_secret_production'),
 			  'sandbox' => false
-			];
+			);
 
 		}
 	    
@@ -831,49 +831,49 @@ class ControllerPaymentGerencianet extends Controller {
 			$items = array();
 			foreach ($this->cart->getProducts() as $product) {
 
-				$item = [
+				$item = array(
 					'name' => htmlspecialchars($product['name']),
 			        'amount' => intval($product['quantity']),
 			        'value' => $this->formatMoney($this->currency->format($product['price']), true)
-				];
+				);
 				array_push($items, $item);
 			}
 		}
 
 		foreach ($data['taxes'] as $new_tax) {
-			$item = [
+			$item = array(
 				'name' => $new_tax['title'],
 		        'amount' => 1,
 		        'value' => $this->formatMoney($this->currency->format($new_tax['value']), true)
-			];
+			);
 			array_push($items, $item);
 		}
 
 		if (isset($this->session->data['shipping_method']['cost'])) {
-			$shipping = [
-			    [
+			$shipping = array(
+			    array(
 			        'name' => $this->session->data['shipping_method']['title'],
 			        'value' => $this->formatMoney($this->currency->format($this->session->data['shipping_method']['cost']), true)
-			    ]
-			];
+			    )
+			);
 		}
 
-		$metadata = [
+		$metadata = array(
 		    'custom_id' => strval($this->session->data['order_id']),
 		    'notification_url' => $this->url->link('payment/gerencianet/callback', '', 'SSL')
-		];
+		);
 
 		if (isset($this->session->data['shipping_method']['cost'])) {
-			$body = [
+			$body = array(
 			    'items' => $items,
 	    		'shippings' => $shipping,
 	    		'metadata' => $metadata
-			];
+			);
 		} else {
-			$body = [
+			$body = array(
 			    'items' => $items,
 	    		'metadata' => $metadata
-			];
+			);
 		}
 
 		try {
@@ -1034,52 +1034,52 @@ class ControllerPaymentGerencianet extends Controller {
 
 
 			if ($data['pay_billet_with_cnpj'] && $data['corporate_name'] && $data['cnpj']) {
-				$juridical_data = [
+				$juridical_data = array(
 				  'corporate_name' => $data['corporate_name'],
 				  'cnpj' => $data['cnpj']
-				];
+				);
 
-				$customer = [
+				$customer = array(
 				    'name' => $data['first_name'] . ' ' . $data['last_name'],
 				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number'],
   					'juridical_person' => $juridical_data
-				];
+				);
 			} else {
-				$customer = [
+				$customer = array(
 				    'name' => $data['first_name'] . ' ' . $data['last_name'],
 				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number']
-				];
+				);
 			}
 
 
-			$params = ['id' => $data['id_charge']];
+			$params = array('id' => $data['id_charge']);
 
-			$discount = [
+			$discount = array(
 				'type' => 'currency',
 				'value' => intval($total_discount)
-			];
+			);
 
 			if ($total_discount>0) {
-				$body = [
-				    'payment' => [
-				        'banking_billet' => [
+				$body = array(
+				    'payment' => array(
+				        'banking_billet' => array(
 				            'expire_at' => $expirationDate,
 				            'customer' => $customer,
 				            'discount' => $discount
-				        ]
-				    ]
-				];
+				        )
+				    )
+				);
 			} else {
-				$body = [
-				    'payment' => [
-				        'banking_billet' => [
+				$body = array(
+				    'payment' => array(
+				        'banking_billet' => array(
 				            'expire_at' => $expirationDate,
 				            'customer' => $customer
-				        ]
-				    ]
-				];
+				        )
+				    )
+				);
 			}
 
 			try {
@@ -1348,7 +1348,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$this->session->data['buyer_email'] = $data['email'];
 
-			$params = ['id' => $data['id_charge']];
+			$params = array('id' => $data['id_charge']);
 			$paymentToken = $data['payment_token'];
 
 
@@ -1371,30 +1371,30 @@ class ControllerPaymentGerencianet extends Controller {
 			}
 
 			if ($data['pay_card_with_cnpj'] && $data['corporate_name'] && $data['cnpj']) {
-				$juridical_data = [
+				$juridical_data = array(
 				  'corporate_name' => $data['corporate_name'],
 				  'cnpj' => $data['cnpj']
-				];
+				);
 
-				$customer = [
+				$customer = array(
 				    'name' => $data['first_name'] . " " . $data['last_name'],
 				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number'],
 				    'email' => $data['email'],
 				    'birth' => $data['birth'],
   					'juridical_person' => $juridical_data
-				];
+				);
 			} else {
-				$customer = [
+				$customer = array(
 				    'name' => $data['first_name'] . " " . $data['last_name'],
 				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number'],
 				    'email' => $data['email'],
 				    'birth' => $data['birth']
-				];
+				);
 			}
 
-			$billingAddress = [
+			$billingAddress = array(
 			    'street' => $data['street'],
 			    'number' => $data['number'],
 			    'neighborhood' => $data['neighborhood'],
@@ -1402,36 +1402,36 @@ class ControllerPaymentGerencianet extends Controller {
 			    'city' => $data['city'],
 			    'state' => $data['state'],
 			    'complement' => $data['complement']
-			];
+			);
 
-			$discount = [
+			$discount = array(
 				'type' => 'currency',
 				'value' => intval($total_discount)
-			];
+			);
 
 			if ($total_discount>0) {
-				$body = [
-				    'payment' => [
-				        'credit_card' => [
+				$body = array(
+				    'payment' => array(
+				        'credit_card' => array(
 				            'installments' => intval($data['installments']),
 				            'billing_address' => $billingAddress,
 				            'payment_token' => $paymentToken,
 				            'customer' => $customer,
 				            'discount' => $discount
-				        ]
-				    ]
-				];
+				        )
+				    )
+				);
 			} else {
-				$body = [
-				    'payment' => [
-				        'credit_card' => [
+				$body = array(
+				    'payment' => array(
+				        'credit_card' => array(
 				            'installments' => intval($data['installments']),
 				            'billing_address' => $billingAddress,
 				            'payment_token' => $paymentToken,
 				            'customer' => $customer
-				        ]
-				    ]
-				];
+				        )
+				    )
+				);
 			}
 			
 			try {
@@ -1472,7 +1472,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$options = $this->gerencianet_config_payment_api();
 
-			$params = ['total' => $data['total'], 'brand' => $data['brand']];
+			$params = array('total' => $data['total'], 'brand' => $data['brand']);
 
 			try {
 			    $api = new Gerencianet($options);

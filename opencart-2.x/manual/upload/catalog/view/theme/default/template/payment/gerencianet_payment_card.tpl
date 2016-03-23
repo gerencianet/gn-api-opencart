@@ -274,7 +274,7 @@
 					    		<input type="text" name="input-payment-card-cvv" id="input-payment-card-cvv" value="" class="form-control gn-cvv-input" />
 					    	</div>
 					    	<div class="pull-left">
-					    		<div class="clear gn-cvv-info">
+					    		<div class="gn-cvv-info">
 						    		<div class="pull-left gn-icon-card-input">
 						    		</div>
 						    		<div class="pull-left">
