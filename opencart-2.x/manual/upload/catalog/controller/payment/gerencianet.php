@@ -60,7 +60,7 @@ class ControllerPaymentGerencianet extends Controller {
 				 
 				try {
 				    $api = new Gerencianet($options);
-				    $notification = $api->getNotification($params, []);
+				    $notification = $api->getNotification($params, array());
 
 
 				    if ($notification['code']==200) {
@@ -325,7 +325,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			try {
 			    $api = new Gerencianet($options);
-			    $installments = $api->getInstallments($params, []);
+			    $installments = $api->getInstallments($params, array());
 			    $data['max_installments'] = end($installments['data']['installments'])['installment'] . "x de " . $this->currency->format(intval(end($installments['data']['installments'])['value'])/100);
 			} catch (GerencianetException $e) {
 				$data['max_installments'] = "1 x de " . $data['total_paying_without_discount'];
@@ -878,7 +878,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 		try {
 		    $api = new Gerencianet($options);
-		    $charge = $api->createCharge([], $body);
+		    $charge = $api->createCharge(array(), $body);
 		 
 		    $this->result_api($charge, true);
 
@@ -1476,7 +1476,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			try {
 			    $api = new Gerencianet($options);
-			    $installments = $api->getInstallments($params, []);
+			    $installments = $api->getInstallments($params, array());
 
 			    $this->result_api($installments, true);
 			} catch (GerencianetException $e) {
