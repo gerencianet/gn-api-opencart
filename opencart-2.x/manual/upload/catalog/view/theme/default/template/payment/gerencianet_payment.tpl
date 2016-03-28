@@ -58,7 +58,7 @@
             </div>
             </div>
             <div id="collapse-payment-billet" <?php if ($gerencianet_payment_option_card) { ?>class="gn-hide"<?php } ?> >
-                <div class="panel-body"></div>
+                <div class="panel-body gn-panel"></div>
               </div>
 
         </div>
@@ -92,7 +92,7 @@
             </div>
             </div>
             <div id="collapse-payment-card" <?php if ($gerencianet_payment_option_billet) { ?>class="gn-hide"<?php } ?> >
-                <div class="panel-body"></div>
+                <div class="panel-body gn-panel"></div>
             </div>
         </div>
         <?php } ?>
@@ -273,7 +273,7 @@ $(document).ready(function() {
             '</div>' +
             '</div>' +
             '<div id="collapse-payment-billet" <?php if ($gerencianet_payment_option_card) { ?>class="gn-hide"<?php } ?>>' +
-                '<div class="panel-body">' + html + '</div>' +
+                '<div class="panel-body gn-panel">' + html + '</div>' +
             '</div>');
 
             $('#background-billet').click(function(e){
@@ -352,7 +352,7 @@ $(document).ready(function() {
             '</div>' +
             '</div>' +
             '<div id="collapse-payment-card" <?php if ($gerencianet_payment_option_billet) { ?>class="gn-hide"<?php } ?>>' +
-                '<div class="panel-body">' + html + '</div>' +
+                '<div class="panel-body gn-panel">' + html + '</div>' +
             '</div>');
 
             $('#background-card').click(function(e){

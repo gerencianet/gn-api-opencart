@@ -489,6 +489,10 @@
     text-align: right;
 }
 
+.gn-panel {
+    background-color: #FFFFFF;
+}
+
 
 .clear {
     clear: both;
