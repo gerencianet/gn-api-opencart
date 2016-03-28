@@ -185,7 +185,7 @@
     <?php echo $column_right; ?></div>
 </div>
 <script type="text/javascript"><!--
-
+//v0.1.2.5
 $(document).ready(function() {
 
     var active=0;
@@ -615,7 +615,7 @@ function payCardCharge() {
         $.ajax({
             url: 'index.php?route=payment/gerencianet/pay_card',
             type: 'POST',
-            data: 'id_charge=' + id_charge + '& payment_token='+ response.data.payment_token + '& first_name='+  $('#input-payment-card-name').val() + '& cpf='+ $('#input-payment-card-cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#input-payment-card-phone').val().replace(/[^\d]+/g,'') + '& birth='+  dateBirth[2] + "-" + dateBirth[1] + "-" + dateBirth[0]+ '& email='+  $('#input-payment-card-email').val() + '& street='+  $('#input-payment-card-street').val() + '& number='+  $('#input-payment-card-address-number').val() + '& neighborhood='+  $('#input-payment-card-neighborhood').val() + '& complement='+  $('#input-payment-card-complement').val() + '& zipcode='+  $('#input-payment-card-zipcode').val() + '& city='+  $('#input-payment-card-city').val() + '& state='+  $('#input-payment-card-state').val() + '& installments='+  $('#input-payment-card-installments').val() + '& cnpj=' + $('#cnpj_card').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name_card').val() + '& pay_card_with_cnpj=' + $('#pay_card_with_cnpj').val(),
+            data: 'id_charge=' + id_charge + '& payment_token='+ response.data.payment_token + '& first_name='+  $('#input-payment-card-name').val() + '& cpf='+ $('#input-payment-card-cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#input-payment-card-phone').val().replace(/[^\d]+/g,'') + '& birth='+  dateBirth[2] + "-" + dateBirth[1] + "-" + dateBirth[0]+ '& email='+  $('#input-payment-card-email').val() + '& street='+  $('#input-payment-card-street').val() + '& number='+  $('#input-payment-card-address-number').val() + '& neighborhood='+  $('#input-payment-card-neighborhood').val() + '& complement='+  $('#input-payment-card-complement').val() + '& zipcode='+  $('#input-payment-card-zipcode').val().replace(/[^\d]+/g,'') + '& city='+  $('#input-payment-card-city').val() + '& state='+  $('#input-payment-card-state').val() + '& installments='+  $('#input-payment-card-installments').val() + '& cnpj=' + $('#cnpj_card').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name_card').val() + '& pay_card_with_cnpj=' + $('#pay_card_with_cnpj').val(),
             beforeSend: function() {
                 $('.button-payment').button('loading');
             },
