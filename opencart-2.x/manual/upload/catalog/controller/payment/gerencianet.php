@@ -1398,7 +1398,7 @@ class ControllerPaymentGerencianet extends Controller {
 			    'street' => $data['street'],
 			    'number' => $data['number'],
 			    'neighborhood' => $data['neighborhood'],
-			    'zipcode' => $data['zipcode'],
+			    'zipcode' => preg_replace( '/[^0-9]/', '', $data['zipcode']),
 			    'city' => $data['city'],
 			    'state' => $data['state'],
 			    'complement' => $data['complement']
