@@ -111,7 +111,7 @@
             </table>
 
             <div>
-                <div class="buttons">
+                <div class="buttons gn-button-size">
                   <div class="pull-right">
                     <div id="button-payment-billet" class="btn btn-primary button-payment gn-button-pay" data-loading-text="<?php echo $gn_billet_button_continue_loading; ?>">
                         <div class="pull-left"><?php echo $gn_billet_button_continue; ?></div> <div class="gn-button-divisor"></div> <b><?php echo $total_paying_with_discount; ?></b>
@@ -142,7 +142,7 @@
             </table>
             <div>
 
-                <div class="buttons">
+                <div class="buttons gn-button-size">
                   <div class="pull-right">
                     <div id="button-payment-card" class="btn btn-primary button-payment gn-button-pay" data-loading-text="<?php echo $gn_card_payment_button_loading; ?>">
                         <div class="pull-left"><?php echo $gn_card_payment_button; ?></div> <div class="gn-button-divisor"></div> <b><?php echo $total_paying_without_discount; ?></b>
@@ -172,7 +172,7 @@
               </tfoot>
             </table>
             <div>
-                <div class="buttons">
+                <div class="buttons gn-button-size">
                   <div class="pull-right">
                     <input type="button" value="Selecione a forma de pagamento" class="btn btn-primary disabled" disabled="disabled" />
                   </div>

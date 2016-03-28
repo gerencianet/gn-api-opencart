@@ -1501,12 +1501,16 @@ class ControllerPaymentGerencianet extends Controller {
 		if ($success) {
 			echo json_encode($result);
 		} else {
-			$property = explode("/",$result['message']['property']);
-			$propertyName = end($property);
-			
-			$messageShow = $this->getErrorMessage(intval($result['code']), $propertyName);
+			if (isset($result['message']['property'])) {
+				$property = explode("/",$result['message']['property']);
+				$propertyName = end($property);
+			} else {
+				$propertyName="";
+			}
 
+			$messageShow = $this->getErrorMessage(intval($result['code']), $propertyName);
 			$errorResponse = array(
+				"code" => 0,
 		        "message" => $messageShow
 		    );
 			echo json_encode($errorResponse);
@@ -1551,6 +1555,9 @@ class ControllerPaymentGerencianet extends Controller {
 				break;
 			case 4600002:
 				$message = $messageErrorDefault;
+				break;
+			case 4600012:
+				$message = 'Transação não autorizada.';
 				break;
 			case 4600022:
 				$message = $messageErrorDefault;

@@ -233,6 +233,9 @@
     line-height: 20px;
 }
 
+.gn-button-size {
+    height: 80px;
+}
 .gn-success-payment {
     border: 1px solid #CCCCCC;
     margin: 10px;
