@@ -6,7 +6,7 @@ Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.
 
 ### Automática
 
-1. Faça o download da [última versão](opencart-2.x/auto/) do instalador automático do módulo.
+1. Faça o download do instalador automático do módulo de acordo com sua versão do OpenCart.
 2. Na administração da loja OpenCart, acesse o menu `System > Settings` (`Configurações > Lojas`) e clique no botão `Edit` (`Editar`). Na aba **FTP**, preencha as informações de acesso ao ftp de sua hospedagem. Tenha atenção especial ao campo FTP Root (Diretório FTP), que é caminho completo para o diretório raiz onde está instalado o seu OpenCart. Em seguida, clique no botão `Save` (`Salvar`).
 3. Acesse o menu `Extensions > Extension Installer` (`Extensões > Instalador`), clique no botão **Upload**, selecione o arquivo 'gerencianet.ocmod.zip' (citado na primeira instrução) e aguarde a conclusão da instalação automática.
 
@@ -17,7 +17,7 @@ Atenção: Devido ao tamanho do arquivo de instalação do módulo, talvez seja 
 
 ### Manual
 
-1. Faça o download da [última versão](opencart-2.x/manual/) dos arquivos do módulo.
+1. Faça o download dos arquivos do módulo de acordo com sua versão do OpenCart.
 2. Descompacte os arquivo baixado e realize o upload das pastas **admin**, **catalog** e **lib** para dentro do diretório principal do OpenCart*.
 
 *Caso você já tenha instalado o módulo da Gerencianet anteriormente, o OpenCart poderá informar que alguns arquivos serão sobrescritos. Não se preocupe, pois a instalação não afetará qualquer arquivo que não seja do módulo da Gerencianet já existente em sua loja.
