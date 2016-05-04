@@ -137,8 +137,9 @@ class ControllerPaymentGerencianet extends Controller {
 
 		$data['action'] = $this->url->link('payment/gerencianet/consult_charge');
 
-		$this->load->model('checkout/order');
+		
 		$this->load->model('extension/extension');
+		$this->load->model('checkout/order');
 		$this->document->addScript('catalog/view/javascript/jquery/jquery.mask.min.js');
 
 
@@ -312,17 +313,17 @@ class ControllerPaymentGerencianet extends Controller {
 				}
 				$data['totals_card'][] = array(
 					'title' => $total['title'],
-					'text'  => $this->formatCurrencyBRL(intval($total['value']*100)/100),
+					'text'  => $this->formatCurrencyBRL(intval(floatval($total['value'])*100)/100),
 				);
 			}
 
-			$data['total_with_discount'] = $order_info['total']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal());;
+			$data['total_with_discount'] = $order_info['total']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal());
 			//$data['total_with_discount'] = $total['value']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal());
 			//$data['total_paying_with_discount'] = $this->currency->format($total['value']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()));
 			//$data['total_paying_without_discount'] = $this->currency->format($order_info['total']);
 
-			$data['total_paying_with_discount'] = $this->formatCurrencyBRL(intval(($order_info['total']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()))*100));
-			$data['total_paying_without_discount'] = $this->formatCurrencyBRL((intval($order_info['total'])*100));
+			$data['total_paying_with_discount'] = $this->formatCurrencyBRL(floatval(($order_info['total']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()))*100));
+			$data['total_paying_without_discount'] = $this->formatBRL((floatval($order_info['total'])*100));
 
 
 			$options = $this->gerencianet_config_payment_api();
@@ -792,8 +793,6 @@ class ControllerPaymentGerencianet extends Controller {
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
 				$this->load->model('total/' . $result['code']);
-
-				//$this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
 			}
 		}
 
@@ -840,7 +839,7 @@ class ControllerPaymentGerencianet extends Controller {
 				$item = array(
 					'name' => htmlspecialchars($product['name']),
 			        'amount' => intval($product['quantity']),
-			        'value' => $this->formatMoney(intval($product['price']*100)/100, true)
+			        'value' => (int)(number_format((floatval($product['price'])*100), 0, '', ''))
 				);
 				array_push($items, $item);
 			}
@@ -850,7 +849,7 @@ class ControllerPaymentGerencianet extends Controller {
 			$item = array(
 				'name' => $new_tax['title'],
 		        'amount' => 1,
-		        'value' => $this->formatMoney(intval($new_tax['value']*100)/100, true)
+		        'value' => intval(floatval($new_tax['value'])*100)
 			);
 			array_push($items, $item);
 		}
@@ -859,7 +858,7 @@ class ControllerPaymentGerencianet extends Controller {
 			$shipping = array(
 			    array(
 			        'name' => $this->session->data['shipping_method']['title'],
-			        'value' => $this->formatMoney(intval($this->session->data['shipping_method']['cost']*100)/100, true)
+			        'value' => (int)(number_format(floatval($this->session->data['shipping_method']['cost'])*100, 0, '', ''))
 			    )
 			);
 		}
@@ -963,20 +962,15 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['totals'] = array();
 			$data['taxes'] = array();
 
-			$total_discount=0;
-
-			foreach ($order_data['totals'] as $total) {
-				
-				if (floatval($total['value'])<0) {
-					$total_discount += $this->formatMoney(intval($total['value']*100)/100);
-				}
-			}
 			if (isset($this->session->data['shipping_method']['cost'])) {
 				$shipp = $this->session->data['shipping_method']['cost'];
 			} else {
 				$shipp = 0;
 			}
 
+
+			
+			
 			$discount_cupouns_and_vouchers = ($this->cart->getSubTotal()+$shipp)-$order_info['total'];
 
 			$discountFormatedByOC = $this->formatMoney(intval(ceil((($this->getBilletDiscount()/100)*$this->cart->getSubTotal() + $discount_cupouns_and_vouchers)*100))/100, true);
@@ -986,6 +980,8 @@ class ControllerPaymentGerencianet extends Controller {
 				//$total_discount = $discountFormatedByOC;
 				$total_discount = ceil($total_discount*100)/100 + ceil($discountFormatedByOC*100)/100;
 				$total_billet_discount_no_currency_format = $discountFormatedByOC_no_currency_format;
+			} else {
+				$total_discount = ceil(floatval(($this->cart->getSubTotal()+$shipp)-$order_info['total'])*100);
 			}
 
 			if (isset($this->request->post['first_name'])) { 
@@ -1488,7 +1484,7 @@ class ControllerPaymentGerencianet extends Controller {
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
-			$data['total'] = intval(floatval($order_info['total']*100));		
+			$data['total'] = number_format(floatval($order_info['total']*100), 0, '', '');		
 			$data['brand'] = $this->request->post['brand'];
 
 			$options = $this->gerencianet_config_payment_api();
@@ -1703,7 +1699,13 @@ class ControllerPaymentGerencianet extends Controller {
 	}
 
 	public function formatCurrencyBRL($value) {
-		$formated = "R$".number_format(intval($value)/100, 2, ',', '.');
+		$formated = "R$".number_format($value/100, 2, ',', '.');
+
+		return $formated;
+	}
+
+	public function formatBRL($value) {
+		$formated = "R$".number_format($value/100, 2, ',', '.');
 
 		return $formated;
 	}
