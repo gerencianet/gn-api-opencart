@@ -35,8 +35,22 @@ class ControllerPaymentGerencianet extends Controller {
                 }
                 $incorrectsFields .= $this->language->get('gn_entry_incorrect_field_payee_code');
             }
-
-            if ($this->request->post['gerencianet_payment_option_card']!="1" && $this->request->post['gerencianet_payment_option_billet']!="1") {
+            $payment_option = false;
+            if (isset($this->request->post['gerencianet_payment_option_card'])) {
+                if ($this->request->post['gerencianet_payment_option_card']=="1" ) {
+                    $payment_option=true;
+                }
+            } else {
+                $this->request->post['gerencianet_payment_option_card'] = "0";
+            }
+            if (isset($this->request->post['gerencianet_payment_option_billet'])) {
+                if ($this->request->post['gerencianet_payment_option_billet']=="1" ) {
+                    $payment_option=true;
+                }
+            } else {
+                $this->request->post['gerencianet_payment_option_billet'] = "0";
+            }
+            if (!$payment_option) {
                 if ($incorrectsFields!="") {
                     $incorrectsFields .= "; ";
                 }
