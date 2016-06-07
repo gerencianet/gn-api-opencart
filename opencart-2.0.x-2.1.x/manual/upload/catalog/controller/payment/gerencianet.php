@@ -7,29 +7,160 @@ class ControllerPaymentGerencianet extends Controller {
 	public function index() {
     	$this->load->language('payment/gerencianet');
 
-		$data['button_confirm'] = $this->language->get('button_confirm');
-		$data['action'] = $this->url->link('payment/gerencianet/finalize');
-
 		$this->load->model('checkout/order');
+
+		$gn_checkout_type = $this->config->get('gerencianet_osc');
+		if ($gn_checkout_type=="1") {
+			$data['checkout_type'] = "OSC";
+		} else {
+			$data['checkout_type'] = "default";
+		}
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
+			$data['button_confirm'] = $this->language->get('button_confirm');
+			$data['action'] = $this->url->link('payment/gerencianet/finalize');
+			
+			if ($gn_checkout_type=="1") {
 
-			foreach ($this->cart->getProducts() as $product) {
-				foreach ($product['option'] as $option) {
-					if ($option['type'] == 'file') {
-						$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
-
-						if ($upload_info) {
-							$value = $upload_info['name'];
-						} else {
-							$value = '';
-						}
-					}
+				if ($this->config->get('gerencianet_sandbox')) {
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+				} else {
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 				}
-			}
-						
+
+				if (isset($this->session->data['shipping_method']['cost'])) {
+					$shipping_price = $this->session->data['shipping_method']['cost'];
+				} else {
+					$shipping_price=0;
+				}
+
+				$data['gn_loading_installments'] = $this->language->get('gn_loading_installments');
+
+				$data['checkout_type'] = "OSC";
+				$data['billet_option'] = $this->config->get('gerencianet_payment_option_billet');
+				$data['card_option'] = $this->config->get('gerencianet_payment_option_card');
+				$data['sandbox'] = $this->config->get('gerencianet_sandbox');
+				$data['order_total_billet_formatted'] = $this->currency->format($order_info['total']-(intval((($this->getBilletDiscount())*($order_info['total']-$shipping_price)))/100));
+				$data['order_total_card_formatted'] = $this->currency->format($order_info['total']);
+
+				$data['order_total_billet'] = $this->formatMoney($data['order_total_billet_formatted'],true);
+				$data['order_total_card'] = $this->formatMoney($data['order_total_card_formatted'],true);
+				$data['discount'] = $this->getBilletDiscount();
+				$data['discount_formatted'] = $this->config->get('gerencianet_discount_billet_value');
+				$data['discount_total_value'] = $this->currency->format(intval((($this->getBilletDiscount())*($order_info['total']-$shipping_price)))/100);
+				$data['gn_warning_sandbox_message'] = "MENSAGEM SANDBOX ATIVO";
+				$data['gn_billet_payment_method_comments'] = "Optando pelo pagamento por Boleto, a confirmação será realizada no dia útil seguinte ao pagamento.";
+				$data['gn_card_payment_comments'] = 'Optando pelo pagamento com cartão de crédito, o pagamento é processado e a confirmação ocorrerá em até 48 horas.';
+
+				$data['success_url'] = $this->url->link('payment/gerencianet/success');
+				$data['actual_order_id'] = $this->session->data['order_id'];
+
+				$options = $this->gerencianet_config_payment_api();
+				$params = array('total' => (floatval($order_info['total'])*100), 'brand' => 'visa');
+				try {
+				    $api = new Gerencianet($options);
+				    $installments = $api->getInstallments($params, array());
+				    $data['max_installments'] = end($installments['data']['installments'])['installment'] . "x de " . $this->currency->format(intval(end($installments['data']['installments'])['value'])/100);
+				} catch (GerencianetException $e) {
+					return "Ocorreu um erro inesperado. Tente novamente em alguns minutos.";
+					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
+				} catch (Exception $e) {
+					return "Ocorreu um erro inesperado. Tente novamente em alguns minutos.";
+					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
+				}
+
+				if (isset($order_info['payment_firstname'])) {
+					$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['first_name'] = '';
+				}
+
+				if (isset($order_info['payment_lastname'])) {
+					$data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['last_name'] = '';
+				}
+
+				if (isset($order_info['cpf'])) {
+					$data['cpf'] = html_entity_decode($order_info['cpf'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['cpf'] = '';
+				}
+				if (isset($order_info['telephone'])) {
+					$data['phone_number'] = html_entity_decode($order_info['telephone'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['phone_number'] = '';
+				}
+
+				if (isset($order_info['email'])) {
+					$data['email'] = html_entity_decode($order_info['email'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['email'] = '';
+				}
+
+				if (isset($order_info['birth'])) {
+					$data['birth'] = html_entity_decode($order_info['birth'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['birth'] = '';
+				}
+
+				if (isset($order_info['payment_street'])) {
+					$data['street'] = html_entity_decode($order_info['payment_street'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_address_1'])) {
+					$data['street'] = html_entity_decode($order_info['payment_address_1'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['street'] = '';
+				}
+
+				if (isset($order_info['payment_number'])) {
+					$data['number'] = html_entity_decode($order_info['payment_number'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_address_2'])) {
+					$data['number'] = html_entity_decode($order_info['payment_address_2'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['number'] = '';
+				}
+
+				if (isset($order_info['payment_neighborhood'])) {
+					$data['neighborhood'] = html_entity_decode($order_info['payment_neighborhood'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['neighborhood'] = '';
+				}
+
+				if (isset($order_info['payment_complement'])) {
+					$data['complement'] = html_entity_decode($order_info['payment_complement'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_adress_complement'])) {
+					$data['complement'] = html_entity_decode($order_info['payment_adress_complement'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['complement'] = '';
+				}
+
+				if (isset($order_info['payment_postcode'])) {
+					$data['zipcode'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['zipcode'] = '';
+				}
+
+				if (isset($order_info['payment_city'])) {
+					$data['city'] = html_entity_decode($order_info['payment_city'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['city'] = '';
+				}
+
+				if (isset($order_info['payment_zone'])) {
+					$data['state'] = html_entity_decode($order_info['payment_zone'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['state'] = '';
+				}
+
+				if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+	         		$data['base'] = $this->config->get('config_ssl');
+		      	} else {
+		         	$data['base'] = $this->config->get('config_url');
+		      	}
+		    }
+
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet.tpl')) {
 				return $this->load->view($this->config->get('config_template') . '/template/payment/gerencianet.tpl', $data);
 			} else {
@@ -140,8 +271,6 @@ class ControllerPaymentGerencianet extends Controller {
 		$this->load->model('checkout/order');
 		$this->load->model('extension/extension');
 		$this->document->addScript('catalog/view/javascript/jquery/jquery.mask.min.js');
-
-
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -305,7 +434,7 @@ class ControllerPaymentGerencianet extends Controller {
 				if (!$billetDiscountAdded && $this->getBilletDiscount()>0) {
 					$data['totals_billet'][] = array(
 						'title' => 'Desconto de ' . $this->config->get('gerencianet_discount_billet_value'),
-						'text'  => '-' . $this->currency->format(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()),
+						'text'  => '-' . $this->currency->format(intval(($this->getBilletDiscount())*$this->cart->getSubTotal())/100),
 					);
 					$billetDiscountAdded=true;
 				}
@@ -316,7 +445,7 @@ class ControllerPaymentGerencianet extends Controller {
 			}
 
 			$data['total_with_discount'] = $total['value']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal());
-			$data['total_paying_with_discount'] = $this->currency->format($total['value']-(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()));
+			$data['total_paying_with_discount'] = $this->currency->format($total['value']-intval(($this->getBilletDiscount())*$this->cart->getSubTotal())/100);
 			$data['total_paying_without_discount'] = $this->currency->format($order_info['total']);
 
 			$options = $this->gerencianet_config_payment_api();
@@ -331,6 +460,107 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['max_installments'] = "1 x de " . $data['total_paying_without_discount'];
 			} catch (Exception $e) {
 				$data['max_installments'] = "1 x de " . $data['total_paying_without_discount'];
+			}
+
+			$this->session->data['total_values_card_order_' . $this->session->data['order_id']] = $data['totals_card'];
+			$this->session->data['total_values_billet_order_' . $this->session->data['order_id']] = $data['totals_billet'];
+
+			$data['shipping_required'] = $this->cart->hasShipping();
+
+			if ($this->config->get('gerencianet_sandbox')) {
+				$data['alert_sandbox'] = $this->language->get('text_testmode');
+			} else {
+				$data['alert_sandbox'] = '';
+			}
+
+			if (isset($this->session->data['error'])) {
+				$data['error_warning'] = $this->session->data['error'];
+				unset($this->session->data['error']);
+			} else {
+				$data['error_warning'] = '';
+			}
+
+			if (isset($order_info['payment_firstname'])) {
+				$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['first_name'] = '';
+			}
+
+			if (isset($order_info['payment_lastname'])) {
+				$data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['last_name'] = '';
+			}
+
+			if (isset($order_info['cpf'])) {
+				$data['cpf'] = html_entity_decode($order_info['cpf'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['cpf'] = '';
+			}
+			if (isset($order_info['telephone'])) {
+				$data['phone_number'] = html_entity_decode($order_info['telephone'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['phone_number'] = '';
+			}
+
+			if (isset($order_info['email'])) {
+				$data['email'] = html_entity_decode($order_info['email'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['email'] = '';
+			}
+
+			if (isset($order_info['birth'])) {
+				$data['birth'] = html_entity_decode($order_info['birth'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['birth'] = '';
+			}
+
+			if (isset($order_info['payment_street'])) {
+				$data['street'] = html_entity_decode($order_info['payment_street'], ENT_QUOTES, 'UTF-8');
+			} else if (isset($order_info['payment_address_1'])) {
+				$data['street'] = html_entity_decode($order_info['payment_address_1'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['street'] = '';
+			}
+
+			if (isset($order_info['payment_number'])) {
+				$data['number'] = html_entity_decode($order_info['payment_number'], ENT_QUOTES, 'UTF-8');
+			} else if (isset($order_info['payment_address_2'])) {
+				$data['number'] = html_entity_decode($order_info['payment_address_2'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['number'] = '';
+			}
+
+			if (isset($order_info['payment_neighborhood'])) {
+				$data['neighborhood'] = html_entity_decode($order_info['payment_neighborhood'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['neighborhood'] = '';
+			}
+
+			if (isset($order_info['payment_complement'])) {
+				$data['complement'] = html_entity_decode($order_info['payment_complement'], ENT_QUOTES, 'UTF-8');
+			} else if (isset($order_info['payment_adress_complement'])) {
+				$data['complement'] = html_entity_decode($order_info['payment_adress_complement'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['complement'] = '';
+			}
+
+			if (isset($order_info['payment_postcode'])) {
+				$data['zipcode'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['zipcode'] = '';
+			}
+
+			if (isset($order_info['payment_city'])) {
+				$data['city'] = html_entity_decode($order_info['payment_city'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['city'] = '';
+			}
+
+			if (isset($order_info['payment_zone'])) {
+				$data['state'] = html_entity_decode($order_info['payment_zone'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$data['state'] = '';
 			}
 
 			$this->session->data['total_values_card_order_' . $this->session->data['order_id']] = $data['totals_card'];
@@ -371,6 +601,57 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['gn_card_payment_button_loading'] = $this->language->get('gn_card_payment_button_loading');
 			$data['gn_billet_button_continue'] = $this->language->get('gn_billet_button_continue');
 			$data['gn_billet_button_continue_loading'] = $this->language->get('gn_billet_button_continue_loading');
+			$data['gn_phone'] = $this->language->get('gn_phone');
+			$data['gn_phone_placeholder'] = $this->language->get('gn_phone_placeholder');
+			$data['gn_show_billet'] = $this->language->get('gn_show_billet');
+			$data['gn_card_payment_comments'] = $this->language->get('gn_card_payment_comments');
+			$data['gn_email'] = $this->language->get('gn_email');
+			$data['gn_email_placeholder'] = $this->language->get('gn_email_placeholder');
+			$data['gn_name'] = $this->language->get('gn_name');
+			$data['gn_name_placeholder'] = $this->language->get('gn_name_placeholder');
+			$data['gn_cpf'] = $this->language->get('gn_cpf');
+			$data['gn_cpf_placeholder'] = $this->language->get('gn_cpf_placeholder');
+			$data['gn_cnpj_option'] = $this->language->get('gn_cnpj_option');
+			$data['gn_cnpj'] = $this->language->get('gn_cnpj');
+			$data['gn_corporate_name'] = $this->language->get('gn_corporate_name');
+			$data['gn_corporate_name_placeholder'] = $this->language->get('gn_corporate_name_placeholder');
+			$data['gn_phone'] = $this->language->get('gn_phone');
+			$data['gn_phone_placeholder'] = $this->language->get('gn_phone_placeholder');
+			$data['gn_birth'] = $this->language->get('gn_birth');
+			$data['gn_birth_placeholder'] = $this->language->get('gn_birth_placeholder');
+			$data['gn_billing_address_title'] = $this->language->get('gn_billing_address_title');
+			$data['gn_show_shipping_data'] = $this->language->get('gn_show_shipping_data');
+			$data['gn_street'] = $this->language->get('gn_street');
+			$data['gn_street_placeholder'] = $this->language->get('gn_street_placeholder');
+			$data['gn_street_number'] = $this->language->get('gn_street_number');
+			$data['gn_street_number_placeholder'] = $this->language->get('gn_street_number_placeholder');
+			$data['gn_neighborhood'] = $this->language->get('gn_neighborhood');
+			$data['gn_neighborhood_placeholder'] = $this->language->get('gn_neighborhood_placeholder');
+			$data['gn_address_complement'] = $this->language->get('gn_address_complement');
+			$data['gn_address_complement_placeholder'] = $this->language->get('gn_address_complement_placeholder');
+			$data['gn_cep'] = $this->language->get('gn_cep');
+			$data['gn_cep_placeholder'] = $this->language->get('gn_cep_placeholder');
+			$data['gn_city'] = $this->language->get('gn_city');
+			$data['gn_city_placeholder'] = $this->language->get('gn_city_placeholder');
+			$data['gn_state'] = $this->language->get('gn_state');
+			$data['gn_state_no_selected'] = $this->language->get('gn_state_no_selected');
+			$data['gn_shipping_address_title'] = $this->language->get('gn_shipping_address_title');
+			$data['gn_no_shipping_data'] = $this->language->get('gn_no_shipping_data');
+			$data['gn_add_shipping_data'] = $this->language->get('gn_add_shipping_data');
+			$data['gn_change_shipping_data'] = $this->language->get('gn_change_shipping_data');
+			$data['gn_card_title'] = $this->language->get('gn_card_title');
+			$data['gn_card_brand'] = $this->language->get('gn_card_brand');
+			$data['gn_card_brand_no_selected'] = $this->language->get('gn_card_brand_no_selected');
+			$data['gn_card_installments_options'] = $this->language->get('gn_card_installments_options');
+			$data['gn_card_installments_options_no_selected'] = $this->language->get('gn_card_installments_options_no_selected');
+			$data['gn_card_number'] = $this->language->get('gn_card_number');
+			$data['gn_card_cvv'] = $this->language->get('gn_card_cvv');
+			$data['gn_card_expiration'] = $this->language->get('gn_card_expiration');
+			$data['gn_card_expiration_month'] = $this->language->get('gn_card_expiration_month');
+			$data['gn_card_expiration_month_placeholder'] = $this->language->get('gn_card_expiration_month_placeholder');
+			$data['gn_card_expiration_year'] = $this->language->get('gn_card_expiration_year');
+			$data['gn_card_expiration_year_placeholder'] = $this->language->get('gn_card_expiration_year_placeholder');
+			$data['gn_billet_payment_method_comments'] = $this->language->get('gn_billet_payment_method_comments');
 
 			$data['total_value'] = floatval($order_info['total']);
 			$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
@@ -383,7 +664,12 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['email'] = $order_info['email'];
 			$data['cancel_return'] = $this->url->link('checkout/checkout', '', 'SSL');
 
-			$data['success_url'] = $this->url->link('payment/gerencianet/success');
+			if( isset($_SERVER['HTTPS'] ) ) {
+				$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+			} else {
+				$data['success_url'] = $this->url->link('payment/gerencianet/success');
+			}
+			
 			$data['actual_order_id'] = $this->session->data['order_id'];
 
 			$data['column_left'] = $this->load->controller('common/column_left');
@@ -967,7 +1253,7 @@ class ControllerPaymentGerencianet extends Controller {
 			}
 
 			$discountFormatedByOC = $this->formatMoney($this->currency->format(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()), true);
-			$discountFormatedByOC_no_currency_format = ($this->getBilletDiscount()/100)*$this->cart->getSubTotal();
+			$discountFormatedByOC_no_currency_format = (intval(($this->getBilletDiscount())*$this->cart->getSubTotal())/100);
 			$total_billet_discount_no_currency_format=0;
 			if ($this->getBilletDiscount()>0) {
 				$total_discount = $total_discount + $discountFormatedByOC;
@@ -1496,7 +1782,6 @@ class ControllerPaymentGerencianet extends Controller {
 		}
 	}
 
-
 	public function result_api($result, $success) {
 		if ($success) {
 			echo json_encode($result);
@@ -1545,7 +1830,11 @@ class ControllerPaymentGerencianet extends Controller {
 				$message = 'Esta transação já possui uma forma de pagamento definida.';
 				break;
 			case 3500034:
-				$message = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente.';
+				if ($property=="payment_token") {
+					$message = 'Os dados do cartão não foram validados. Por favor, digite todos dados do cartão novamente.';
+				} else {
+					$message = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente.';
+				}
 				break;
 			case 3500042:
 				$message = $messageErrorDefault;
@@ -1644,6 +1933,9 @@ class ControllerPaymentGerencianet extends Controller {
 			case "name":
 				return 'Nome';
 				break;
+			case "complement":
+				return 'Complemento';
+				break;
 			case "cpf":
 				return 'CPF';
 				break;
@@ -1653,8 +1945,11 @@ class ControllerPaymentGerencianet extends Controller {
 			case "email":
 				return 'Email';
 				break;
-			case "cpf":
-				return 'CPF';
+			case "cnpj":
+				return 'CNPJ';
+				break;
+			case "corporate_name":
+				return 'Razão Social';
 				break;
 			case "birth":
 				return 'Data de nascimento';

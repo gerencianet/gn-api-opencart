@@ -91,7 +91,7 @@ $_['gn_billet_oc_order_comment'] = 'Ver Boleto';
 $_['gn_card_oc_order_comment'] = 'Pago com Cartão de Crédito';
 
 $_['gn_show_billet'] = 'Visualizar Boleto';
-$_['gn_billet_payment_method_comments'] = 'Optando pelo pagamento por boleto, a confirmação será realizada no dia útil seguinte ao pagamento.';
+$_['gn_billet_payment_method_comments'] = 'Optando pelo pagamento com boleto, a confirmação será realizada no dia útil seguinte ao pagamento.';
 $_['gn_billet_button_continue'] = 'Gerar Boleto';
 $_['gn_billet_button_continue_loading'] = 'Gerando Boleto...';
 

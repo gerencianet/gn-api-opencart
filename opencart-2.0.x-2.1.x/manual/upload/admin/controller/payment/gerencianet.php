@@ -57,6 +57,14 @@ class ControllerPaymentGerencianet extends Controller {
                 $incorrectsFields .= $this->language->get('gn_entry_no_payment_selected');
             }
 
+            if (isset($this->request->post['gerencianet_osc'])) {
+                if ($this->request->post['gerencianet_osc']!="1" ) {
+                    $this->request->post['gerencianet_osc'] = "0";
+                }
+            } else {
+                $this->request->post['gerencianet_osc'] = "0";
+            }
+
             if ($incorrectsFields=="") {
                 $this->session->data['success'] = $this->language->get('gn_config_saved');
             } else {
@@ -141,6 +149,9 @@ class ControllerPaymentGerencianet extends Controller {
         $data['gn_entry_keys_development_help'] = $this->language->get('gn_entry_keys_development_help');
         $data['gn_entry_payee_code_help'] = $this->language->get('gn_entry_payee_code_help');
         $data['gn_entry_close'] = $this->language->get('gn_entry_close');
+        $data['gn_entry_payment_osc'] = $this->language->get('gn_entry_payment_osc');
+        $data['gn_entry_help_payment_osc'] = $this->language->get('gn_entry_help_payment_osc');
+        $data['gn_entry_payment_osc_option'] = $this->language->get('gn_entry_payment_osc_option');
         
         if (isset($this->error['warning'])) {
             $data['error_warning'] = $this->error['warning'];
@@ -307,6 +318,12 @@ class ControllerPaymentGerencianet extends Controller {
             $data['gerencianet_payment_option_card'] = $this->request->post['gerencianet_payment_option_card'];
         } else {
             $data['gerencianet_payment_option_card'] = $this->config->get('gerencianet_payment_option_card');
+        }
+
+        if (isset($this->request->post['gerencianet_osc'])) {
+            $data['gerencianet_osc'] = $this->request->post['gerencianet_osc'];
+        } else {
+            $data['gerencianet_osc'] = $this->config->get('gerencianet_osc');
         }
         
         $this->load->model('localisation/order_status');

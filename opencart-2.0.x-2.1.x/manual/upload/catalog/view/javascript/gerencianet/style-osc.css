@@ -25,23 +25,18 @@
 }
 
 .gn-icon-spinner6:before {
-    font-family: 'gn-icomoon' !important;
     content: "\e74e";
 }
 .gn-icon-credit-card2:before {
-    font-family: 'gn-icomoon' !important;
     content: "\e900";
 }
 .gn-icon-icones-personalizados_boleto:before {
-    font-family: 'gn-icomoon' !important;
     content: "\e901";
 }
 .gn-icon-download:before {
-    font-family: 'gn-icomoon' !important;
     content: "\e902";
 }
 .gn-icon-check-circle-o:before {
-    font-family: 'gn-icomoon' !important;
     content: "\e903";
 }
 
@@ -119,41 +114,41 @@
 }
 
 .gn-visa{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-40px 0;
 }
 
 .gn-mastercard{
-    background-image:url(../gerencianet/images/sprite-gn.png);
+    background-image:url(images/sprite-gn.png);
     background-position:0px 0;
 }
 
 .gn-amex{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-80px 0;
 }
 
 .gn-diners{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-40px -40px;
 }
 
 .gn-discover{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position: 0 -40px;
 }
 
 .gn-jcb{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-160px 0;
 }
 
 .gn-elo{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-80px -40px;
 }
 .gn-aura{
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-120px 0;
 }
 
@@ -164,6 +159,14 @@
     filter: none;
     background-color: #F26424;
     border: 1px solid #C84D24;
+}
+
+.gn-card-brand-checked{
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    filter: none !important;
+    background-color: #F26424 !important;
+    border: 1px solid #C84D24 !important;
 }
 
 .gn-card-brand{
@@ -193,6 +196,7 @@
     background-color: #F26424;
 }
 
+
 .gn-card-brand-content {
     margin: 5px;
 }
@@ -217,8 +221,12 @@
     margin-right: 30px;
 }
 
+.gn-right-padding-1 {
+    padding-right: 10px;
+}
+
 .gn-icon-card-input {
-    background:url(../gerencianet/images/sprite-gn.png);
+    background:url(images/sprite-gn.png);
     background-position:-120px -45px;
     background-size: 200px 80px !important;
     background-repeat:no-repeat;
@@ -238,9 +246,6 @@
     line-height: 20px;
 }
 
-.gn-button-size {
-    height: 80px;
-}
 .gn-success-payment {
     border: 1px solid #CCCCCC;
     margin: 10px;
@@ -290,8 +295,12 @@
 
 .gn-success-payment-button-icon {
     font-size: 25px;
-    margin: -2px 5px -8px -2px;
+    margin: -2px 15px -8px -2px;
     float: left;
+}
+
+.gn-success-payment-button {
+    margin-bottom: 30px;
 }
 
 .gn-button-divisor {
@@ -303,6 +312,7 @@
 }
 
 .gn-loading-request {
+    margin-top: 25px;
     display: none;
 }
 
@@ -343,8 +353,11 @@
     margin-left: 15px;
 }
 
+.gn-cnpj-row .checker{
+    float: left;
+}
+
 .gn-minimum-size-field {
-    min-width: 120px;
 }
 
 .gn-max-size-select {
@@ -377,11 +390,11 @@
 }
 
 .gn-card-number-input-row {
-    margin-left: 40px;
+    margin-right: 10px;
 }
 
 .gn-input-card-number {
-    margin-left:-5px;
+    margin-left:0px;
 }
 
 .gn-card-expiration-row {
@@ -390,7 +403,7 @@
 }
 
 .gn-card-expiration-select {
-    width:80px; 
+    width:90px; 
     float: left;
 }
 
@@ -400,6 +413,7 @@
 }
 
 .gn-cvv-row {
+    width: 60px;
     margin-right: 15px; 
     margin-bottom: 3px;
 }
@@ -412,12 +426,13 @@
     text-align: center;
 }
 
-.gn-row{
+.gn-row {
     width:100%;
     height:auto;
     vertical-align: middle;
     overflow:hidden;
     margin:10px auto;
+    padding:2px;
 }
 
 .gn-row-left {
@@ -456,23 +471,28 @@
     width: 200px;
 }
 
-.form-group input[type='text'] {
+.gn-form input[type='text'] {
     width: 100%;
 }
 
 .gn-form-select {
     width: 100%;
     max-width: 350px;
+    min-width: 200px;
 }
 
 .gn-form {
-    margin: 15px;
+    margin: 0px 15px 25px 15px;
 }
 
 .gn-form .required label:before {
     content: '*';
     color: #F00;
     font-weight: bold;
+}
+
+.gn-form .required label:after {
+    content: ' ';
 }
 
 .gn-form .gn-card-brand:before {
@@ -493,14 +513,27 @@
 
 .gn-label {
     height:30px;
-    padding: 7px 15px 7px 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
     text-align: right;
 }
 
-.gn-panel {
-    background-color: #FFFFFF;
+.gn-label-birth {
+    height:35px;
+    line-height: 18px;
+    padding-top: 5px;
+    text-align: right;
+    vertical-align: center;
 }
 
+.gn-label-birth label {
+    vertical-align: center;
+}
+
+.gn-payment-option-sizer {
+    height: 80px;
+    width: 1px;
+}
 
 .clear {
     clear: both;
@@ -510,6 +543,13 @@
     float: left;
 }
 .pull-right {
+    float: right;
+}
+
+.gn-pull-left {
+    float: left;
+}
+.gn-pull-right {
     float: right;
 }
 
@@ -566,13 +606,224 @@
       width: 8.333333333333332%;
 }  
 
-.gn-payment-finalized {
-    max-width: 1200px;
+.gn-osc-logo {
+    background-color: #FFF; 
+    float: left;
+    padding: 25px 15px;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+.gn-osc-payment-option {
+    background-color: #FFFFFF; 
+    float: left;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-left: 0px;
+    border: none;
+}
+
+
+.gn-osc-payment-option-selected {
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 0px;
+    background-color: #FFFFFF;
+}
+
+.gn-osc-payment-option-unselected {
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 0px;
+    background-color: #F0F0F0;
+}
+.gn-osc-icon-gerencianet {
+    color: #666666;
+}
+
+.gn-osc-icon-gerencianet a, .gn-osc-icon-gerencianet a:hover {
+    color: #666666;
+    text-decoration: none;
+}
+
+.gn-osc-icon-gerencianet span{
+    font-size: 25px;
+}
+
+.gn-osc-left {
+    display: table-cell;
+    vertical-align: middle;
+    height:auto;
+    padding: 3px;
+}
+
+.gn-osc-payment-option-gerencianet {
+    font-size: 16px;
+    color: #000;
+    padding-left: 15px;
+}
+
+.gn-osc-payment-option-gerencianet a {
+    color: #000;
+    text-decoration: none;
+}
+
+.gn-osc-payment-option-gerencianet a:hover {
+    text-decoration: underline;
+}
+
+.gn-osc-background {
+    background-color: #FFFFFF; 
+    margin-top: -1px; 
+    padding: 0px; 
+    border: 1px solid #CCCCCC;
+}
+
+.gn-osc-radio {
+    margin: 0px !important;
+}
+
+.gn-osc-payment-option-sizer {
+    height: 60px;
+    width: 1px;
+}
+
+.gn-row select, input[type="text"] {
+    color: #262626;
+    background-color: #FFF;
+    padding: 5px;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.gn-osc-row {
+    height:auto;
+    vertical-align: middle;
+    overflow:hidden;
+    margin:10px auto;
+    padding:2px;
+}
+
+
+.gn-osc-row select, input[type="text"] {
+    color: #262626;
+    background-color: #FFF;
+    padding: 5px;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.gn-inputs-error {
+    border: 1px solid #bd7977 !important;
+    background-color: #f4dddd !important;
+}
+
+.gn-osc-warning-payment {
+    color: #a94442;
+    border: 1px solid #bd7977;
+    background-color: #f2dede;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.gn-osc-attention-payment {
+    color: #8a6d3b;
+    border: 1px solid #faebcc;
+    background-color: #fcf8e3;
+    padding: 15px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    display: none;
+}
+
+.gn-osc-pay-comments {
+    margin: 0px;
+}
+
+.gn-billet-button {
+    height: auto;
+}
+
+.gn-osc-payment_module {
+    margin-bottom: 10px; 
+    display: block;
+    width: 50%;
+    min-width: 550px;
+    border: 1px solid #d6d4d4;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    color: #333;
+    padding: 10px;
+    letter-spacing: -1px;
+    position: relative; 
+}
+.gn-osc-payment_module span {
+      color: #777; 
+}
+
+.gn-warning {
+    color: #8a6d3b;
+    border: 1px solid #faebcc;
+    background-color: #fcf8e3;
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.gn-alert {
+    color: #a94442;
+    border: 1px solid #ebccd1;
+    background-color: #f2dede;
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.gn-osc-button {
+    background-color: #f26522;
+    color: #FFFFFF;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 10px 16px;
+    border: none;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.gn-osc-button-disabled {
+    background-color: #ED9E79;
+    color: #FFFFFF;
+}
+
+.gn-osc-subtotal {
+    border: 1px solid #DEDEDE; 
+    margin: 0px; 
+    padding:5px;
+    font-size: 16px;
+}
+
+.gn-panel-body {
+    padding: 3px;
 }
 
 @media only screen and (max-width: 992px) {
+
     .gn-row-left, .gn-row-right {
         display: block;
+        width: 100%;
+    }
+
+    .gn-osc-payment_module {
         width: 100%;
     }
 
@@ -596,15 +847,44 @@
         margin-left: 0;
     }
 
-    .gn-label {
-        height:30px;
-        padding: 15px 0 0 0;
+    .gn-label, .gn-label-birth {
+        height:35px;
+        padding: 10px 0 0 0;
         text-align: left;
     }
+
+    .gn-payment-option-sizer {
+        display: none;
+    }
+
+
+    .gn-osc-pay-comments {
+        padding-top: 0px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+    }
+
 }
 
+@media only screen and (max-width: 550px) {
+    .gn-osc-payment-option {
+        float: none;
+        display: block;
+        margin-left: 0px;
+        margin-bottom: 15px;
+    }
+    .gn-osc-logo {
+        float: none;
+        display: block;
+    }
 
+    .gn-osc-payment_module {
+        min-width: auto;
+        width: 100%;
+    }
 
+}
 
 /** Key Frames **/
 

@@ -7,34 +7,177 @@ class ControllerPaymentGerencianet extends Controller {
 	public function index() {
     	$this->load->language('payment/gerencianet');
 
-		$data['button_confirm'] = $this->language->get('button_confirm');
-		$data['action'] = $this->url->link('payment/gerencianet/finalize');
-
 		$this->load->model('checkout/order');
+
+		$gn_checkout_type = $this->config->get('gerencianet_osc');
+		if ($gn_checkout_type=="1") {
+			$data['checkout_type'] = "OSC";
+		} else {
+			$data['checkout_type'] = "default";
+		}
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
+			$data['button_confirm'] = $this->language->get('button_confirm');
+			$data['action'] = $this->url->link('payment/gerencianet/finalize');
+			
+			if ($gn_checkout_type=="1") {
 
-			foreach ($this->cart->getProducts() as $product) {
-				foreach ($product['option'] as $option) {
-					if ($option['type'] == 'file') {
-						$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
-
-						if ($upload_info) {
-							$value = $upload_info['name'];
-						} else {
-							$value = '';
-						}
-					}
+				if ($this->config->get('gerencianet_sandbox')) {
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+				} else {
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 				}
-			}
-						
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/payment/gerencianet.tpl')) {
-				return $this->load->view($this->config->get('config_template') . '/payment/gerencianet.tpl', $data);
+
+				if (isset($this->session->data['shipping_method']['cost'])) {
+					$shipping_price = $this->session->data['shipping_method']['cost'];
+				} else {
+					$shipping_price=0;
+				}
+
+				$data['gn_loading_installments'] = $this->language->get('gn_loading_installments');
+
+				$data['checkout_type'] = "OSC";
+				$data['billet_option'] = $this->config->get('gerencianet_payment_option_billet');
+				$data['card_option'] = $this->config->get('gerencianet_payment_option_card');
+				$data['sandbox'] = $this->config->get('gerencianet_sandbox');
+				$data['order_total_billet_formatted'] = $this->formatCurrencyBRL(intval($order_info['total']*100-intval(($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
+				$data['order_total_card_formatted'] = $this->formatCurrencyBRL(($order_info['total'])*100);
+
+				$data['order_total_billet'] = $this->formatMoney($data['order_total_billet_formatted'],true);
+				$data['order_total_card'] = $this->formatMoney($data['order_total_card_formatted'],true);
+				$data['discount'] = $this->getBilletDiscount();
+				$data['discount_formatted'] = $this->config->get('gerencianet_discount_billet_value');
+				$data['discount_total_value'] = $this->formatCurrencyBRL(intval((($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
+				$data['gn_warning_sandbox_message'] = "O modo Sandbox (Ambiente de testes) está ativo. Suas cobranças não serão validadas.";
+				$data['gn_billet_payment_method_comments'] = "Optando pelo pagamento por Boleto, a confirmação será realizada no dia útil seguinte ao pagamento.";
+				$data['gn_card_payment_comments'] = 'Optando pelo pagamento com cartão de crédito, o pagamento é processado e a confirmação ocorrerá em até 48 horas.';
+
+				if( isset($_SERVER['HTTPS'] ) ) {
+					$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+				} else {
+					$data['success_url'] = $this->url->link('payment/gerencianet/success');
+				}
+				
+				$data['actual_order_id'] = $this->session->data['order_id'];
+
+				$options = $this->gerencianet_config_payment_api();
+				$params = array('total' => (floatval($order_info['total'])*100), 'brand' => 'visa');
+				$error_api = false;
+				try {
+				    $api = new Gerencianet($options);
+				    $installments = $api->getInstallments($params, array());
+				    $data['max_installments'] = end($installments['data']['installments'])['installment'] . "x de " . $this->formatCurrencyBRL(intval(end($installments['data']['installments'])['value']));
+
+				} catch (GerencianetException $e) {
+					return "Ocorreu um erro inesperado. Tente novamente em alguns minutos.";
+					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
+				} catch (Exception $e) {
+					return "Ocorreu um erro inesperado. Tente novamente em alguns minutos.";
+					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
+				}
+
+				if (isset($order_info['payment_firstname'])) {
+					$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['first_name'] = '';
+				}
+
+				if (isset($order_info['payment_lastname'])) {
+					$data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['last_name'] = '';
+				}
+
+				if (isset($order_info['cpf'])) {
+					$data['cpf'] = html_entity_decode($order_info['cpf'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['cpf'] = '';
+				}
+				if (isset($order_info['telephone'])) {
+					$data['phone_number'] = html_entity_decode($order_info['telephone'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['phone_number'] = '';
+				}
+
+				if (isset($order_info['email'])) {
+					$data['email'] = html_entity_decode($order_info['email'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['email'] = '';
+				}
+
+				if (isset($order_info['birth'])) {
+					$data['birth'] = html_entity_decode($order_info['birth'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['birth'] = '';
+				}
+
+				if (isset($order_info['payment_street'])) {
+					$data['street'] = html_entity_decode($order_info['payment_street'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_address_1'])) {
+					$data['street'] = html_entity_decode($order_info['payment_address_1'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['street'] = '';
+				}
+
+				if (isset($order_info['payment_number'])) {
+					$data['number'] = html_entity_decode($order_info['payment_number'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_address_2'])) {
+					$data['number'] = html_entity_decode($order_info['payment_address_2'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['number'] = '';
+				}
+
+				if (isset($order_info['payment_neighborhood'])) {
+					$data['neighborhood'] = html_entity_decode($order_info['payment_neighborhood'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['neighborhood'] = '';
+				}
+
+				if (isset($order_info['payment_complement'])) {
+					$data['complement'] = html_entity_decode($order_info['payment_complement'], ENT_QUOTES, 'UTF-8');
+				} else if (isset($order_info['payment_adress_complement'])) {
+					$data['complement'] = html_entity_decode($order_info['payment_adress_complement'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['complement'] = '';
+				}
+
+				if (isset($order_info['payment_postcode'])) {
+					$data['zipcode'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['zipcode'] = '';
+				}
+
+				if (isset($order_info['payment_city'])) {
+					$data['city'] = html_entity_decode($order_info['payment_city'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['city'] = '';
+				}
+
+				if (isset($order_info['payment_zone'])) {
+					$data['state'] = html_entity_decode($order_info['payment_zone'], ENT_QUOTES, 'UTF-8');
+				} else {
+					$data['state'] = '';
+				}
+
+				if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+	         		$data['base'] = $this->config->get('config_ssl');
+		      	} else {
+		         	$data['base'] = $this->config->get('config_url');
+		      	}
+		    }
+
+			
+			if (version_compare(VERSION, '2.2') < 0) {
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet.tpl')) {
+					return $this->load->view($this->config->get('config_template') . '/template/payment/gerencianet.tpl', $data);
+				} else {
+					return $this->load->view('default/template/payment/gerencianet.tpl', $data);
+				}
 			} else {
-				return $this->load->view($this->config->get('config_template') . '/payment/gerencianet.tpl', $data);
-			}
+				return $this->load->view('payment/gerencianet', $data);
+			}			
 		}
 	}
 
@@ -509,6 +652,7 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['gn_card_expiration_year'] = $this->language->get('gn_card_expiration_year');
 			$data['gn_card_expiration_year_placeholder'] = $this->language->get('gn_card_expiration_year_placeholder');
 			$data['gn_billet_payment_method_comments'] = $this->language->get('gn_billet_payment_method_comments');
+			$data['template'] = $this->config->get('config_template');
 
 			$data['total_value'] = floatval($order_info['total']);
 			$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
@@ -544,10 +688,14 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['footer'] = $this->load->controller('common/footer');
 			$data['header'] = $this->load->controller('common/header');
 
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . 'payment/gerencianet_payment.tpl')) {
-				$this->response->setOutput($this->load->view($this->config->get('config_template') . 'payment/gerencianet_payment.tpl', $data));
+			if (version_compare(VERSION, '2.2') < 0) {
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet_payment.tpl')) {
+					$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/payment/gerencianet_payment.tpl', $data));
+				} else {
+					$this->response->setOutput($this->load->view('default/template/payment/gerencianet_payment.tpl', $data));
+				}
 			} else {
-				$this->response->setOutput($this->load->view($this->config->get('config_template') .'payment/gerencianet_payment.tpl', $data));
+				$this->response->setOutput($this->load->view('payment/gerencianet_payment', $data));
 			}
 		}
 	}
@@ -641,10 +789,14 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['footer'] = $this->load->controller('common/footer');
 				$data['header'] = $this->load->controller('common/header');
 
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . 'payment/gerencianet_success.tpl')) {
-					$this->response->setOutput($this->load->view($this->config->get('config_template') . 'payment/gerencianet_success.tpl', $data));
+				if (version_compare(VERSION, '2.2') < 0) {
+					if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet_success.tpl')) {
+						$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/payment/gerencianet_success.tpl', $data));
+					} else {
+						$this->response->setOutput($this->load->view('default/template/payment/gerencianet_success.tpl', $data));
+					}
 				} else {
-					$this->response->setOutput($this->load->view($this->config->get('config_template') . 'payment/gerencianet_success.tpl', $data));
+					$this->response->setOutput($this->load->view('payment/gerencianet_success', $data));
 				}
 			}
 		}

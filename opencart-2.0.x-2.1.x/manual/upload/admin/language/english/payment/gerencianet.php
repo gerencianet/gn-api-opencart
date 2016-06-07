@@ -30,6 +30,10 @@ $_['gn_entry_payment_options'] = 'Pagamentos permitidos';
 $_['gn_entry_payment_options_billet_and_card'] = 'Boleto e Cartão de Crédito';
 $_['gn_entry_payment_options_billet'] = 'Boleto Bancário';
 $_['gn_entry_payment_options_card'] = 'Cartão de Crédito';
+$_['gn_entry_payment_osc'] = 'Checkout em um passo';
+$_['gn_entry_payment_osc_option'] = 'Habilitar checkout em um passo';
+$_['gn_entry_help_payment_osc'] = 'Esta opção permite que o pagamento seja realizado diretamente na tela de Finalizar Compra. Antes de utilizar esta funcionalidade em produção, realize teste em modo de desenvolvimento para verificar a compatibilidade com a sua loja.';
+
 
 $_['gn_entry_payment_notification_update'] = 'Atualizar status dos pedidos OpenCart automaticamente';
 $_['gn_entry_payment_notification_update_notify'] = 'Ao atualizar o status do pedido, deseja enviar e-mail automático da sua loja para notificar o cliente?';

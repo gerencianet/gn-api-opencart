@@ -78,6 +78,18 @@
                 </div>
               </div>
 
+              <div class="form-group">
+              <label class="col-sm-3 control-label" for="entry-payment-options"><span data-toggle="tooltip" title="<?php echo $gn_entry_help_payment_osc; ?>"><?php echo $gn_entry_payment_osc; ?></span></label>
+                <div class="col-sm-9">
+                  <div class="pull-left gn-admin-item-form">
+                    <input type="checkbox" name="gerencianet_osc" value="1" <?php if ($gerencianet_osc) { ?> checked <?php } ?>>
+                  </div>
+                  <div class="pull-left gn-admin-item-left">
+                    <?php echo $gn_entry_payment_osc_option; ?>
+                  </div>
+                </div>
+              </div>
+
               <div class="form-group gn-admin-detail-config">
                 <div class="col-sm-3 control-label"></div>
                 <div class="col-sm-9 gn-admin-detail-background">

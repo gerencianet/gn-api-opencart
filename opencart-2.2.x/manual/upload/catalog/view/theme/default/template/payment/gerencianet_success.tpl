@@ -14,6 +14,7 @@
     <?php $class = 'col-sm-12'; ?>
     <?php } ?>
     <div id="content" class="<?php echo $class; ?> gn-success-content"><?php echo $content_top; ?>
+      <div class="gn-payment-finalized">
       <h1><?php echo $gn_success_payment_title; ?></h1>
       
       <?php echo $text_message; ?>
@@ -59,7 +60,7 @@
                 <div class="row">
                     <div class="col-sm-1">
                       <div class="gn-icon-emission-success">
-                          <span class="icon-check-circle-o"></span>
+                          <span class="gn-icon-check-circle-o"></span>
                       </div>
                     </div>
 
@@ -81,7 +82,7 @@
                  <div class="row">
                     <div class="buttons gn-align-center">
                         <a id="button-payment-billet" class="btn btn-primary button-payment gn-button-pay" href="<?php echo $generated_billet_url; ?>" target="_blank" >
-                            <div class="gn-success-payment-button-icon"><span class="icon-download"></span></div> <div class="gn-button-divisor"></div><?php echo $gn_success_payment_billet_button; ?>
+                            <div class="gn-success-payment-button-icon"><span class="gn-icon-download"></span></div> <div class="gn-button-divisor"></div><?php echo $gn_success_payment_billet_button; ?>
                         </a>
                     </div>
                   </div>
@@ -90,6 +91,7 @@
           </div>
       </div>
       </p>
+      </div>
 
       <?php echo $content_bottom; ?></div>
     <?php echo $column_right; ?></div>
