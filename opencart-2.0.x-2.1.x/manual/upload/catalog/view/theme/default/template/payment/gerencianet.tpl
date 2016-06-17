@@ -463,7 +463,7 @@
                                             <div class="gn-cvv-info">
                                                 <div class="pull-left gn-icon-card-input">
                                                 </div>
-                                                <div class="pull-left">
+                                                <div class="pull-left gn-osc-cvv-info-description">
                                                     São os três últimos
                                                     dígitos no verso do cartão.
                                                 </div>

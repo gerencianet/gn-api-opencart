@@ -54,7 +54,12 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['gn_billet_payment_method_comments'] = "Optando pelo pagamento por Boleto, a confirmação será realizada no dia útil seguinte ao pagamento.";
 				$data['gn_card_payment_comments'] = 'Optando pelo pagamento com cartão de crédito, o pagamento é processado e a confirmação ocorrerá em até 48 horas.';
 
-				$data['success_url'] = $this->url->link('payment/gerencianet/success');
+				if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+	         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+				} else {
+					$data['success_url'] = $this->url->link('payment/gerencianet/success');
+		      	}
+
 				$data['actual_order_id'] = $this->session->data['order_id'];
 
 				$options = $this->gerencianet_config_payment_api();
@@ -664,12 +669,12 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['email'] = $order_info['email'];
 			$data['cancel_return'] = $this->url->link('checkout/checkout', '', 'SSL');
 
-			if( isset($_SERVER['HTTPS'] ) ) {
-				$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+			if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
+         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
 			} else {
 				$data['success_url'] = $this->url->link('payment/gerencianet/success');
-			}
-			
+	      	}
+	      	
 			$data['actual_order_id'] = $this->session->data['order_id'];
 
 			$data['column_left'] = $this->load->controller('common/column_left');

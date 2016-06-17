@@ -141,32 +141,37 @@ jQuery(document).ready(function($){
     });
 
     $('#gn-pay-billet-button').click(function(event){
-        $('#gn-pay-billet-button').prop("disabled",true);
-        if (billetValidateFields()) {
-            if (id_charge!=0) {
-                payBilletCharge();
+        if($('#paymentMethodBilletRadio').is(':checked')) {
+            $('#gn-pay-billet-button').prop("disabled",true);
+            if (billetValidateFields()) {
+                if (id_charge!=0) {
+                    payBilletCharge();
+                } else {
+                    createCharge('billet');
+                }
             } else {
-                createCharge('billet');
+                showError("Preencha corretamente os campos informados.");
+                $('#gn-pay-billet-button').prop("disabled",false);
             }
-        } else {
-            showError("Preencha corretamente os campos informados.");
-            $('#gn-pay-billet-button').prop("disabled",false);
         }
     });
 
     $('#gn-pay-card-button').click(function(event){
-        $('#gn-pay-card-button').prop("disabled",true);
-        if (cardValidateFields()) {
-              if (id_charge!=0) {
-                  payCardCharge();
-              } else {
-                  createCharge('card');
-              }
-          } else {
-              showError("Preencha corretamente os campos informados.");
-              $('#gn-pay-card-button').prop("disabled",false);
-          }
-      });
+        if($('#paymentMethodCardRadio').is(':checked')) {
+            $('#gn-pay-card-button').prop("disabled",true);
+            if (cardValidateFields()) {
+                if (id_charge!=0) {
+                    payCardCharge();
+                } else {
+                    createCharge('card');
+                }
+            } else {
+                showError("Preencha corretamente os campos informados.");
+                $('#gn-pay-card-button').prop("disabled",false);
+            }
+        }
+    });
+
 
     function createCharge(paymentType) {
         $('.gn-loading-request').fadeIn();

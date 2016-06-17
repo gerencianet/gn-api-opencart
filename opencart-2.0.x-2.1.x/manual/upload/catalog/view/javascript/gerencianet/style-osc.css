@@ -239,6 +239,11 @@
     font-size: 11px;
     line-height: 13px;
     height: 35px;
+    max-width: 200px !important;
+}
+
+.gn-osc-cvv-info-description {
+    max-width: 140px !important;
 }
 
 .gn-button-pay {
@@ -404,6 +409,7 @@
 
 .gn-card-expiration-select {
     width:90px; 
+    max-width: 100px !important;
     float: left;
 }
 
