@@ -60,6 +60,10 @@ class ControllerPaymentGerencianet extends Controller {
 					$data['success_url'] = $this->url->link('payment/gerencianet/success');
 		      	}
 
+		      	if (strpos($data['success_url'], '?') !== false) {
+		      		$data['success_url'] = $data['success_url'] . "?";
+		      	}
+
 				$data['actual_order_id'] = $this->session->data['order_id'];
 
 				$options = $this->gerencianet_config_payment_api();
@@ -673,6 +677,10 @@ class ControllerPaymentGerencianet extends Controller {
          		$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
 			} else {
 				$data['success_url'] = $this->url->link('payment/gerencianet/success');
+	      	}
+
+	      	if (strpos($data['success_url'], '?') !== false) {
+	      		$data['success_url'] = $data['success_url'] . "?";
 	      	}
 	      	
 			$data['actual_order_id'] = $this->session->data['order_id'];
