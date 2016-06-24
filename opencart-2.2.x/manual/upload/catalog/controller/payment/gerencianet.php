@@ -60,7 +60,7 @@ class ControllerPaymentGerencianet extends Controller {
 					$data['success_url'] = $this->url->link('payment/gerencianet/success');
 		      	}
 
-		      	if (strpos($data['success_url'], '?') !== false) {
+		      	if (strpos($data['success_url'], '?') !== true) {
 		      		$data['success_url'] = $data['success_url'] . "?";
 		      	}
 
@@ -675,7 +675,7 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['success_url'] = $this->url->link('payment/gerencianet/success');
 	      	}
 
-	      	if (strpos($data['success_url'], '?') !== false) {
+	      	if (strpos($data['success_url'], '?') !== true) {
 	      		$data['success_url'] = $data['success_url'] . "?";
 	      	}
 
