@@ -1,12 +1,18 @@
 <?php
-include_once(DIR_SYSTEM . '../lib/gerencianet/autoload.php');
+
+if (version_compare(phpversion(), '5.4.0', '>=')) {
+	include_once(DIR_SYSTEM . '../lib/gerencianet/autoload.php');
+} else {
+	echo "A versão do PHP instalado no servidor não é compatível com o módulo da Gerencianet. Por favor, verifique os requisitos do módulo.";
+	die();
+}
+
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
 
 class ControllerPaymentGerencianet extends Controller {
 	public function index() {
     	$this->load->language('payment/gerencianet');
-
 		$this->load->model('checkout/order');
 
 		$gn_checkout_type = $this->config->get('gerencianet_osc');

@@ -14,6 +14,12 @@
     </div>
   </div>
   <div class="container-fluid">
+    <?php 
+    if (!version_compare(phpversion(), '5.4.0', '>=')) { ?>
+      <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i>
+      A versão do PHP instalado no servidor não é compatível com o módulo da Gerencianet. Por favor, verifique os requisitos do módulo.
+      </div>
+    <?php } ?>
     <?php if (isset($error['error_warning'])) { ?>
     <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> <?php echo $error['error_warning']; ?>
       <button type="button" class="close" data-dismiss="alert">&times;</button>
