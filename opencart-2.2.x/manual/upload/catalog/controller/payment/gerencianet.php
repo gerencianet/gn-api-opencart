@@ -717,7 +717,11 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['generated_payment_type'] = $this->request->get['payment'];
 
 			if ($data['generated_payment_type']=="billet") {
-				$data['generated_billet_url'] = urldecode($this->request->post['billet']);
+				if (isset($this->session->data['billet_link_'.$this->request->get['order']])) {
+					$data['generated_billet_url'] = $this->session->data['billet_link_'.$this->request->get['order']];
+				} else {
+					$data['generated_billet_url'] = false;
+				}
 				if (isset($this->session->data['total_values_billet_order_' . $data['generated_order_number']])) {
 					$data['totals_session'] = $this->session->data['total_values_billet_order_' . $data['generated_order_number']];
 				}
@@ -758,6 +762,8 @@ class ControllerPaymentGerencianet extends Controller {
 					'text' => $this->language->get('success_payment'),
 					'href' => $this->url->link('payment/gerencianet/success', '', 'SSL')
 				);
+
+				//$this->session->data['billet_link_'.$this->session->data['order_id']]
 
 				$data['gn_success_payment_title'] = $this->language->get('gn_success_payment_title');
 				$data['gn_success_payment_order'] = $this->language->get('gn_success_payment_order');
@@ -1171,6 +1177,7 @@ class ControllerPaymentGerencianet extends Controller {
 			    }
 			    
 			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), '<a href="' . $charge['data']['link'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
+			    $this->session->data['billet_link_'.$this->session->data['order_id']] = $charge['data']['link'];
 			    $this->session->data['order_id'] = '';
 			    $this->cart->clear();
 			    $this->result_api($charge, true);
@@ -1581,7 +1588,20 @@ class ControllerPaymentGerencianet extends Controller {
 				$propertyName="";
 			}
 
-			$messageShow = $this->getErrorMessage(intval($result['code']), $propertyName);
+			if (isset($result['code'])) {
+				if (isset($result['message']) && $propertyName=="") {
+					$messageShow = $this->getErrorMessage(intval($result['code']), $result['message']);
+				} else {
+					$messageShow = $this->getErrorMessage(intval($result['code']), $propertyName);
+				}
+			} else {
+				if (isset($result['message'])) {
+					$messageShow = $result['message'];
+				} else {
+					$messageShow = $this->getErrorMessage(1, $propertyName);
+				}
+			}
+
 			$errorResponse = array(
 				"code" => 0,
 		        "message" => $messageShow
@@ -1673,6 +1693,9 @@ class ControllerPaymentGerencianet extends Controller {
 				break;
 			case 4600212:
 				$message = 'Número de telefone já associado a outro CPF. Não é possível cadastrar o mesmo telefone para mais de um CPF.';
+				break;
+			case 4600222:
+				$message = 'Recebedor e cliente não podem ser a mesma pessoa.';
 				break;
 			case 4600224:
 				$message = $messageErrorDefault;

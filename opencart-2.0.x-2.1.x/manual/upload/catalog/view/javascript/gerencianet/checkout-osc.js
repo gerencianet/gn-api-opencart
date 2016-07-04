@@ -242,12 +242,7 @@ jQuery(document).ready(function($){
             success: function(response) {
                 var obj = $.parseJSON(response);
                 if (obj.code==200) {
-                    var url = encodeURIComponent(obj.data.link);
-                    var redirect = $('<form action="' + success_url + "&payment=billet&order=" + actual_order_id + "&charge=" + obj.data.charge_id + '" method="post">' +
-                      '<input type="text" name="billet" value="' + url + '" />' +
-                      '</form>');
-                    $('body').append(redirect);
-                    redirect.submit();
+                    window.location.href = success_url + "&payment=billet&order=" + actual_order_id + "&charge=" + obj.data.charge_id;
                 } else {
                     $('#gn-pay-billet-button').prop("disabled",false);
                     //$('#gn-pay-billet-button').removeClass("gn-osc-button-disabled");

@@ -73,9 +73,13 @@
                 <?php if ($generated_payment_type=="billet") { ?>
                  <div class="row">
                     <div class="buttons gn-align-center">
+                        <?php if ($generated_billet_url==false) { ?>
+                        Acesse seu boleto diretamente de sua conta ou através do seu e-mail.
+                      <?php } else { ?>
                         <a id="button-payment-billet" class="btn btn-primary button-payment gn-button-pay" href="<?php echo $generated_billet_url; ?>" target="_blank" >
-                            <div class="gn-success-payment-button-icon"><span class="icon-download"></span></div> <div class="gn-button-divisor"></div><?php echo $gn_success_payment_billet_button; ?>
+                            <div class="gn-success-payment-button-icon"><span class="gn-icon-download"></span></div> <div class="gn-button-divisor"></div><?php echo $gn_success_payment_billet_button; ?>
                         </a>
+                      <?php } ?>
                     </div>
                   </div>
                 <?php } ?>

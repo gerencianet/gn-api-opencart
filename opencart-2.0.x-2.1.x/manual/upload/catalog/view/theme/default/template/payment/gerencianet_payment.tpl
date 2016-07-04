@@ -855,12 +855,7 @@ function payBilletCharge() {
         success: function(response) {
             var obj = $.parseJSON(response);
             if (obj.code==200) {
-                var url = encodeURIComponent(obj.data.link);
-                var redirect = $('<form action="' + "<?php echo $success_url; ?>&payment=billet&order=<?php echo $actual_order_id; ?>&charge=" + obj.data.charge_id + '" method="post">' +
-                  '<input type="text" name="billet" value="' + url + '" />' +
-                  '</form>');
-                $('body').append(redirect);
-                redirect.submit();
+                window.location.href = "<?php echo $success_url; ?>&payment=billet&order=<?php echo $actual_order_id; ?>&charge=" + obj.data.charge_id;
             } else {
                 $('.warning-payment').slideDown();
                 $('.warning-payment').html('<i class="fa fa-exclamation-circle"></i> <?php echo $gn_charge_error; ?> <b>' + obj.message + '</b><button type="button" class="close" data-dismiss="alert">&times;</button>');
