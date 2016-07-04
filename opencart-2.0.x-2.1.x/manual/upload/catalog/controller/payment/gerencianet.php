@@ -709,7 +709,11 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['generated_payment_type'] = $this->request->get['payment'];
 
 			if ($data['generated_payment_type']=="billet") {
-				$data['generated_billet_url'] = urldecode($this->request->post['billet']);
+				if (isset($this->session->data['billet_link_'.$this->request->get['order']])) {
+					$data['generated_billet_url'] = $this->session->data['billet_link_'.$this->request->get['order']];
+				} else {
+					$data['generated_billet_url'] = false;
+				}
 				if (isset($this->session->data['total_values_billet_order_' . $data['generated_order_number']])) {
 					$data['totals_session'] = $this->session->data['total_values_billet_order_' . $data['generated_order_number']];
 				}
