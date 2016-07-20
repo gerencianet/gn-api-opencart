@@ -19,7 +19,7 @@ Atenção: Devido ao tamanho do arquivo de instalação do módulo, talvez seja 
 
 ### Manual
 
-1. Faça o download dos arquivos do módulo de acordo com sua versão do OpenCart.
+1. Faça o download dos [arquivos da última versão do módulo](manual/).
 2. Descompacte os arquivo baixado e realize o upload das pastas **admin**, **catalog** e **lib** para dentro do diretório principal do OpenCart*.
 
 *Caso você já tenha instalado o módulo da Gerencianet anteriormente, o OpenCart poderá informar que alguns arquivos serão sobrescritos. Não se preocupe, pois a instalação não afetará qualquer arquivo que não seja do módulo da Gerencianet já existente em sua loja.

@@ -1135,27 +1135,6 @@ class ControllerPaymentGerencianet extends Controller {
 				'value' => intval($total_discount)
 			);
 
-			/*if ($total_discount>0) {
-				$body = array(
-				    'payment' => array(
-				        'banking_billet' => array(
-				            'expire_at' => $expirationDate,
-				            'customer' => $customer,
-				            'discount' => $discount
-				        )
-				    )
-				);
-			} else {
-				$body = array(
-				    'payment' => array(
-				        'banking_billet' => array(
-				            'expire_at' => $expirationDate,
-				            'customer' => $customer
-				        )
-				    )
-				);
-			}*/
-
 			$instructionsList = array(
 				$this->config->get('gerencianet_billet_instruction_line_1'), 
 				$this->config->get('gerencianet_billet_instruction_line_2'), 
