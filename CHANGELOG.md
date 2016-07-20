@@ -1,3 +1,8 @@
+# v0.3.0
+
+* Add: Unificação do módulo único para todas versões 2.x
+* Add: Configuração das instruções do boleto bancário
+
 # v0.2.0
 
 * Fix: Validações
