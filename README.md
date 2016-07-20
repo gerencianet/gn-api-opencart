@@ -27,7 +27,7 @@ Atenção: Devido ao tamanho do arquivo de instalação do módulo, talvez seja 
 
 ## Configuração
 
-Ao acessar `Extensions >  Payments` (`Extensões > Pagamentos`), você já visualizará o módulo da Gerencianet disponível na lista. Clique em `install` para instalar o módulo e depois em `edit` para iniciar a configuração.
+Ao acessar `Extensions >  Payments` (`Extensões > Pagamentos`), você já visualizará o módulo da Gerencianet disponível na lista. Clique em `install` (`instalar`) para instalar o módulo e depois em `edit` (`editar`) para iniciar a configuração.
 
 Três abas estarão disponíveis para realizar a configuração do módulo:
 
@@ -42,6 +42,7 @@ Nesta aba, as seguintes propriedades podem ser configuradas:
 * Pagamentos permitidos: Determina quais tipos de pagamentos serão aceitos pelo módulo
 * Dias para vencimento do Boleto: Determina em quantos dias o boleto irá vencer após a data de geração
 * Desconto para pagamento no Boleto: Você pode fornecer desconto para clientes que pagam por meio de Boleto Bancário.
+* Instruções no Boleto Bancário: Você pode definir quatro linhas com até 90 caracteres de instruções no Boleto Bancário. Se as linhas não forem preenchidas, serão exibidas as instruções padrões no boleto
 * Atualizar status dos pedidos do OpenCart automaticamente: Determina se o módulo poderá atualizar automaticamente o status de um pedido de acordo com as notificações de atualização enviadas pela Gerencianet
 * Envio de e-mail automático da sua loja para notificar o cliente: Notifica o cliente por um e-mail da sua loja quando uma atualização do status automática for realizada. Independente da opção, a Gerencianet enviará um e-mail para o cliente informando sobre a cobrança.
 * Status: Determina se o módulo de pagamentos da Gerencianet está Ativo ou Inativo.
