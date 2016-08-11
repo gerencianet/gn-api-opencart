@@ -69,7 +69,7 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['actual_order_id'] = $this->session->data['order_id'];
 
 				$options = $this->gerencianet_config_payment_api();
-				$params = array('total' => (floatval($order_info['total'])*100), 'brand' => 'visa');
+				$params = array('total' => intval(floatval($order_info['total'])*100), 'brand' => 'visa');
 				$error_api = false;
 				try {
 				    $api = new Gerencianet($options);
@@ -460,7 +460,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$options = $this->gerencianet_config_payment_api();
 
-			$params = array('total' => (floatval($order_info['total'])*100), 'brand' => 'visa');
+			$params = array('total' => intval(floatval($order_info['total'])*100), 'brand' => 'visa');
 
 			try {
 			    $api = new Gerencianet($options);
@@ -787,13 +787,12 @@ class ControllerPaymentGerencianet extends Controller {
 					$data['text_message'] = sprintf($this->language->get('gn_success_text_guest'), $this->url->link('information/contact'));
 				}
 
-
 				if (isset($this->session->data['buyer_email'])) {
 					$data['buyer_email'] = $this->session->data['buyer_email'];
 				} else {
 					$data['buyer_email'] = "";
 				}
-			
+				
 				$data['column_left'] = $this->load->controller('common/column_left');
 				$data['column_right'] = $this->load->controller('common/column_right');
 				$data['content_top'] = $this->load->controller('common/content_top');

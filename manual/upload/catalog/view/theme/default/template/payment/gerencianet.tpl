@@ -578,6 +578,7 @@
 
 <script type="text/javascript">
     var getPaymentToken;
+    var loaded = true;
     $gn.ready(function(checkout) {
         getPaymentToken = checkout.getPaymentToken;
     });
