@@ -6,6 +6,7 @@ class ControllerPaymentGerencianet extends Controller {
         $this->load->language('payment/gerencianet');
         $this->document->setTitle('Gerencianet');
         $this->load->model('setting/setting');
+        $gerencianetModuleVersion = "v0.3.0";
      
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
 
@@ -148,6 +149,7 @@ class ControllerPaymentGerencianet extends Controller {
         $data['gn_entry_discount_value'] = $this->language->get('gn_entry_discount_value');
         $data['gn_entry_discount_card'] = $this->language->get('gn_entry_discount_card');
         $data['gn_entry_official_module_title'] = $this->language->get('gn_entry_official_module_title');
+        $data['gn_entry_official_module_version'] = $gerencianetModuleVersion;
         $data['gn_config_credentials'] = $this->language->get('gn_config_credentials');
         $data['gn_entry_status_on'] = $this->language->get('gn_entry_status_on');
         $data['gn_entry_status_off'] = $this->language->get('gn_entry_status_off');

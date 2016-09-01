@@ -35,7 +35,7 @@
             <a target="_BLANK" href="https://www.gerencianet.com.br"><img src="view/image/payment/gerencianet-configurations.png" alt="Gerencianet" title="Gerencianet" /></a> 
           </div>
           <div class="pull-left gn-admin-title">
-            <b><?php echo $gn_entry_official_module_title; ?></b>
+            <b><?php echo $gn_entry_official_module_title.' - '.$gn_entry_official_module_version; ?></b>
           </div>
         </div>
         <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form-gn-std-uk" class="form-horizontal">
