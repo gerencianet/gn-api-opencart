@@ -122,26 +122,31 @@
               </div>
 
               <div id="gn_cpf_phone_row" class="required gn-osc-row gn-billet-field" >
-                <div class="gn-col-2 gn-label">
-                  <label for="gn_billet_cpf" class="gn-right-padding-1">CPF: </label>
-                </div>
-                <div class="gn-col-10">
+                <div class="gn-col-13">
                   
-                  <div>
-                    <div class="gn-col-3 required">
-                      <input type="text" name="gn_billet_cpf" id="gn_billet_cpf" value="<?php echo $cpf; ?>" class="form-control cpf-mask" />
+                  
+
+                    <div id="gn_cpf_area">
+                      <div class="gn-col-2 gn-label">
+                        <label for="gn_billet_cpf" class="gn-right-padding-1">CPF: </label>
+                      </div>
+                      <div class="gn-col-3 required">
+                        <input type="text" name="gn_billet_cpf" id="gn_billet_cpf" value="<?php echo $cpf; ?>" class="form-control cpf-mask" />
+                      </div>
                     </div>
-                    <div class="gn-col-8">
+
+                    <div class="gn-col-6">
                       <div class=" required">
                         <div class="gn-col-4 gn-label">
                         <label class="gn-col-12 gn-right-padding-1" for="gn_billet_phone_number" >Telefone: </label>
                         </div>
-                        <div class="gn-col-4">
+                        <div class="gn-col-5">
                           <input type="text" name="gn_billet_phone_number" id="gn_billet_phone_number" value="<?php echo $phone_number; ?>" class="form-control phone-mask" />
                         </div>
                       </div>
                     </div>
-                  </div>
+
+                  
                 </div>
               </div>
 
@@ -248,21 +253,25 @@
 
                     <div id="gn_card_cpf_phone_row" class="required gn-osc-row gn-card-field" >
                     
+                      <div id="gn_card_cpf_area">
                         <div class="gn-col-2 gn-label">
                             <label for="gn_card_cpf" class="gn-right-padding-1" >CPF: </label>
                         </div>
                         <div class="gn-col-4">
                             <input type="text" name="gn_card_cpf" id="gn_card_cpf" value="<?php echo $cpf; ?>" class="form-control cpf-mask gn-minimum-size-field" />
                         </div>
-                        <div class="gn-col-6">
-                          <div class="gn-col-4 gn-label">
-                              <label class="gn-left-space-2 gn-right-padding-1" for="gn_card_phone_number">Telefone: </label>
-                          </div>
-                          <div class="gn-col-8">
-                              <input type="text" name="gn_card_phone_number" value="<?php echo $phone_number; ?>" id="gn_card_phone_number" class="form-control phone-mask gn-minimum-size-field" />
-                          </div>
-                          
+                      </div>
+
+                      <div class="gn-col-6">
+                        <div class="gn-col-4 gn-label">
+                            <label class="gn-left-space-2 gn-right-padding-1" for="gn_card_phone_number">Telefone: </label>
                         </div>
+                        <div class="gn-col-8">
+                            <input type="text" name="gn_card_phone_number" value="<?php echo $phone_number; ?>" id="gn_card_phone_number" class="form-control phone-mask gn-minimum-size-field" />
+                        </div>
+                        
+                      </div>
+                      
                     </div>
 
                     <div id="gn_card_birth_row" class=" required gn-osc-row gn-card-field" >

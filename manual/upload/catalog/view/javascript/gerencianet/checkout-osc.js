@@ -546,13 +546,22 @@ jQuery(document).ready(function($){
                 errorMessage = "Razão Social inválida. Por favor, digite novamente.";
             }
         }
-
-        if (validateName($('#gn_billet_full_name').val())) {
-            $('#gn_billet_full_name').removeClass("gn-inputs-error");
-        } else {
-            $('#gn_billet_full_name').addClass("gn-inputs-error");
-            errorMessage = "Nome inválido. Por favor, digite novamente.";
+        else
+        {
+            if (verifyCPF($('#gn_billet_cpf').val())) {
+                $('#gn_billet_cpf').removeClass("gn-inputs-error");
+            } else {
+                $('#gn_billet_cpf').addClass("gn-inputs-error");
+                errorMessage = "CPF inválido. Por favor, digite novamente.";
+            }
+            if (validateName($('#gn_billet_full_name').val())) {
+                $('#gn_billet_full_name').removeClass("gn-inputs-error");
+            } else {
+                $('#gn_billet_full_name').addClass("gn-inputs-error");
+                errorMessage = "Nome inválido. Por favor, digite novamente.";
+            }
         }
+
 
         if (validateEmail($('#gn_billet_email').val())) {
             $('#gn_billet_email').removeClass("gn-inputs-error");
@@ -561,12 +570,6 @@ jQuery(document).ready(function($){
             errorMessage = "Email inválido. Por favor, digite novamente.";
         }
 
-        if (verifyCPF($('#gn_billet_cpf').val())) {
-            $('#gn_billet_cpf').removeClass("gn-inputs-error");
-        } else {
-            $('#gn_billet_cpf').addClass("gn-inputs-error");
-            errorMessage = "CPF inválido. Por favor, digite novamente.";
-        }
 
         if (validatePhone($('#gn_billet_phone_number').val())) {
             $('#gn_billet_phone_number').removeClass("gn-inputs-error");
@@ -603,25 +606,30 @@ jQuery(document).ready(function($){
             }
         }
 
-        if (validateName($('#gn_card_full_name').val())) {
-            $('#gn_card_full_name').removeClass("gn-inputs-error");
-        } else {
-            $('#gn_card_full_name').addClass("gn-inputs-error");
-            errorMessage = "Nome inválido. Por favor, digite novamente.";
+        else 
+        {
+            if (verifyCPF($('#gn_card_cpf').val())) {
+                $('#gn_card_cpf').removeClass("gn-inputs-error");
+            } else {
+                $('#gn_card_cpf').addClass("gn-inputs-error");
+                errorMessage = "CPF inválido. Por favor, digite novamente.";
+            }
+            
+            if (validateName($('#gn_card_full_name').val())) {
+                $('#gn_card_full_name').removeClass("gn-inputs-error");
+            } else {
+                $('#gn_card_full_name').addClass("gn-inputs-error");
+                errorMessage = "Nome inválido. Por favor, digite novamente.";
+            }
+
         }
+
 
         if (validateEmail($('#gn_card_email').val())) {
             $('#gn_card_email').removeClass("gn-inputs-error");
         } else {
             $('#gn_card_email').addClass("gn-inputs-error");
             errorMessage = "Email inválido. Por favor, digite novamente.";
-        }
-
-        if (verifyCPF($('#gn_card_cpf').val())) {
-            $('#gn_card_cpf').removeClass("gn-inputs-error");
-        } else {
-            $('#gn_card_cpf').addClass("gn-inputs-error");
-            errorMessage = "CPF inválido. Por favor, digite novamente.";
         }
 
         if (validatePhone($('#gn_card_phone_number').val())) {
@@ -796,16 +804,20 @@ jQuery(document).ready(function($){
     $('#pay_billet_with_cnpj').click(function() {
         if ($(this).is(':checked')) {
             $('#pay_cnpj').slideDown();
+            $('#gn_cpf_area').hide();  //criado
         } else {
             $('#pay_cnpj').slideUp();
+            $('#gn_cpf_area').show(); //criado
         }
     });
 
     $('#pay_card_with_cnpj').click(function() {
         if ($(this).is(':checked')) {
             $('#pay_cnpj_card').slideDown();
+            $('#gn_card_cpf_area').hide();  //criado
         } else {
             $('#pay_cnpj_card').slideUp();
+            $('#gn_card_cpf_area').show();  //criado
         }
     });
 

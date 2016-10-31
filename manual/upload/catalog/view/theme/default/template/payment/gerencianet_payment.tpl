@@ -111,15 +111,19 @@
                         </div>
 
                         <div class="required gn-row <?php if ($cpf) { ?> gn-hide <?php } ?>" >
-                          <div class="gn-col-1">
-                            <label class="gn-label" for="input-payment-billet-cpf"><?php echo $gn_cpf; ?></label>
-                          </div>
                           <div class="gn-col-11">
-                            
+  
                             <div>
-                              <div class="gn-col-3 required">
-                                <input type="text" name="cpf" id="cpf" value="<?php echo $cpf; ?>" placeholder="<?php echo $gn_cpf_placeholder; ?>" class="form-control cpf-mask" />
+
+                              <div id="gn-cpf-area">
+                                <div class="gn-col-1">
+                                  <label class="gn-label" for="input-payment-billet-cpf"><?php echo $gn_cpf; ?></label>
+                                </div>
+                                <div class="gn-col-3 required">
+                                  <input type="text" name="cpf" id="cpf" value="<?php echo $cpf; ?>" placeholder="<?php echo $gn_cpf_placeholder; ?>" class="form-control cpf-mask" />
+                                </div>
                               </div>
+
                               <div class="gn-col-8">
                                 <div class=" required">
                                   <label class="gn-col-4 gn-label" for="input-payment-billet-phone"><?php echo $gn_phone; ?></label>
@@ -128,6 +132,7 @@
                                   </div>
                                 </div>
                               </div>
+
                             </div>
                           </div>
                         </div>
@@ -220,10 +225,14 @@
                             </div>
 
                             <div class=" required gn-row <?php if ($cpf && $phone_number && $birth) { ?> gn-hide <?php } ?>" >
-                            <label class="gn-col-2 gn-label" for="input-payment-card-cpf"><?php echo $gn_cpf; ?></label>
-                                <div class="gn-col-2">
-                                    <input type="text" name="input-payment-card-cpf" id="input-payment-card-cpf" value="<?php echo $cpf; ?>" placeholder="<?php echo $gn_cpf_placeholder; ?>" class="form-control cpf-mask gn-minimum-size-field" />
+
+                                <div id="gn-card-cpf-area">
+                                  <label class="gn-col-2 gn-label" for="input-payment-card-cpf"><?php echo $gn_cpf; ?></label>
+                                  <div class="gn-col-2">
+                                      <input type="text" name="input-payment-card-cpf" id="input-payment-card-cpf" value="<?php echo $cpf; ?>" placeholder="<?php echo $gn_cpf_placeholder; ?>" class="form-control cpf-mask gn-minimum-size-field" />
+                                  </div>
                                 </div>
+
                                 <div class="gn-col-2">
                                     <label class=" gn-left-space-2 gn-label" for="input-payment-card-phone"><?php echo $gn_phone; ?></label>
                                 </div>
@@ -635,8 +644,10 @@ $(document).ready(function() {
     $('#pay_billet_with_cnpj').click(function() {
         if ($(this).is(':checked')) {
             $('#pay_cnpj').slideDown();
+            $('#gn-cpf-area').hide();
         } else {
             $('#pay_cnpj').slideUp();
+            $('#gn-cpf-area').show();
         }
     });
 
@@ -676,8 +687,10 @@ $(document).ready(function() {
             $('#pay_card_with_cnpj').click(function() {
                 if ($(this).is(':checked')) {
                     $('#pay_cnpj_card').slideDown();
+                    $('#gn-card-cpf-area').hide();
                 } else {
                     $('#pay_cnpj_card').slideUp();
+                    $('#gn-card-cpf-area').show();
                 }
             });
 
@@ -751,7 +764,7 @@ $(document).delegate('#button-payment-billet', 'click', function() {
     } else {
         if (($("#pay_billet_with_cnpj").is(':checked') && verifyCNPJ($('#cnpj').val())) || !($("#pay_billet_with_cnpj").is(':checked'))) {
             if (($("#pay_billet_with_cnpj").is(':checked') && $('#corporate_name').val()!="") || !($("#pay_billet_with_cnpj").is(':checked'))) {
-                if (verifyCPF($('#cpf').val())) {
+                if (verifyCPF($('#cpf').val())  || ($("#pay_billet_with_cnpj").is(':checked'))) {
                     if (verifyPhone($('#phone_number').val())) {
                         createCharge('billet');
                     }
@@ -787,7 +800,7 @@ function validateCardFields() {
         errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cnpj; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
     } else if (!(($("#pay_card_with_cnpj").is(':checked') && $('#corporate_name_card').val()!="") || !($("#pay_card_with_cnpj").is(':checked')))) {
         errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_corporate_name; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
-    } else if (!(verifyCPF($('#input-payment-card-cpf').val()))) {
+    } else if (!(verifyCPF($('#input-payment-card-cpf').val())) && !($("#pay_card_with_cnpj").is(':checked'))) {
         errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_cpf; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';
     } else if (!(verifyPhone($('#input-payment-card-phone').val()))) {
         errorMessage = '<i class="fa fa-exclamation-circle"></i> <?php echo $gn_invalid_phone_number; ?> <button type="button" class="close" data-dismiss="alert">&times;</button>';

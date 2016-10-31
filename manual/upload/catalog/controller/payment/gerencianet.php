@@ -84,6 +84,9 @@ class ControllerPaymentGerencianet extends Controller {
 					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
 				}
 
+				if($this->currency->getCode() != 'BRL')
+					return "<br><b><span style='color:red'>Gerencianet Error: Moeda não aceita. A Gerencianet processa apenas transações na moeda brasileira, o Real (código BRL)</span></b></br>";
+
 				if (isset($order_info['payment_firstname'])) {
 					$data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
 				} else {
@@ -1113,8 +1116,6 @@ class ControllerPaymentGerencianet extends Controller {
 				);
 
 				$customer = array(
-				    'name' => $data['first_name'] . ' ' . $data['last_name'],
-				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number'],
   					'juridical_person' => $juridical_data
 				);
@@ -1486,8 +1487,6 @@ class ControllerPaymentGerencianet extends Controller {
 				);
 
 				$customer = array(
-				    'name' => $data['first_name'] . " " . $data['last_name'],
-				    'cpf' => $data['cpf'],
 				    'phone_number' => $data['phone_number'],
 				    'email' => $data['email'],
 				    'birth' => $data['birth'],

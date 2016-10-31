@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para OpenCart - Versão 0.3.0 #
+# Módulo de Integração Gerencianet para OpenCart - Versão 0.3.1 #
 
 Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.1, 2.0.2.0, 2.0.3.1, 2.1.0.1, 2.1.0.2 e 2.2.0.0.
 
@@ -57,5 +57,6 @@ Nesta aba é realizada a configuração dos Status de pagamento da Gerencianet c
 
 ## Requisitos
 
+* É necessário que o Real Brasileiro esteja configurado como moeda padrão no Opencart.
 * Versão mínima do PHP: 5.4.0
 * Versão mínima do OpenCart: 2.0.0.0

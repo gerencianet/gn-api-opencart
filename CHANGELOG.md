@@ -1,3 +1,8 @@
+# v0.3.1
+
+* Delete: Obrigatoriedade de CPF para compras de Pessoa Jurídica.
+* Add: Validação de moeda utilizada.
+
 # v0.3.0
 
 * Add: Unificação do módulo único para todas versões 2.x
