@@ -26,7 +26,7 @@ class ModelPaymentGerencianet extends Model {
 				$title_show = $this->language->get('text_title');
 			}
 
-			$title_show .= '<div style="background-image: url(https://acervo.gerencianet.com.br/imagens/marca-gerencianet.svg); position: relative; background-repeat: no-repeat; width:100px; height:20px; margin:0 0 -5px 10px; padding:0 0 0 0; display: inline-block;"></div>';
+			$title_show .= '<div style="background-image: url(https://s3-sa-east-1.amazonaws.com/acervo.gerencianet.com.br/imagens/marca-gerencianet.svg); position: relative; background-repeat: no-repeat; width:100px; height:20px; margin:0 0 -5px 10px; padding:0 0 0 0; display: inline-block;"></div>';
 			$method_data = array(
 				'code'       => 'gerencianet',
 				'title'      => $title_show,

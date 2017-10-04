@@ -1,3 +1,8 @@
+# v0.3.2
+
+* Fix: Link para imagens inexistentes.
+* Add: Atuliza nova marca da Gerenciet.
+
 # v0.3.1
 
 * Delete: Obrigatoriedade de CPF para compras de Pessoa Jurídica.
