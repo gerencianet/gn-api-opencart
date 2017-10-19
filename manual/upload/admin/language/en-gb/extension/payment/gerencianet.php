@@ -3,7 +3,7 @@ $_['heading_title'] = 'Gerencianet';
  
 $_['text_enabled'] = 'Ativado';
 $_['text_disabled'] = 'Desativado';
-$_['text_payment'] = 'Payment';
+$_['text_payment'] = 'Extensions';
 $_['text_gerencianet']	= '<a target="_BLANK" href="https://www.gerencianet.com.br"><img src="view/image/payment/gerencianet-payment.png" alt="Gerencianet" title="Gerencianet" /></a>';
 
 $_['text_yes'] = 'Sim';

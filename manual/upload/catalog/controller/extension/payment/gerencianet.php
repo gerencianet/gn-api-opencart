@@ -1,5 +1,4 @@
 <?php
-
 if (version_compare(phpversion(), '5.4.0', '>=')) {
 	include_once(DIR_SYSTEM . '../lib/gerencianet/autoload.php');
 } else {
@@ -9,9 +8,9 @@ if (version_compare(phpversion(), '5.4.0', '>=')) {
 
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
-class ControllerPaymentGerencianet extends Controller {
+class ControllerExtensionPaymentGerencianet extends Controller {
 	public function index() {
-    	$this->load->language('payment/gerencianet');
+    	$this->load->language('extension/payment/gerencianet');
 
 		$this->load->model('checkout/order');
 
@@ -26,7 +25,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 		if ($order_info) {
 			$data['button_confirm'] = $this->language->get('button_confirm');
-			$data['action'] = $this->url->link('payment/gerencianet/finalize');
+			$data['action'] = $this->url->link('extension/payment/gerencianet/finalize');
 			
 			if ($gn_checkout_type=="1") {
 
@@ -61,9 +60,9 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['gn_card_payment_comments'] = 'Optando pelo pagamento com cartão de crédito, o pagamento é processado e a confirmação ocorrerá em até 48 horas.';
 
 				if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
-	         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+	         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('extension/payment/gerencianet/success'));
 				} else {
-					$data['success_url'] = $this->url->link('payment/gerencianet/success');
+					$data['success_url'] = $this->url->link('extension/payment/gerencianet/success');
 		      	}
 
 				$data['actual_order_id'] = $this->session->data['order_id'];
@@ -84,7 +83,7 @@ class ControllerPaymentGerencianet extends Controller {
 					$data['max_installments'] = "1 x de " . $data['order_total_card_formatted'];
 				}
 
-				if($this->currency->getCode() != 'BRL')
+				if($this->config->get('config_currency') != 'BRL')
 					return "<br><b><span style='color:red'>Gerencianet Error: Moeda não aceita. A Gerencianet processa apenas transações na moeda brasileira, o Real (código BRL)</span></b></br>";
 
 				if (isset($order_info['payment_firstname'])) {
@@ -177,20 +176,20 @@ class ControllerPaymentGerencianet extends Controller {
 		      	}
 		    }
 
-			
 			if (version_compare(VERSION, '2.2') < 0) {
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet.tpl')) {
-					return $this->load->view($this->config->get('config_template') . '/template/payment/gerencianet.tpl', $data);
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/gerencianet.tpl')) {
+					return $this->load->view($this->config->get('config_template') . '/template/extension/payment/gerencianet.tpl', $data);
 				} else {
-					return $this->load->view('default/template/payment/gerencianet.tpl', $data);
+					return $this->load->view('default/template/extension/payment/gerencianet.tpl', $data);
 				}
 			} else {
-				return $this->load->view('payment/gerencianet', $data);
+				return $this->load->view('extension/payment/gerencianet', $data);
 			}			
 		}
 	}
 
 	public function callback() {
+
 		if ($this->config->get('gerencianet_payment_notification_update')) {
 
 			$this->load->model('checkout/order');
@@ -276,7 +275,7 @@ class ControllerPaymentGerencianet extends Controller {
 	}
 
 	public function finalize() {
-		$this->load->language('payment/gerencianet');
+		$this->load->language('extension/payment/gerencianet');
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
@@ -367,7 +366,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			$data['breadcrumbs'][] = array(
 				'text' => $this->language->get('heading_title'),
-				'href' => $this->url->link('payment/gerencianet/finalize', '', 'SSL')
+				'href' => $this->url->link('extension/payment/gerencianet/finalize', '', 'SSL')
 			);
 
 			if (isset($this->session->data['error'])) {
@@ -415,7 +414,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
+					$this->load->model('extension/total/' . $result['code']);
 
 				}
 			}
@@ -675,9 +674,9 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['cancel_return'] = $this->url->link('checkout/checkout', '', 'SSL');
 
 			if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
-         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('payment/gerencianet/success'));
+         		$data['success_url'] = str_replace("http://", "https://", $this->url->link('extension/payment/gerencianet/success'));
 			} else {
-				$data['success_url'] = $this->url->link('payment/gerencianet/success');
+				$data['success_url'] = $this->url->link('extension/payment/gerencianet/success');
 	      	}
 
 			$data['actual_order_id'] = $this->session->data['order_id'];
@@ -698,19 +697,19 @@ class ControllerPaymentGerencianet extends Controller {
 			$data['header'] = $this->load->controller('common/header');
 
 			if (version_compare(VERSION, '2.2') < 0) {
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet_payment.tpl')) {
-					$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/payment/gerencianet_payment.tpl', $data));
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/gerencianet_payment.tpl')) {
+					$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/extension/payment/gerencianet_payment.tpl', $data));
 				} else {
-					$this->response->setOutput($this->load->view('default/template/payment/gerencianet_payment.tpl', $data));
+					$this->response->setOutput($this->load->view('default/template/extension/payment/gerencianet_payment.tpl', $data));
 				}
 			} else {
-				$this->response->setOutput($this->load->view('payment/gerencianet_payment', $data));
+				$this->response->setOutput($this->load->view('extension/payment/gerencianet_payment', $data));
 			}
 		}
 	}
 
 	public function success() {
-		$this->load->language('payment/gerencianet');
+		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
 		$this->load->model('extension/extension');
 
@@ -763,7 +762,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 				$data['breadcrumbs'][] = array(
 					'text' => $this->language->get('success_payment'),
-					'href' => $this->url->link('payment/gerencianet/success', '', 'SSL')
+					'href' => $this->url->link('extension/payment/gerencianet/success', '', 'SSL')
 				);
 
 				//$this->session->data['billet_link_'.$this->session->data['order_id']]
@@ -804,20 +803,20 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['header'] = $this->load->controller('common/header');
 
 				if (version_compare(VERSION, '2.2') < 0) {
-					if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/gerencianet_success.tpl')) {
-						$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/payment/gerencianet_success.tpl', $data));
+					if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/extension/payment/gerencianet_success.tpl')) {
+						$this->response->setOutput($this->load->view($this->config->get('config_template') . '/template/extension/payment/gerencianet_success.tpl', $data));
 					} else {
-						$this->response->setOutput($this->load->view('default/template/payment/gerencianet_success.tpl', $data));
+						$this->response->setOutput($this->load->view('default/template/extension/payment/gerencianet_success.tpl', $data));
 					}
 				} else {
-					$this->response->setOutput($this->load->view('payment/gerencianet_success', $data));
+					$this->response->setOutput($this->load->view('extension/payment/gerencianet_success', $data));
 				}
 			}
 		}
 	}
 
 	public function gerencianet_config_payment_api() {
-		$this->load->language('payment/gerencianet');
+		$this->load->language('extension/payment/gerencianet');
 	    $this->load->model('setting/setting');
 
     	if ($this->config->get('gerencianet_sandbox')) {
@@ -864,7 +863,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$this->load->model('total/' . $result['code']);
+				$this->load->model('extension/total/' . $result['code']);
 			}
 		}
 
@@ -887,6 +886,7 @@ class ControllerPaymentGerencianet extends Controller {
 		} else {
 			$shipping_price=0;
 		}
+
 		foreach ($order_data['totals'] as $total) {
 			if ((floatval($total['value'])==floatval($shipping_price)) && $shippingOnArray) {
 				$shippingOnArray=false;
@@ -903,7 +903,7 @@ class ControllerPaymentGerencianet extends Controller {
 				}
 			}
 		}
-
+		
 		if ($order_info) {
 			$items = array();
 			foreach ($this->cart->getProducts() as $product) {
@@ -915,8 +915,20 @@ class ControllerPaymentGerencianet extends Controller {
 				);
 				array_push($items, $item);
 			}
+			
+			$totalTax = 0.0;
+			foreach ($taxes as $tax) {
+				$totalTax += $tax;
+			}
+			$item = array(
+				'name' => 'Taxas da compra',
+				'amount' => 1,
+				'value' => intval(floatval($totalTax)*100)
+			);
+			if($totalTax > 0)
+				array_push($items, $item);
 		}
-
+		
 		foreach ($data['taxes'] as $new_tax) {
 			$item = array(
 				'name' => $new_tax['title'],
@@ -937,7 +949,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 		$metadata = array(
 		    'custom_id' => strval($this->session->data['order_id']),
-		    'notification_url' => $this->url->link('payment/gerencianet/callback', '', 'SSL')
+		    'notification_url' => $this->url->link('extension/payment/gerencianet/callback', '', 'SSL')
 		);
 
 		if (isset($this->session->data['shipping_method']['cost'])) {
@@ -977,7 +989,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 	public function pay_billet() {
 
-		$this->load->language('payment/gerencianet');
+		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
 		$this->load->model('extension/extension');
 
@@ -1017,7 +1029,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
+					$this->load->model('extension/total/' . $result['code']);
 				}
 			}
 
@@ -1038,7 +1050,9 @@ class ControllerPaymentGerencianet extends Controller {
 				$shipp = 0;
 			}
 			
-			$discount_cupouns_and_vouchers = ($this->cart->getSubTotal()+$shipp)-$order_info['total'];
+			$discount_cupouns_and_vouchers = 0;
+			if(($this->cart->getSubTotal()+$shipp) > $order_info['total'])
+				$discount_cupouns_and_vouchers = ($this->cart->getSubTotal()+$shipp)-$order_info['total'];
 
 			$discountFormatedByOC = $this->formatMoney(intval(ceil((($this->getBilletDiscount()/100)*$this->cart->getSubTotal() + $discount_cupouns_and_vouchers)*100))/100, true);
 			$discountFormatedByOC_no_currency_format = $this->formatMoney(intval(ceil((($this->getBilletDiscount()/100)*$this->cart->getSubTotal())*100))/100, true);
@@ -1047,7 +1061,9 @@ class ControllerPaymentGerencianet extends Controller {
 				$total_discount = $discountFormatedByOC;
 				$total_billet_discount_no_currency_format = $discountFormatedByOC_no_currency_format;
 			} else {
-				$total_discount = ceil(floatval(($this->cart->getSubTotal()+$shipp)-$order_info['total'])*100);
+				$total_discount = 0;
+				if(($this->cart->getSubTotal()+$shipp) > $order_info['total'])
+					$total_discount = ceil(floatval(($this->cart->getSubTotal()+$shipp)-$order_info['total'])*100);
 			}
 
 			if (isset($this->request->post['first_name'])) { 
@@ -1230,7 +1246,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 	public function pay_card() {
 
-		$this->load->language('payment/gerencianet');
+		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
 		$this->load->model('extension/extension');
 
@@ -1256,7 +1272,7 @@ class ControllerPaymentGerencianet extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
+					$this->load->model('extension/total/' . $result['code']);
 				}
 			}
 

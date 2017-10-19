@@ -724,7 +724,7 @@ var id_charge = 0;
 function createCharge(paymentType) {
     $('.gn-loading-request').fadeIn();
     $.ajax({
-        url: 'index.php?route=payment/gerencianet/create_charge',
+        url: 'index.php?route=extension/payment/gerencianet/create_charge',
         type: 'POST',
         beforeSend: function() {
             $('.button-payment').button('loading');
@@ -861,7 +861,7 @@ $(document).delegate('#button-payment-card', 'click', function() {
 function payBilletCharge() {
     $('.gn-loading-request').fadeIn();
     $.ajax({
-        url: 'index.php?route=payment/gerencianet/pay_billet',
+        url: 'index.php?route=extension/payment/gerencianet/pay_billet',
         type: 'POST',
         data: 'id_charge=' + id_charge + '& cpf='+ $('#cpf').val().replace(/[^\d]+/g,'') + '& first_name=' + $('#first_name').val() + '& phone_number=' + $('#phone_number').val().replace(/[^\d]+/g,'') + '& cnpj=' + $('#cnpj').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name').val() + '& pay_billet_with_cnpj=' + $('#pay_billet_with_cnpj').val(),
         beforeSend: function() {
@@ -909,7 +909,7 @@ function payCardCharge() {
         var dateBirth = $('#input-payment-card-birth').val().split("/");
 
         $.ajax({
-            url: 'index.php?route=payment/gerencianet/pay_card',
+            url: 'index.php?route=extension/payment/gerencianet/pay_card',
             type: 'POST',
             data: 'id_charge=' + id_charge + '& payment_token='+ response.data.payment_token + '& first_name='+  $('#input-payment-card-name').val() + '& cpf='+ $('#input-payment-card-cpf').val().replace(/[^\d]+/g,'') + '& phone_number=' + $('#input-payment-card-phone').val().replace(/[^\d]+/g,'') + '& birth='+  dateBirth[2] + "-" + dateBirth[1] + "-" + dateBirth[0]+ '& email='+  $('#input-payment-card-email').val() + '& street='+  $('#input-payment-card-street').val() + '& number='+  $('#input-payment-card-address-number').val() + '& neighborhood='+  $('#input-payment-card-neighborhood').val() + '& complement='+  $('#input-payment-card-complement').val() + '& zipcode='+  $('#input-payment-card-zipcode').val().replace(/[^\d]+/g,'') + '& city='+  $('#input-payment-card-city').val() + '& state='+  $('#input-payment-card-state').val() + '& installments='+  $('#input-payment-card-installments').val() + '& cnpj=' + $('#cnpj_card').val().replace(/[^\d]+/g,'') + '& corporate_name=' + $('#corporate_name_card').val() + '& pay_card_with_cnpj=' + $('#pay_card_with_cnpj').val(),
             beforeSend: function() {
@@ -950,7 +950,7 @@ function payCardCharge() {
 function getInstallments(card_brand) {
     $('#input-payment-card-installments').html('<option value=""><?php echo $gn_loading_installments; ?></option>').show();
     $.ajax({
-        url: 'index.php?route=payment/gerencianet/get_installments',
+        url: 'index.php?route=extension/payment/gerencianet/get_installments',
         type: 'POST',
         data: 'brand=' + card_brand,
         success: function(response) {

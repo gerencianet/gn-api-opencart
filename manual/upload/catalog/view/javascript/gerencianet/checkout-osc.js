@@ -161,9 +161,9 @@ jQuery(document).ready(function($){
             action: "create_charge",
             order_id: order_id
         };
-        
+        //alert("chegou aqui");
         jQuery.ajax({
-            url: 'index.php?route=payment/gerencianet/create_charge',
+            url: 'index.php?route=extension/payment/gerencianet/create_charge',
             type: 'POST',
             data: data,
             success: function(response) {
@@ -183,9 +183,23 @@ jQuery(document).ready(function($){
                 }
                 
             },
-            error: function(){
-                alert("error ocurred");
+           error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
             }
+        }
         });
 
         return false;
@@ -214,7 +228,7 @@ jQuery(document).ready(function($){
         };
         
         jQuery.ajax({
-            url: 'index.php?route=payment/gerencianet/pay_billet',
+            url: 'index.php?route=extension/payment/gerencianet/pay_billet',
             type: 'POST',
             data: data,
             success: function(response) {
@@ -230,7 +244,7 @@ jQuery(document).ready(function($){
                 }
             },
             error: function(){
-                alert("error ocurred");
+                alert("error ocurred 2");
             }
         });
 
@@ -292,7 +306,7 @@ jQuery(document).ready(function($){
             };
             
             jQuery.ajax({
-                url: 'index.php?route=payment/gerencianet/pay_card',
+                url: 'index.php?route=extension/payment/gerencianet/pay_card',
                 type: 'POST',
                 data: data,
                 success: function(response) {
@@ -309,7 +323,7 @@ jQuery(document).ready(function($){
                     
                 },
                 error: function(){
-                    alert("error ocurred");
+                    alert("error ocurred 3");
                 }
             });
             return false;
@@ -828,7 +842,7 @@ jQuery(document).ready(function($){
     function getInstallments(card_brand) {
         $('#gn_card_installments').html('<option value="">Aguarde, carregando...</option>').show();
         $.ajax({
-            url: 'index.php?route=payment/gerencianet/get_installments',
+            url: 'index.php?route=extension/payment/gerencianet/get_installments',
             type: 'POST',
             data: 'brand=' + card_brand,
             success: function(response) {
