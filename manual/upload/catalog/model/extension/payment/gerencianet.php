@@ -3,11 +3,11 @@ class ModelExtensionPaymentGerencianet extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/gerencianet');
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('gerencianet_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_gerencianet_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 
-		if ($this->config->get('gerencianet_total') > 0 && $this->config->get('gerencianet_total') > $total) {
+		if ($this->config->get('payment_gerencianet_total') > 0 && $this->config->get('payment_gerencianet_total') > $total) {
 			$status = false;
-		} elseif (!$this->config->get('gerencianet_geo_zone_id')) {
+		} elseif (!$this->config->get('payment_gerencianet_geo_zone_id')) {
 			$status = true;
 		} elseif ($query->num_rows) {
 			$status = true;
@@ -18,9 +18,9 @@ class ModelExtensionPaymentGerencianet extends Model {
 		$method_data = array();
 
 		if ($status) {
-			if ($this->config->get('gerencianet_payment_option_billet') && !$this->config->get('gerencianet_payment_option_card')) {
+			if ($this->config->get('payment_gerencianet_payment_option_billet') && !$this->config->get('payment_gerencianet_payment_option_card')) {
 				$title_show = 'Boleto Bancário';
-			} else if ($this->config->get('gerencianet_payment_option_card') && !$this->config->get('gerencianet_payment_option_billet')) {
+			} else if ($this->config->get('payment_gerencianet_payment_option_card') && !$this->config->get('payment_gerencianet_payment_option_billet')) {
 				$title_show = "Cartão de Crédito";
 			} else {
 				$title_show = $this->language->get('text_title');
@@ -31,7 +31,7 @@ class ModelExtensionPaymentGerencianet extends Model {
 				'code'       => 'gerencianet',
 				'title'      => $title_show,
 				'terms'      => '',
-				'sort_order' => $this->config->get('gerencianet_sort_order')
+				'sort_order' => $this->config->get('payment_gerencianet_sort_order')
 			);
 		}
 

@@ -14,12 +14,14 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 		$this->load->model('checkout/order');
 
-		$gn_checkout_type = $this->config->get('gerencianet_osc');
+		$gn_checkout_type = $this->config->get('payment_gerencianet_osc');
 		if ($gn_checkout_type=="1") {
 			$data['checkout_type'] = "OSC";
 		} else {
 			$data['checkout_type'] = "default";
 		}
+
+		$data['actual_year'] = intval(date("Y"));
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -29,10 +31,10 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 			
 			if ($gn_checkout_type=="1") {
 
-				if ($this->config->get('gerencianet_sandbox')) {
-					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+				if ($this->config->get('payment_gerencianet_sandbox')) {
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('payment_gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('payment_gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('payment_gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 				} else {
-					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+					$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('payment_gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('payment_gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('payment_gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 				}
 
 				if (isset($this->session->data['shipping_method']['cost'])) {
@@ -44,16 +46,16 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 				$data['gn_loading_installments'] = $this->language->get('gn_loading_installments');
 
 				$data['checkout_type'] = "OSC";
-				$data['billet_option'] = $this->config->get('gerencianet_payment_option_billet');
-				$data['card_option'] = $this->config->get('gerencianet_payment_option_card');
-				$data['sandbox'] = $this->config->get('gerencianet_sandbox');
+				$data['billet_option'] = $this->config->get('payment_gerencianet_payment_option_billet');
+				$data['card_option'] = $this->config->get('payment_gerencianet_payment_option_card');
+				$data['sandbox'] = $this->config->get('payment_gerencianet_sandbox');
 				$data['order_total_billet_formatted'] = $this->formatCurrencyBRL(intval($order_info['total']*100-intval(($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
 				$data['order_total_card_formatted'] = $this->formatCurrencyBRL(($order_info['total'])*100);
 
 				$data['order_total_billet'] = $this->formatMoney($data['order_total_billet_formatted'],true);
 				$data['order_total_card'] = $this->formatMoney($data['order_total_card_formatted'],true);
 				$data['discount'] = $this->getBilletDiscount();
-				$data['discount_formatted'] = $this->config->get('gerencianet_discount_billet_value');
+				$data['discount_formatted'] = $this->config->get('payment_gerencianet_discount_billet_value');
 				$data['discount_total_value'] = $this->formatCurrencyBRL(intval((($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
 				$data['gn_warning_sandbox_message'] = "O modo Sandbox (Ambiente de testes) está ativo. Suas cobranças não serão validadas.";
 				$data['gn_billet_payment_method_comments'] = "Optando pelo pagamento por Boleto, a confirmação será realizada no dia útil seguinte ao pagamento.";
@@ -190,10 +192,10 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 	public function callback() {
 
-		if ($this->config->get('gerencianet_payment_notification_update')) {
+		if ($this->config->get('payment_gerencianet_payment_notification_update')) {
 
 			$this->load->model('checkout/order');
-			$this->load->model('extension/extension');
+			$this->load->model('setting/extension');
 
 			$options = $this->gerencianet_config_payment_api();
 
@@ -225,36 +227,36 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 						switch($orderStatusFromNotification) {
 							case 'new':
-								$order_status_id = $this->config->get('gerencianet_new_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_new_status_id');
 								$updateOrderHistory = false;
 								break;
 							case 'waiting':
-								$order_status_id = $this->config->get('gerencianet_waiting_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_waiting_status_id');
 								$updateOrderHistory = false;
 								break;
 							case 'paid':
-								$order_status_id = $this->config->get('gerencianet_paid_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_paid_status_id');
 								$updateOrderHistory = true;
 								break;
 							case 'unpaid':
-								$order_status_id = $this->config->get('gerencianet_unpaid_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_unpaid_status_id');
 								$updateOrderHistory = true;
 								break;
 							case 'refunded':
-								$order_status_id = $this->config->get('gerencianet_refunded_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_refunded_status_id');
 								$updateOrderHistory = true;
 								break;
 							case 'contested':
-								$order_status_id = $this->config->get('gerencianet_contested_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_contested_status_id');
 								$updateOrderHistory = true;
 								break;
 							case 'canceled':
-								$order_status_id = $this->config->get('gerencianet_canceled_status_id');
+								$order_status_id = $this->config->get('payment_gerencianet_canceled_status_id');
 								$updateOrderHistory = true;
 								break;
 						}
 						if ($updateOrderHistory) {
-							if ($this->config->get('gerencianet_payment_notification_update_notify')) {
+							if ($this->config->get('payment_gerencianet_payment_notification_update_notify')) {
 								$this->model_checkout_order->addOrderHistory(intval($orderIdFromNotification), intval($order_status_id), '', true);
 							} else {
 								$this->model_checkout_order->addOrderHistory(intval($orderIdFromNotification), intval($order_status_id), '', false);
@@ -279,13 +281,13 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		if ($this->config->get('gerencianet_sandbox')) {
-			$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+		if ($this->config->get('payment_gerencianet_sandbox')) {
+			$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('payment_gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('payment_gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('payment_gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 		} else {
-			$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
+			$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/".$this->config->get('payment_gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('payment_gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('payment_gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");
 		}
 
-		$this->load->model('extension/extension');
+		$this->load->model('setting/extension');
 		$this->load->model('checkout/order');
 		$this->document->addScript('catalog/view/javascript/jquery/jquery.mask.min.js');
 
@@ -384,13 +386,13 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 				$data['account'] = '';
 			}
 
-		    $data['gerencianet_payment_option_billet'] = $this->config->get('gerencianet_payment_option_billet');
-		    $data['gerencianet_payment_option_card'] = $this->config->get('gerencianet_payment_option_card');
-		    $data['gerencianet_discount_billet_value'] = $this->getBilletDiscount();
+		    $data['payment_gerencianet_payment_option_billet'] = $this->config->get('payment_gerencianet_payment_option_billet');
+		    $data['payment_gerencianet_payment_option_card'] = $this->config->get('payment_gerencianet_payment_option_card');
+		    $data['payment_gerencianet_discount_billet_value'] = $this->getBilletDiscount();
 
-		    if (isset($data['gerencianet_discount_billet_value'])) {
+		    if (isset($data['payment_gerencianet_discount_billet_value'])) {
 		    	if ($this->getBilletDiscount() > 0 ) {
-		    		$data['discount_span'] = 'Desconto de ' . $this->config->get('gerencianet_discount_billet_value');
+		    		$data['discount_span'] = 'Desconto de ' . $this->config->get('payment_gerencianet_discount_billet_value');
 		    	} else {
 		    		$data['discount_span'] = '';
 		    	}
@@ -404,7 +406,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 			$sort_order = array();
 
-			$results = $this->model_extension_extension->getExtensions('total');
+			$results = $this->model_setting_extension->getExtensions('total');
 
 			foreach ($results as $key => $value) {
 				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -443,7 +445,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 				}
 				if (!$billetDiscountAdded && $this->getBilletDiscount()>0) {
 					$data['totals_billet'][] = array(
-						'title' => 'Desconto de ' . $this->config->get('gerencianet_discount_billet_value'),
+						'title' => 'Desconto de ' . $this->config->get('payment_gerencianet_discount_billet_value'),
 						'text'  => '-' . $this->formatCurrencyBRL(intval(($this->getBilletDiscount()/100)*$this->cart->getSubTotal()*100)/100),
 					);
 					$billetDiscountAdded=true;
@@ -474,7 +476,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 				$data['max_installments'] = "1 x de " . $data['total_paying_without_discount'];
 			}
 
-			if ($this->config->get('gerencianet_sandbox')) {
+			if ($this->config->get('payment_gerencianet_sandbox')) {
 				$data['alert_sandbox'] = $this->language->get('text_testmode');
 			} else {
 				$data['alert_sandbox'] = '';
@@ -711,7 +713,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 	public function success() {
 		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
-		$this->load->model('extension/extension');
+		$this->load->model('setting/extension');
 
 		if (isset($this->request->get['order']) && isset($this->request->get['charge']) && isset($this->request->get['payment'])) {
 			$data['generated_order_number'] = $this->request->get['order'];
@@ -819,17 +821,17 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 		$this->load->language('extension/payment/gerencianet');
 	    $this->load->model('setting/setting');
 
-    	if ($this->config->get('gerencianet_sandbox')) {
+    	if ($this->config->get('payment_gerencianet_sandbox')) {
 			$options = array(
-			  'client_id' => $this->config->get('gerencianet_client_id_development'),
-			  'client_secret' => $this->config->get('gerencianet_client_secret_development'),
+			  'client_id' => $this->config->get('payment_gerencianet_client_id_development'),
+			  'client_secret' => $this->config->get('payment_gerencianet_client_secret_development'),
 			  'sandbox' => true
 			);
 
 		} else {
 			$options = array(
-			  'client_id' => $this->config->get('gerencianet_client_id_production'),
-			  'client_secret' => $this->config->get('gerencianet_client_secret_production'),
+			  'client_id' => $this->config->get('payment_gerencianet_client_id_production'),
+			  'client_secret' => $this->config->get('payment_gerencianet_client_secret_production'),
 			  'sandbox' => false
 			);
 
@@ -843,7 +845,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 		$options = $this->gerencianet_config_payment_api();
 
 		$this->load->model('checkout/order');
-		$this->load->model('extension/extension');
+		$this->load->model('setting/extension');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -853,7 +855,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 		$sort_order = array();
 
-		$results = $this->model_extension_extension->getExtensions('total');
+		$results = $this->model_setting_extension->getExtensions('total');
 
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -991,19 +993,19 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
-		$this->load->model('extension/extension');
+		$this->load->model('setting/extension');
 
 		$data['id_charge'] = $this->request->post['id_charge'];
 		
 		$options = $this->gerencianet_config_payment_api();
 
-		if ($this->config->get('gerencianet_billet_days_to_expire')=="") {
+		if ($this->config->get('payment_gerencianet_billet_days_to_expire')=="") {
 	    	$billetExpireDays = "5";
 	    } else {
-	    	if (intval($this->config->get('gerencianet_billet_days_to_expire'))<1) {
+	    	if (intval($this->config->get('payment_gerencianet_billet_days_to_expire'))<1) {
 	        	$billetExpireDays = "5";
 	    	} else {
-	    		$billetExpireDays = intval($this->config->get('gerencianet_billet_days_to_expire'));
+	    		$billetExpireDays = intval($this->config->get('payment_gerencianet_billet_days_to_expire'));
 	    	}
 	    }
 	    
@@ -1019,7 +1021,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 			$sort_order = array();
 
-			$results = $this->model_extension_extension->getExtensions('total');
+			$results = $this->model_setting_extension->getExtensions('total');
 
 			foreach ($results as $key => $value) {
 				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -1152,10 +1154,10 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 			);
 
 			$instructionsList = array(
-				$this->config->get('gerencianet_billet_instruction_line_1'), 
-				$this->config->get('gerencianet_billet_instruction_line_2'), 
-				$this->config->get('gerencianet_billet_instruction_line_3'),
-				$this->config->get('gerencianet_billet_instruction_line_4')
+				$this->config->get('payment_gerencianet_billet_instruction_line_1'), 
+				$this->config->get('payment_gerencianet_billet_instruction_line_2'), 
+				$this->config->get('payment_gerencianet_billet_instruction_line_3'),
+				$this->config->get('payment_gerencianet_billet_instruction_line_4')
 			);
 	        $instructions = array();
 	        foreach ($instructionsList as $instruction) {
@@ -1216,13 +1218,13 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 			    if ($total_discount>0) {
 				    $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet', total = '" . (float)$totalWithBilletDiscount . "'  WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
-				    $this->db->query("INSERT INTO " . DB_PREFIX . "order_total SET order_id = '" . (int)$this->session->data['order_id'] . "', code = 'voucher', title = 'Desconto de " . $this->config->get('gerencianet_discount_billet_value') . " no Boleto', `value` = '" . -floatval($discountFormatedByOC_no_currency_format/100) . "', sort_order = '2'");
+				    $this->db->query("INSERT INTO " . DB_PREFIX . "order_total SET order_id = '" . (int)$this->session->data['order_id'] . "', code = 'voucher', title = 'Desconto de " . $this->config->get('payment_gerencianet_discount_billet_value') . " no Boleto', `value` = '" . -floatval($discountFormatedByOC_no_currency_format/100) . "', sort_order = '2'");
 				    $this->db->query("UPDATE " . DB_PREFIX . "order_total SET value = '" . (float)$totalWithBilletDiscount . "' WHERE title = 'Total' AND order_id = '" . (int)$this->session->data['order_id'] . "'");
 			    } else {
 			    	$this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet' WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
 			    }
 			    
-			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), '<a href="' . $charge['data']['link'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
+			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_gerencianet_waiting_status_id'), '<a href="' . $charge['data']['link'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
 			    $this->session->data['billet_link_'.$this->session->data['order_id']] = $charge['data']['link'];
 			    $this->session->data['order_id'] = '';
 			    $this->cart->clear();
@@ -1248,7 +1250,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 		$this->load->language('extension/payment/gerencianet');
 		$this->load->model('checkout/order');
-		$this->load->model('extension/extension');
+		$this->load->model('setting/extension');
 
 		$options = $this->gerencianet_config_payment_api();
 
@@ -1262,7 +1264,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 			$sort_order = array();
 
-			$results = $this->model_extension_extension->getExtensions('total');
+			$results = $this->model_setting_extension->getExtensions('total');
 
 			foreach ($results as $key => $value) {
 				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -1564,7 +1566,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 
 			    $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Cartão de Crédito - Gerencianet' WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
 
-			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), $this->language->get('gn_card_oc_order_comment'), true);
+			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('payment_gerencianet_waiting_status_id'), $this->language->get('gn_card_oc_order_comment'), true);
 			    $this->session->data['order_id'] = '';
 			    $this->cart->clear();
 			    $this->result_api($charge, true);
@@ -1834,7 +1836,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 	}
 
 	public function getBilletDiscount() {
-	    return floatval(preg_replace( '/[^0-9.]/', '', str_replace(",",".",$this->config->get('gerencianet_discount_billet_value'))));
+	    return floatval(preg_replace( '/[^0-9.]/', '', str_replace(",",".",$this->config->get('payment_gerencianet_discount_billet_value'))));
 	}
 
 }
