@@ -1,12 +1,12 @@
 <?php
-class ControllerPaymentGerencianet extends Controller {
+class ControllerExtensionPaymentGerencianet extends Controller {
     private $error = array();
  
     public function index() {
-        $this->load->language('payment/gerencianet');
+        $this->load->language('extension/payment/gerencianet');
         $this->document->setTitle('Gerencianet');
         $this->load->model('setting/setting');
-        $gerencianetModuleVersion = "v0.3.0";
+        $gerencianetModuleVersion = "v0.1.0";
      
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
 
@@ -80,7 +80,7 @@ class ControllerPaymentGerencianet extends Controller {
             }
           
             $this->model_setting_setting->editSetting('gerencianet', $this->request->post);
-            $this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+            $this->response->redirect($this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL'));
         }
 
         $this->document->addScript('../catalog/view/javascript/jquery/jquery.mask.min.js');
@@ -184,17 +184,17 @@ class ControllerPaymentGerencianet extends Controller {
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('text_payment'),
-            'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL')
+            'href' => $this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL')
         );
 
         $data['breadcrumbs'][] = array(
             'text' => $this->language->get('heading_title'),
-            'href' => $this->url->link('payment/gerencianet', 'token=' . $this->session->data['token'], 'SSL')
+            'href' => $this->url->link('extension/payment/gerencianet', 'token=' . $this->session->data['token'], 'SSL')
         );
 
-        $data['action'] = $this->url->link('payment/gerencianet', 'token=' . $this->session->data['token'], 'SSL');
+        $data['action'] = $this->url->link('extension/payment/gerencianet', 'token=' . $this->session->data['token'], 'SSL');
 
-        $data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
+        $data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'], 'SSL');
 
         if (isset($this->request->post['gerencianet_sandbox'])) {
             $data['gerencianet_sandbox'] = $this->request->post['gerencianet_sandbox'];
@@ -367,6 +367,6 @@ class ControllerPaymentGerencianet extends Controller {
         $data['column_left'] = $this->load->controller('common/column_left');
         $data['footer'] = $this->load->controller('common/footer');
 
-        $this->response->setOutput($this->load->view('payment/gerencianet.tpl', $data));
+        $this->response->setOutput($this->load->view('extension/payment/gerencianet.tpl', $data));
     }
 }

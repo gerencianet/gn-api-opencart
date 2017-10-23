@@ -1,8 +1,29 @@
-# Módulo de Integração Gerencianet para OpenCart - Versão 0.3.2 #
+# Módulo de Integração Gerencianet para OpenCart-2.3 - Versão 2.0.0 #
 
-Este módulo é compatível com as versões do OpenCart 2.0.0.0, 2.0.1.0, 2.0.1.1, 2.0.2.0, 2.0.3.1, 2.1.0.1, 2.1.0.2 e 2.2.0.0.
+:warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 2.3.0.2. Caso você tenha uma versão inferior do Opencart, você deve seguir os passos deste [link](https://github.com/gerencianet/gn-api-opencart).** 
 
 **Em caso de dúvidas, você pode verificar a [Documentação](https://docs.gerencianet.com.br) da API na Gerencianet e, necessitando de mais detalhes ou informações, entre em contato conosco, via nossos [Canais de Comunicação](https://gerencianet.com.br/central-de-ajuda).**
+
+## Pré-instalação
+
+:warning: Este passo só deve ser seguido caso você tenha a versão antiga do módulo Gerencianet/Opencart e o Opencart 2.3.x.
+
+1 - Desinstale o módulo antigo da Gerencianet;
+
+2 - Apague os seguintes arquivos no servidor onde o Opencart está instalado:
+
+- loja/admin/controller/payment/gerencianet.php
+- loja/admin/language/en-gb/payment/gerencianet.php
+- loja/admin/view/template/payment/gerencianet.tpl
+
+- loja/catalog/controller/payment/gerencianet.php
+- loja/catalog/language/en-gb/payment/gerencianet.php
+- loja/catalog/model/payment/gerencianet.php
+- loja/catalog/view/theme/default/template/payment/gerencianet.tpl
+- loja/catalog/view/theme/default/template/payment/gerencianet_payment.tpl
+- loja/catalog/view/theme/default/template/payment/gerencianet_success.tpl
+
+:warning: Nenhum diretório deve ser apagado, apenas os arquivos citados acima.
 
 ## Instalação
 
@@ -27,7 +48,7 @@ Atenção: Devido ao tamanho do arquivo de instalação do módulo, talvez seja 
 
 ## Configuração
 
-Ao acessar `Extensions >  Payments` (`Extensões > Pagamentos`), você já visualizará o módulo da Gerencianet disponível na lista. Clique em `install` (`instalar`) para instalar o módulo e depois em `edit` (`editar`) para iniciar a configuração.
+Ao acessar `Extensions >  Extensions` (`Extensões > Extensões`), você deverá selecionar o tipo de extensão que deseja. Escolha `Payments` (`Pagamentos`). Você já visualizará o módulo da Gerencianet disponível na lista. Clique em `install` (`instalar`) para instalar o módulo e depois em `edit` (`editar`) para iniciar a configuração.
 
 Três abas estarão disponíveis para realizar a configuração do módulo:
 
@@ -59,4 +80,4 @@ Nesta aba é realizada a configuração dos Status de pagamento da Gerencianet c
 
 * É necessário que o Real Brasileiro esteja configurado como moeda padrão no Opencart.
 * Versão mínima do PHP: 5.4.0
-* Versão mínima do OpenCart: 2.0.0.0
+* Versão mínima do OpenCart: 2.3.0.2
