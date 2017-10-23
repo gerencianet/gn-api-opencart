@@ -280,6 +280,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 		$this->load->language('extension/payment/gerencianet');
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
+		$data['actual_year'] = intval(date("Y"));
 
 		if ($this->config->get('payment_gerencianet_sandbox')) {
 			$data['scriptPaymentToken'] = html_entity_decode("<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/".$this->config->get('payment_gerencianet_payee_code')."/'+v;s.async=false;s.id='".$this->config->get('payment_gerencianet_payee_code')."';if(!document.getElementById('".$this->config->get('payment_gerencianet_payee_code')."')){document.getElementsByTagName('head')[0].appendChild(s);};&#36;gn={validForm:true,processed:false,done:{},ready:function(fn){&#36;gn.done=fn;}};</script>");

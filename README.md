@@ -1,16 +1,16 @@
-# Módulo de Integração Gerencianet para OpenCart-2.3 - Versão 0.1.1 #
+# Módulo de Integração Gerencianet para OpenCart-3.x - Versão 3.0.0 #
 
-:warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 2.3.0.2. Caso você tenha uma versão inferior do Opencart, você deve seguir os passos deste [link](https://github.com/gerencianet/gn-api-opencart).** 
+:warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 3.0.2.0. Caso você tenha uma versão inferior do Opencart, verifique a versão correta do módulo a ser baixado na sessão [Versões](#versoes)
 
 **Em caso de dúvidas, você pode verificar a [Documentação](https://docs.gerencianet.com.br) da API na Gerencianet e, necessitando de mais detalhes ou informações, entre em contato conosco, via nossos [Canais de Comunicação](https://gerencianet.com.br/central-de-ajuda).**
 
 ## Pré-instalação
 
-:warning: Este passo só deve ser seguido caso você tenha a versão antiga do módulo Gerencianet/Opencart e o Opencart 2.3.x.
+:warning: Este passo só deve ser seguido caso você tenha a versão antiga do módulo Gerencianet/Opencart e o Opencart 3.0.x.
 
 1 - Desinstale o módulo antigo da Gerencianet;
 
-2 - Apague os seguintes arquivos no servidor onde o Opencart está instalado:
+2 - Apague os seguintes arquivos no servidor onde o Opencart está instalado (apenas se você tiver a versão 0.x do Módulo Gerencianet Opencart:):
 
 - loja/admin/controller/payment/gerencianet.php
 - loja/admin/language/en-gb/payment/gerencianet.php
@@ -80,4 +80,13 @@ Nesta aba é realizada a configuração dos Status de pagamento da Gerencianet c
 
 * É necessário que o Real Brasileiro esteja configurado como moeda padrão no Opencart.
 * Versão mínima do PHP: 5.4.0
-* Versão mínima do OpenCart: 2.3.0.2
+* Versão mínima do OpenCart: 3.0.2.0
+
+
+## Versões
+
+| Version | Status | Packagist | Repo | Opencart Version |
+| --- | --- | --- | --- | --- |
+| 1.x | Maintained | `gerencianet/gn-api-opencart` | [v1](https://github.com/gerencianet/gn-api-opencart/tree/1.x) | \>= 2.0 |
+| 2.x | Maintained | `gerencianet/gn-api-opencart` | [v2](https://github.com/gerencianet/gn-api-opencart/tree/2.x) | \>= 2.3 |
+| 3.x | Maintained | `gerencianet/gn-api-opencart` | [v3](https://github.com/gerencianet/gn-api-opencart) | \>= 3.0 |
