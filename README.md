@@ -85,7 +85,7 @@ Nesta aba é realizada a configuração dos Status de pagamento da Gerencianet c
 
 ## Versões
 | Version | Status  | Repo | Opencart Version |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | 1.x | Maintained | [v1](https://github.com/gerencianet/gn-api-opencart/tree/1.x) | \>= 2.0 |
 | 2.x | Maintained | [v2](https://github.com/gerencianet/gn-api-opencart/tree/2.x) | \>= 2.3 |
 | 3.x | Maintained | [v3](https://github.com/gerencianet/gn-api-opencart) | \>= 3.0 |
