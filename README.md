@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para OpenCart-3.x - Versão 3.0.0 #
+# Módulo de Integração Gerencianet para OpenCart-3.x - Versão 3.0.0 (BETA) #
 
 :warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 3.0.2.0. Caso você tenha uma versão inferior do Opencart, verifique a versão correta do módulo a ser baixado na sessão [Versões](#versões)**
 
