@@ -1,6 +1,6 @@
 # Módulo de Integração Gerencianet para OpenCart-3.x - Versão 3.0.0 #
 
-:warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 3.0.2.0. Caso você tenha uma versão inferior do Opencart, verifique a versão correta do módulo a ser baixado na sessão [Versões](#versoes)
+:warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 3.0.2.0. Caso você tenha uma versão inferior do Opencart, verifique a versão correta do módulo a ser baixado na sessão [Versões](#versões)**
 
 **Em caso de dúvidas, você pode verificar a [Documentação](https://docs.gerencianet.com.br) da API na Gerencianet e, necessitando de mais detalhes ou informações, entre em contato conosco, via nossos [Canais de Comunicação](https://gerencianet.com.br/central-de-ajuda).**
 
@@ -84,7 +84,6 @@ Nesta aba é realizada a configuração dos Status de pagamento da Gerencianet c
 
 
 ## Versões
-
 | Version | Status | Packagist | Repo | Opencart Version |
 | --- | --- | --- | --- | --- |
 | 1.x | Maintained | `gerencianet/gn-api-opencart` | [v1](https://github.com/gerencianet/gn-api-opencart/tree/1.x) | \>= 2.0 |
