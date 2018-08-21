@@ -6,7 +6,7 @@ class ControllerExtensionPaymentGerencianet extends Controller {
         $this->load->language('extension/payment/gerencianet');
         $this->document->setTitle('Gerencianet');
         $this->load->model('setting/setting');
-        $gerencianetModuleVersion = "v2.0.0";
+        $gerencianetModuleVersion = "v2.0.1";
      
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
 
