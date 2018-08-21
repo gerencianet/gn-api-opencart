@@ -26,7 +26,7 @@ class Request
         'base_url' => $this->config['baseUri'],
         'headers' => [
           'Content-Type' => 'application/json',
-          'api-sdk' => 'opencart-0.3.2',
+          'api-sdk' => 'opencart-0.3.3',
           'partner-token' => $partner_token
           ],
       ]);

@@ -48,14 +48,14 @@ class ControllerPaymentGerencianet extends Controller {
 				$data['billet_option'] = $this->config->get('gerencianet_payment_option_billet');
 				$data['card_option'] = $this->config->get('gerencianet_payment_option_card');
 				$data['sandbox'] = $this->config->get('gerencianet_sandbox');
-				$data['order_total_billet_formatted'] = $this->formatCurrencyBRL(intval($order_info['total']*100-intval(($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
+				$data['order_total_billet_formatted'] = $this->formatCurrencyBRL(intval($order_info['total']*100-intval(($this->getBilletDiscount())*($this->cart->getSubTotal()))));
 				$data['order_total_card_formatted'] = $this->formatCurrencyBRL(($order_info['total'])*100);
 
 				$data['order_total_billet'] = $this->formatMoney($data['order_total_billet_formatted'],true);
 				$data['order_total_card'] = $this->formatMoney($data['order_total_card_formatted'],true);
 				$data['discount'] = $this->getBilletDiscount();
 				$data['discount_formatted'] = $this->config->get('gerencianet_discount_billet_value');
-				$data['discount_total_value'] = $this->formatCurrencyBRL(intval((($this->getBilletDiscount())*($order_info['total']-$shipping_price))));
+				$data['discount_total_value'] = $this->formatCurrencyBRL(intval((($this->getBilletDiscount())*($this->cart->getSubTotal()))));
 				$data['gn_warning_sandbox_message'] = "O modo Sandbox (Ambiente de testes) está ativo. Suas cobranças não serão validadas.";
 				$data['gn_billet_payment_method_comments'] = "Optando pelo pagamento por Boleto, a confirmação será realizada no dia útil seguinte ao pagamento.";
 				$data['gn_card_payment_comments'] = 'Optando pelo pagamento com cartão de crédito, o pagamento é processado e a confirmação ocorrerá em até 48 horas.';
@@ -1196,7 +1196,7 @@ class ControllerPaymentGerencianet extends Controller {
 					$shipping_price=0;
 				}
 
-			    $totalWithBilletDiscount = ($order_info['total']-floatval($total_discount/100));
+			    $totalWithBilletDiscount = ($order_info['total']-floatval($discountFormatedByOC_no_currency_format/100));
 
 			    if ($total_discount>0) {
 				    $this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet', total = '" . (float)$totalWithBilletDiscount . "'  WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");

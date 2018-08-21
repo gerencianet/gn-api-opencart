@@ -1,3 +1,7 @@
+# v0.3.3
+
+* Fix: Valor final do boleto com aplicação do desconto de cupom.
+
 # v0.3.2
 
 * Fix: Link para imagens inexistentes.
