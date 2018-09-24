@@ -316,6 +316,11 @@
     background-position:-120px 0;
 }
 
+.gn-reset .gn-hipercard{
+    background:url(../gerencianet/images/sprite-gn.png);
+    background-position:-160px -40px;
+}
+
 .gn-reset .gn-card-brand-selector input:active +.gn-reset .gn-card-brand{opacity: .9;}
 .gn-reset .gn-card-brand-selector input:checked +.gn-reset .gn-card-brand{
     -webkit-filter: none;
