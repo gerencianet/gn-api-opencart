@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para OpenCart-2.3 - Versão 2.0.1 #
+# Módulo de Integração Gerencianet para OpenCart-2.3 - Versão 2.1.0 #
 
 :warning: **Este módulo é compatível apenas com as versões do OpenCart superior a 2.3.0.2. Caso você tenha uma versão inferior do Opencart, você deve seguir os passos deste [link](https://github.com/gerencianet/gn-api-opencart).** 
 

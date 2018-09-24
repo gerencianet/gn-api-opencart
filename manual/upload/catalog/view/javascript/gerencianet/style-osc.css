@@ -152,9 +152,15 @@
     background:url(images/sprite-gn.png);
     background-position:-80px -40px;
 }
+
 .gn-aura{
     background:url(images/sprite-gn.png);
     background-position:-120px 0;
+}
+
+.gn-hipercard{
+    background:url(../gerencianet/images/sprite-gn.png);
+    background-position:-160px -40px;
 }
 
 .gn-card-brand-selector input:active +.gn-card-brand{opacity: .9;}

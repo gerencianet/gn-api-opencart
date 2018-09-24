@@ -377,20 +377,12 @@
                                             <label class="gn-card-brand gn-diners" for="diners"></label>
                                         </div>
                                         <div class="pull-left gn-card-brand-content">
-                                            <input id="discover" type="radio" name="input-payment-card-brand" id="input-payment-card-brand" value="discover" class="gn-hide" />
-                                            <label class="gn-card-brand gn-discover" for="discover"></label>
-                                        </div>
-                                        <div class="pull-left gn-card-brand-content">
-                                            <input id="jcb" type="radio" name="input-payment-card-brand" id="input-payment-card-brand" value="jcb" class="gn-hide" />
-                                            <label class="gn-card-brand gn-jcb" for="jcb"></label>
-                                        </div>
-                                        <div class="pull-left gn-card-brand-content">
                                             <input id="elo" type="radio" name="input-payment-card-brand" id="input-payment-card-brand" value="elo" class="gn-hide" />
                                             <label class="gn-card-brand gn-elo" for="elo"></label>
                                         </div>
                                         <div class="pull-left gn-card-brand-content">
-                                            <input id="aura" type="radio" name="input-payment-card-brand" id="input-payment-card-brand" value="aura" class="gn-hide" />
-                                            <label class="gn-card-brand gn-aura" for="aura"></label>
+                                            <input id="hipercard" type="radio" name="input-payment-card-brand" id="input-payment-card-brand" value="hipercard" class="gn-hide" />
+                                            <label class="gn-card-brand gn-hipercard" for="hipercard"></label>
                                         </div>
                                     </div>
                                 </div>
