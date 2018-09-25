@@ -1,3 +1,8 @@
+# v0.4.0
+
+* Delete: Bandeiras jcb, aura e discover do checkout da Gerencianet.
+* Add: Bandeira hipertcard no checkout da Gerencianet.
+
 # v0.3.3
 
 * Fix: Valor final do boleto com aplicação do desconto de cupom.
