@@ -1222,8 +1222,8 @@ class ControllerExtensionPaymentGerencianet extends Controller {
 			    	$this->db->query("UPDATE `" . DB_PREFIX . "order` SET payment_method = 'Boleto - Gerencianet' WHERE order_id = '" . (int)$this->session->data['order_id'] . "'");
 			    }
 			    
-			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), '<a href="' . $charge['data']['link'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
-			    $this->session->data['billet_link_'.$this->session->data['order_id']] = $charge['data']['link'];
+			    $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('gerencianet_waiting_status_id'), '<a href="' . $charge['data']['pdf']['charge'] . '" target="_blank">' . $this->language->get('gn_billet_oc_order_comment') . '</a>', true);
+			    $this->session->data['billet_link_'.$this->session->data['order_id']] = $charge['data']['pdf']['charge'];
 			    $this->session->data['order_id'] = '';
 			    $this->cart->clear();
 			    $this->result_api($charge, true);
