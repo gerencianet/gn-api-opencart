@@ -28,12 +28,12 @@ class ApiRequest
 
         try {
             return $this->request->send($method, $route, ['json' => $body,
-            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.0', 'partner-token' => $partner_token]]);
+            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.1', 'partner-token' => $partner_token]]);
         } catch (AuthorizationException $e) {
             $this->auth->authorize();
 
             return $this->request->send($method, $route, ['json' => $body,
-            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.0', 'partner-token' => $partner_token]]);
+            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.1', 'partner-token' => $partner_token]]);
         }
     }
 
