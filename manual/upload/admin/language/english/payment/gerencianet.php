@@ -21,6 +21,7 @@ $_['gn_config_order_status'] = 'Status da Compra';
 $_['gn_config_credentials'] = 'Credenciais';
 
 $_['gn_config_saved'] = 'Suas configurações foram salvas com sucesso. Agora você já pode receber pela Gerencianet!';
+$_['gn_config_check_tls'] = 'Identificamos que a sua hospedagem não suporta uma versão segura do TLS(Transport Layer Security) para se comunicar  com a Gerencianet. Para conseguir gerar transações, será necessário que contate o administrador do seu servidor e solicite que a hospedagem seja atualizada para suportar co municações por meio do TLS na versão mínima 1.2. Em caso de dúvidas e para maiores informações, contat e  a Equi pe Técnica da Gerencia net at ravés do suporte da empresa.';
 $_['gn_config_saved_not_on'] = 'Suas configurações foram salvas com sucesso, mas seu módulo ainda não está ativo. Verifique se todos os campos obrigatórios foram preenchidos corretamente:<br>';
 
 $_['gn_entry_sandbox'] = 'Modo';
@@ -100,5 +101,3 @@ $_['gn_entry_keys_production_help'] = 'Onde eu encontro as chaves de produção?
 $_['gn_entry_keys_development_help'] = 'Onde eu encontro as chaves de desenvolvimento?';
 $_['gn_entry_payee_code_help'] = 'Onde encontrar?';
 $_['gn_entry_close'] = 'Fechar';
-
-?>
