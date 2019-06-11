@@ -180,7 +180,7 @@ class ControllerPaymentGerencianet extends Controller
         $content = curl_exec($ch);
         $info = curl_getinfo($ch);
 
-        if (($info['http_code'] == 200) && ($content == 'Gerencianet_Connection_TLS1.2_OK!')) {
+        if (($info['http_code'] !== 200) && ($content !== 'Gerencianet_Connection_TLS1.2_OK!')) {
             $this->tlsOk = false;
             $this->error['warning'] =  $this->language->get('gn_config_check_tls');
         } else {
