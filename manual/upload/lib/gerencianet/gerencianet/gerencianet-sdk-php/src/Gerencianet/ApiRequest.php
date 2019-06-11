@@ -23,17 +23,21 @@ class ApiRequest
             $this->auth->authorize();
         }
 
-        $composerData = json_decode(file_get_contents(__DIR__.'/../../composer.json'), true);
-        $partner_token = isset($this->options['partner_token'])? $this->options['partner_token'] : "";
+        $composerData = json_decode(file_get_contents(__DIR__ . '/../../composer.json'), true);
+        $partner_token = isset($this->options['partner_token']) ? $this->options['partner_token'] : "";
 
         try {
-            return $this->request->send($method, $route, ['json' => $body,
-            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.1', 'partner-token' => $partner_token]]);
+            return $this->request->send($method, $route, [
+                'json' => $body,
+                'headers' => ['Authorization' => 'Bearer ' . $this->auth->accessToken, 'api-sdk' => 'opencart-3.1.2', 'partner-token' => $partner_token]
+            ]);
         } catch (AuthorizationException $e) {
             $this->auth->authorize();
 
-            return $this->request->send($method, $route, ['json' => $body,
-            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'opencart-3.1.1', 'partner-token' => $partner_token]]);
+            return $this->request->send($method, $route, [
+                'json' => $body,
+                'headers' => ['Authorization' => 'Bearer ' . $this->auth->accessToken, 'api-sdk' => 'opencart-3.1.2', 'partner-token' => $partner_token]
+            ]);
         }
     }
 
