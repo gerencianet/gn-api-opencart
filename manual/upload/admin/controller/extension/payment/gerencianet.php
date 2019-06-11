@@ -211,10 +211,6 @@ class ControllerExtensionPaymentGerencianet extends Controller
                 'origin' => 'modulo',
                 'data' => json_encode($dataPost)
             );
-            echo '<pre>';
-            print_r($account);
-            echo '</pre>';
-            die;
             $ch1 = curl_init();
             $options1 = array(
                 CURLOPT_URL         => "https://fortunus.gerencianet.com.br/logs/tls",
