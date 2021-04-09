@@ -1,0 +1,62 @@
+version: '2'
+services:
+
+  mariadb:
+    image: 'docker.io/bitnami/mariadb:10.3-debian-10'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=oc_user
+      - MARIADB_PASSWORD=oc123
+      - MARIADB_DATABASE=oc
+    volumes:
+      - 'mariadb_data:/gn/mariadb'
+
+  opencart:
+    image: 'docker.io/bitnami/opencart:3-debian-10'
+    ports:
+      - '80:8080'
+      - '443:8443'
+    environment:
+      - OPENCART_HOST=localhost
+      - OPENCART_USERNAME=admin
+      - OPENCART_PASSWORD=admin
+      - OPENCART_DATABASE_HOST=mariadb
+      - OPENCART_DATABASE_PORT_NUMBER=3306
+      - OPENCART_DATABASE_USER=oc_user
+      - OPENCART_DATABASE_PASSWORD=oc123
+      - OPENCART_DATABASE_NAME=oc
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - 'opencart_data:/gn/opencart'
+      - 'opencart_storage_data:/gn/opencart_storage/'
+      - './modification.xml:/opt/bitnami/opencart/system/modification.xml'
+      - ../manual/upload/admin/controller/extension/payment/gn_lib:/opt/bitnami/opencart/admin/controller/extension/payment/gn_lib
+      - ../manual/upload/admin/controller/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/controller/extension/payment/gerencianet.php
+      - ../manual/upload/admin/model/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/model/extension/payment/gerencianet.php
+      - ../manual/upload/admin/view/template/extension/payment/gerencianet.twig:/opt/bitnami/opencart/admin/view/template/extension/payment/gerencianet.twig
+      - ./pt-br/admin/language/pt-br:/opt/bitnami/opencart/admin/language/pt-br
+      - ./pt-br/catalog/language/pt-br:/opt/bitnami/opencart/catalog/language/pt-br
+      - ../manual/upload/admin/language/pt-br/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/language/pt-br/extension/payment/gerencianet.php
+      - ../manual/upload/admin/view/image/payment/pix.svg:/opt/bitnami/opencart/admin/view/image/payment/pix.svg
+      - ../manual/upload/admin/view/stylesheet/payment/style.css:/opt/bitnami/opencart/admin/view/stylesheet/payment/style.css
+
+      - ../manual/upload/catalog/controller/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/controller/extension/payment/gerencianet.php
+      - ../manual/upload/catalog/model/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/model/extension/payment/gerencianet.php
+      - ../manual/upload/catalog/view/theme/default/template/extension/payment/gerencianet.twig:/opt/bitnami/opencart/catalog/view/theme/default/template/extension/payment/gerencianet.twig
+      - ../manual/upload/catalog/view/theme/default/template/extension/payment/finalize.twig:/opt/bitnami/opencart/catalog/view/theme/default/template/extension/payment/finalize.twig
+      - ../manual/upload/catalog/view/theme/default/image/payment/pix.svg:/opt/bitnami/opencart/catalog/view/theme/default/image/payment/pix.svg
+      - ../manual/upload/catalog/view/theme/default/stylesheet/payment/style.css:/opt/bitnami/opencart/catalog/view/theme/default/stylesheet/payment/style.css
+      - ../manual/upload/catalog/controller/extension/payment/gn_lib:/opt/bitnami/opencart/catalog/controller/extension/payment/gn_lib
+      - ../manual/certs/helpper-prod.pem:/opt/bitnami/certs/helpper-prod.pem
+      - ../manual/upload/catalog/view/javascript/payment/script.js:/opt/bitnami/opencart/catalog/view/javascript/payment/script.js
+      - ../manual/upload/catalog/language/pt-br/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/language/pt-br/extension/payment/gerencianet.php
+    depends_on:
+      - mariadb
+
+volumes:
+  mariadb_data:
+    driver: local
+  opencart_data:
+    driver: local
+  opencart_storage_data:
+    driver: local
