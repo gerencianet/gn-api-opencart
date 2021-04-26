@@ -1,0 +1,36 @@
+<style>
+    .table-desconto, .table-desconto tfoot tr td { border: 0px !important  }
+    .table-desconto tr:first-child td:first-child { width: 81.5%;  }
+    .value-total { font-size: 2.5rem; }
+</style>
+
+{% if discount != 0 %}
+    <table class="table table-desconto">
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right first" style="">
+                    <strong>Desconto: </strong>
+                </td>
+                <td class="text-right">
+                    {{ discount }}%
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-right">
+                    <strong>Total com Desconto: </strong>
+                </td>
+                <td class="text-right value-total">
+                    {{ currency_symbol_left }} {{ discount_total }} {{ currency_symbol_right }}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+{% endif %}
+
+<form action="{{ action }}" method="post">
+    <div class="buttons">
+        <div class="pull-right">
+            <input type="submit" value="{{ button_confirm }}" class="btn btn-primary"/>
+        </div>
+    </div>
+</form>

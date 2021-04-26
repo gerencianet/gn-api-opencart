@@ -31,25 +31,25 @@ services:
       - 'opencart_storage_data:/gn/opencart_storage/'
       - './modification.xml:/opt/bitnami/opencart/system/modification.xml'
       - ../manual/upload/admin/controller/extension/payment/gn_lib:/opt/bitnami/opencart/admin/controller/extension/payment/gn_lib
-      - ../manual/upload/admin/controller/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/controller/extension/payment/gerencianet.php
-      - ../manual/upload/admin/model/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/model/extension/payment/gerencianet.php
-      - ../manual/upload/admin/view/template/extension/payment/gerencianet.twig:/opt/bitnami/opencart/admin/view/template/extension/payment/gerencianet.twig
+      - ../manual/upload/admin/controller/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/admin/controller/extension/payment/gerencianetpix.php
+      - ../manual/upload/admin/model/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/admin/model/extension/payment/gerencianetpix.php
+      - ../manual/upload/admin/view/template/extension/payment/gerencianetpix.twig:/opt/bitnami/opencart/admin/view/template/extension/payment/gerencianetpix.twig
       - ./pt-br/admin/language/pt-br:/opt/bitnami/opencart/admin/language/pt-br
       - ./pt-br/catalog/language/pt-br:/opt/bitnami/opencart/catalog/language/pt-br
-      - ../manual/upload/admin/language/pt-br/extension/payment/gerencianet.php:/opt/bitnami/opencart/admin/language/pt-br/extension/payment/gerencianet.php
+      - ../manual/upload/admin/language/pt-br/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/admin/language/pt-br/extension/payment/gerencianetpix.php
       - ../manual/upload/admin/view/image/payment/pix.svg:/opt/bitnami/opencart/admin/view/image/payment/pix.svg
       - ../manual/upload/admin/view/stylesheet/payment/style.css:/opt/bitnami/opencart/admin/view/stylesheet/payment/style.css
 
-      - ../manual/upload/catalog/controller/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/controller/extension/payment/gerencianet.php
-      - ../manual/upload/catalog/model/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/model/extension/payment/gerencianet.php
-      - ../manual/upload/catalog/view/theme/default/template/extension/payment/gerencianet.twig:/opt/bitnami/opencart/catalog/view/theme/default/template/extension/payment/gerencianet.twig
+      - ../manual/upload/catalog/controller/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/catalog/controller/extension/payment/gerencianetpix.php
+      - ../manual/upload/catalog/model/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/catalog/model/extension/payment/gerencianetpix.php
+      - ../manual/upload/catalog/view/theme/default/template/extension/payment/gerencianetpix.twig:/opt/bitnami/opencart/catalog/view/theme/default/template/extension/payment/gerencianetpix.twig
       - ../manual/upload/catalog/view/theme/default/template/extension/payment/finalize.twig:/opt/bitnami/opencart/catalog/view/theme/default/template/extension/payment/finalize.twig
       - ../manual/upload/catalog/view/theme/default/image/payment/pix.svg:/opt/bitnami/opencart/catalog/view/theme/default/image/payment/pix.svg
       - ../manual/upload/catalog/view/theme/default/stylesheet/payment/style.css:/opt/bitnami/opencart/catalog/view/theme/default/stylesheet/payment/style.css
       - ../manual/upload/catalog/controller/extension/payment/gn_lib:/opt/bitnami/opencart/catalog/controller/extension/payment/gn_lib
       - ../manual/certs/helpper-prod.pem:/opt/bitnami/certs/helpper-prod.pem
       - ../manual/upload/catalog/view/javascript/payment/script.js:/opt/bitnami/opencart/catalog/view/javascript/payment/script.js
-      - ../manual/upload/catalog/language/pt-br/extension/payment/gerencianet.php:/opt/bitnami/opencart/catalog/language/pt-br/extension/payment/gerencianet.php
+      - ../manual/upload/catalog/language/pt-br/extension/payment/gerencianetpix.php:/opt/bitnami/opencart/catalog/language/pt-br/extension/payment/gerencianetpix.php
     depends_on:
       - mariadb
 

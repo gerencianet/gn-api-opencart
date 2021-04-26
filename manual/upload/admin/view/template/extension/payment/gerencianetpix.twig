@@ -1,0 +1,144 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-gn" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+            </div>
+
+            <h1>{{ heading_title }}</h1>
+
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <!-- MESSAGES ALERT -->
+        {% for type_message in messages|keys %}
+            {% for message in messages[type_message] %}
+            <div class="alert alert-{{ type_message }} alert-dismissible">
+                <i class="fa {{ type_message == 'danger' ? 'fa-times-circle' : type_message == 'warning' ? 'fa-exclamation-triangle' : 'fa-check' }}"></i>
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-cog"></i> {{ payment_gerencianetpix_painel_header }}
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-gn" class="form-horizontal">
+
+                    <!-- TABS -->
+                    <ul class="nav nav-tabs" id="tabs">
+                        <li class="active">
+                            <a href="#tab-general" data-toggle="tab">
+                                <i class="fa fa-address-card"></i> {{ tab_general }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab-pix" data-toggle="tab">
+                                <img src="view/image/payment/pix.svg" /> {{ payment_gerencianetpix_pix }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab-order" data-toggle="tab">
+                                <i class="fa fa-shopping-cart"></i> {{ payment_gerencianetpix_order_status }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab-about" data-toggle="tab">
+                                <i class="fa fa-info-circle"></i> {{ payment_gerencianetpix_about }}
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <!-- CARD CONTENT -->
+                    <div class="tab-content">
+
+                        <!-- GENERAL OPTIONS -->
+                        {% for tab_key in fields|keys %}
+                        <div class="tab-pane {{ loop.index == 1 ? 'active' : '' }} " id="tab-{{ tab_key }}">
+                        
+                            {% for field in fields[tab_key] %}
+                            <div class="form-group {{ field.required ? 'required' : '' }}">
+                                <label class="col-sm-3 control-label" for="{{ field.id }}">
+                                    {{ field.label }}
+                                    
+                                    <!-- HELP tooltip -->
+                                    {% if field.tooltip %}
+                                        <span data-toggle="tooltip" title="{{ field.tooltip }}"></span>
+                                    {% endif %}
+                                </label>
+
+                                <div class="col-sm-9">
+                                    <!-- Input text -->
+                                    {% if field.type == null or field.type == 'text' %}
+                                    <input type="text" name="{{ field.id }}" value="{{ field.value }}" id="{{ field.id }}" class="form-control" />
+
+                                    <!-- Checkbox option -->
+                                    {% elseif field.type == 'checkbox' %}
+                                    <input type="checkbox" name="{{ field.id }}" value="1" {{ field.value == '1' ? 'checked=checked' : '' }} class="form-control" />
+
+                                    <!-- Select option -->
+                                    {% elseif field.type == 'select' %}
+                                    <select name="{{ field.id }}" class="form-control">
+                                        {% for option in options %}
+                                            {% if option.id == field.value %}
+                                                <option value="{{ option.id }}" selected="selected">{{ option.name }}</option>
+                                            {% else %}
+                                                <option value="{{ option.id }}">{{ option.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        {% endfor %}
+
+                        <div class="tab-pane" id="tab-about">
+                            <div class="content">
+                                <div class="gerencianet-logo">
+                                    <a target="_blank" href={{ hrefLogo }}><img src={{ srcLogo }} alt="Gerencianet" title="Gerencianet" /></a>
+                                </div>
+                                 <h3 class="title-gerencianet">Gerencianet Pagamentos - Módulo Oficial v{{text_version}}</h3>
+
+                                <div class="info-container">
+                                    <h5>Site: <a target="_blank" href={{text_about_link}}>{{ text_about_link }}</a></h5>
+                                    <h5>Documentação: <a target="_blank" href={{text_about_user_manual_link}}>{{ text_about_user_manual_link }}</a></h5>
+                                    <h5>Suporte: <a target="_blank" href={{text_about_support_link}}>{{ text_about_support_link }}</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="gerencianet-logo">
+        <a target="_blank" href={{ hrefLogo }}><img src={{ srcLogo }} alt="Gerencianet" title="Gerencianet" /></a>
+    </div>
+    {{ footer }}
+</div>
+<script>
+
+ window.onload = () => {
+    document.getElementById("payment_gerencianet_discount").setAttribute('maxLength',2)
+ }
+</script>
