@@ -1,0 +1,40 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <h1>{{ heading_title }}</h1>
+        </div>
+    </div>
+    <div class="container all-content" >
+        <div class="header-boleto">
+            <img class="img-responsive img-final" src="https://s3-sa-east-1.amazonaws.com/acervo.gerencianet.com.br/imagens/marca-gerencianet.svg" />
+        </div>
+        <section>
+            <div class="content-boleto">
+                {% if status %}
+                <h1>
+                    <img src="catalog/view/theme/default/image/payment/credit-card-check.png" style="width: 20px; height: 20px" /> Pagamento via Cartão de Crédito
+                </h1>
+                <p class="text-success">Pedido #{{ order_id }} Realizado com Sucesso!</p>
+                <p>Seu pagamento está em analise e será processado. Assim que for aprovado lhe enviaremos um e-mail para confirmação</p>
+
+                {% else %}
+                   <div style="width:100%; margin-top: 50px;">
+                    <div class="panel panel-danger" >
+                        <div class="panel-heading"><h4 class="text text-danger"><strong>Falha!</strong> Os campos abaixo não foram preenchidos corretamente:</h4></div>
+                        <div class="panel-body">
+                            <ul >
+                                {% for error in erros %}
+                                    <li style="font-size: 1.4rem"><strong>{{error}}</strong></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+    {{ footer }}
+</div>

@@ -1,0 +1,56 @@
+.copyBillet {
+    width: 100%;
+    font-size: 1.5rem;
+    background: #DF650D;
+    color: #FFF;
+    margin-top: 5px;
+    border: none;
+}
+
+.img-final {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-boleto {
+    
+    margin-bottom: 30px;
+}
+
+.content-boleto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.all-content {
+    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+    padding: 50px;
+    max-width: 1000px;
+    margin-bottom: 30px;
+}
+
+.content-boleto h1 {
+    font-size: 3.2rem;
+    margin-bottom: 22px;
+}
+
+.content-boleto p {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 650px) {
+    .img-final {
+        width: 100% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #content {
+        padding: 5px;
+    }
+    .content-boleto h1 {
+        font-size: 2.3rem;
+        margin-bottom: 20px;
+    }
+}

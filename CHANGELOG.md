@@ -1,3 +1,6 @@
+# v4.0.0
+
+* Add: Incorporada a funcionalidade Pix.
 
 # v3.1.2
 

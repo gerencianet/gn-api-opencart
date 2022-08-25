@@ -1,0 +1,108 @@
+{{ header }}{{ column_left }}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<h1>{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="container all-content">
+		<div class="header-boleto">
+			<img class="img-responsive img-final" src="https://s3-sa-east-1.amazonaws.com/acervo.gerencianet.com.br/imagens/marca-gerencianet.svg"/>
+			<h1 class="title-billet lead">
+							<img src="catalog/view/theme/default/image/payment/boeltos.png" style="width: 20px; height: 20px"/>
+							Pagamento via boleto
+						</h1>
+		</div>
+		<section>
+			<div class="content-boleto">
+				{% if billet_pdf %}
+					<div class="content-billet-left">
+						
+						<p class="text-success">Pedido #{{ order_id }}
+							Realizado com Sucesso!</p>
+						<p id="textoFinal">Clique no botão abaixo e visualize seu boleto ou pague através do QrCode.
+						</p>
+						
+							<a class="btn copyBillet" target="_blank" href="{{billet_pdf}}"><span class="glyphicon glyphicon-barcode"></span> Visualizar Boleto</a>
+							<input   id="input-barcode-code" class="form-control" value='{{ billet_barcode }}' readonly />
+							<button id="btn-barcode-copy" class="form-control btn btn-primary ">Copiar Código de Barras</button>
+						
+					</div>
+                  
+                    <div class="content-billet-right"> 
+						<img class="img-responsive qr-billet" src="{{billet_pix_imagem}}"/> 
+						<button id="btn-pix-copy" class="form-control btn btn-primary">Pix Copia e Cola</button>
+						<input id="input-copiar-colar-copy"   type="hidden" value='{{ billet_copia_e_cola }}'  />
+					</div>
+				{% else %}
+					<div style="width:100%; margin-top: 50px;">
+						<div class="panel panel-danger">
+							<div class="panel-heading">
+								<h4 class="text text-danger">
+									<strong>Falha!</strong>
+									Os campos abaixo não foram preenchidos corretamente:</h4>
+							</div>
+							<div class="panel-body">
+								<ul>
+									{% for error in erros %}
+										<li style="font-size: 1.4rem">
+											<strong>{{error}}</strong>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+
+			</div>
+		</section>
+	</div>
+	{{ footer }}
+</div>
+<script>
+ window.onload = () => {
+	 if ($(window).width() < 650 ) {
+		 $('#textoFinal').html('Clique no botão abaixo e visualize seu boleto.');
+	 }
+	 
+	 addEventCopy('btn-barcode-copy','input-barcode-code',1);
+	 addEventCopy('btn-pix-copy','input-copiar-colar-copy');
+	 function addEventCopy(btn,valueCopy,typeText = 2) {
+		 document.getElementById(btn).addEventListener("click", () => {
+
+        /* Get the text field */
+        const copyText = document.getElementById(valueCopy).value;
+
+        /* created element copy */
+        const textarea = document.createElement("textarea");
+        textarea.value = copyText;
+        
+        document.body.appendChild(textarea);
+
+        /* Select the text field */
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length); /* For mobile devices */
+        
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Removed Element */
+        document.body.removeChild(textarea);
+
+        /* Animation to button copy*/
+        const button = document.getElementById(btn);
+        button.innerHTML = "Copiado &#10004";
+		if(typeText == 1){
+			setTimeout(() => (button.innerHTML = "Copiar Código de Barras"), 1e3);
+		}else{
+			setTimeout(() => (button.innerHTML = "Pix Copia e Cola"), 1e3);
+		}
+        
+    });
+	 }
+    
+}
+ </script>

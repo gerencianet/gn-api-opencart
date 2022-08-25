@@ -1,0 +1,89 @@
+.copyBillet {
+    font-size: 1.5rem;
+    background: #DF650D;
+    color: #FFF;
+    margin-top: 5px;
+    border: none;
+    margin-bottom: 15px;
+    width: 47%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#input-barcode-code{
+    margin-bottom: 2px;
+}
+.img-final {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-boleto {
+    margin-bottom: 30px;
+}
+
+.content-boleto {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 70px;
+
+}
+
+.all-content {
+    box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+    padding: 50px;
+    max-width: 1000px;
+    margin-bottom: 30px;
+}
+
+.content-boleto p {
+    font-size: 1.5rem;
+}
+.qr-billet{
+    width: 135px;
+    margin-bottom: 8px;
+}
+.content-billet-left{
+    width: 40%;
+}
+.content-billet-right{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.title-billet{
+    font-size: 3.2rem;
+    text-align: center;
+    margin-top: 50px;
+
+}
+
+@media (max-width: 650px) {
+    .img-final {
+        width: 100% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #content {
+        padding: 5px;
+    }
+    .title-billet {
+        font-size: 2.3rem;
+    }
+    .content-billet-right{
+        display: none;
+    }
+    .content-billet-left{
+        width: 100%;
+    }
+    .copyBillet{
+        width: 65%;
+    }
+    .content-boleto{
+        margin-top: 50px;
+    }
+}

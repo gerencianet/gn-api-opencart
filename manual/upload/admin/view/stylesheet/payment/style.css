@@ -1,0 +1,41 @@
+.form-about {
+    width:100%;
+}
+.info-container{
+    text-align:center;
+    height: 9.36em;
+}
+.title-gerencianet{
+    color: black;
+    text-align:center;
+}
+.gerencianet-logo {
+    text-align: center;
+    padding-bottom: 1.25em;
+}
+
+.gerencianet-logo img {
+    width: 13.75em;
+}
+
+.alert i {
+    margin-right: 0.5em;
+}
+
+.nav-tabs a {
+    white-space: nowrap;
+}
+
+.nav-tabs img {
+    width: 10px;
+}
+
+label span {
+    cursor: help;
+}
+
+input[type=checkbox], input[type=checkbox] {
+	margin-top: 0.6em;
+	padding-right: 0.3em;
+    cursor: pointer;
+}

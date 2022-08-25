@@ -1,570 +1,348 @@
-{% if checkout_type == 'default' %}
-    <form action="{{ action }}" method="post">
-    <div class="buttons">
-        <div class="pull-right">
-        <input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
-        </div>
-    </div>
-    </form>
+{% if transparent %}
+
+
+	<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/payment/bootstrap-datepicker.min.css">
+	<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/payment/transparent.css">
+	<form class="form-horizontal form-payment-gerencianet" action="{{ action }}" method="post">
+		<input type='hidden' id="totalPedido" value={{total_pedido}}>
+		<div class="global-payment-form">
+			<img class="img-responsive center-block logo-form" src="https://s3-sa-east-1.amazonaws.com/acervo.gerencianet.com.br/imagens/marca-gerencianet.svg">
+			<br>
+			<div class="container-fluid">
+				<div class="row gerencianet-option-row">
+					{% for  option in  options_payment %}
+						{% if option.text %}
+							<div class="col-sm-4 gerencianet-option-colum">
+								<div class="gerencianet-option-payment-colum" id="{{option.id}}_click">
+									<div class="div-payment-radio">
+										<input type="radio" value="{{option.id}}" name="paymentOption" id="{{option.id}}">
+										<img src="catalog/view/theme/default/image/payment/{{option.img}}" alt="">
+									</div>
+									<div class="div-payment-label">
+										<label for="{{option.id}}">
+											<strong>{{option.text}}</strong>
+										</label>
+									</div>
+								</div>
+							</div>
+						{% endif %}
+
+					{% endfor %}
+				</div>
+			</div>
+			<br>
+			<div id="billetSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através do boleto bancário, a confirmação será feita no próximo dia útil após o pagamento.</strong>
+			</h4>
+			<div class="messageValidationBillet"></div>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="nameBillet">Nome/Razão Social</label>
+					<input type="text" name="nomeBoleto" class="form-control" id="nameBillet" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientBillet">CPF/CNPJ</label>
+					<input type="text" name="documentoBoleto" class="form-control" id="documentClientBillet">
+				</div>
+			</div>
+			<div class="form-group ">
+				<div class="col-sm-6">
+					<label class="control-label" for="emailBillet">Email</label>
+					<input type="email" name="emailBoleto" class="form-control" id="emailBillet" value={{customerEmail}}>
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="billetTelefone">Telefone</label>
+					<input type="text" name="telefoneBoleto" class="form-control" id="billetTelefone" value="{{customerTelefone}}">
+				</div>
+			</div>
+			{% if discount_billet != 0 %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style="">
+								<strong>Desconto Boleto:
+								</strong>
+							</td>
+							<td class="text-right">
+								{{ discount_billet }}%
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total com Desconto:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ discount_total_billet }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% else %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style=""></td>
+							<td class="text-right"></td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ total_pedido }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% endif %}
+		</div>
+		<div id="creditSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através de cartão de crédito, o pagamento será processado e a confirmação será feita em até 48  horas.</strong>
+			</h4>
+			<h4 class="text-justify  payment-description-title">
+				<strong>Dados do titular do cartão:</strong>
+			</h4>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="nameCard">Nome/Razão Social</label>
+					<input type="text" name="nomeCartao" class="form-control" id="nameCard" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-6">
+					<label class="control-label" for="emailCard">Email</label>
+					<input type="email" name="emailCartao" class="form-control" id="emailCard" value={{customerEmail}}>
+				</div>
+			</div>
+			<div class="form-group required ">
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientCredit">CPF/CNPJ</label>
+					<input type="text" name="documentoCartao" class="form-control" id="documentClientCredit">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="creditTelefone">Telefone</label>
+					<input type="text" name="telefoneCartao" class="form-control" id="creditTelefone" value="{{customerTelefone}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="data-nascimento">Data de nascimento</label>
+					<div class="input-group date">
+						<input id="data-nascimento" name="nascimento" type="text" class="form-control" placeholder="dd/mm/yyyy">
+						<div class="input-group-addon">
+							<span class="glyphicon glyphicon-th"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h4 class="text-justify  payment-description-title">
+				<strong>Endereço de cobrança:</strong>
+			</h4>
+			<div class="form-group  required">
+
+				<div class="col-sm-6">
+					<label class="control-label" for="creditAddRua">Rua</label>
+					<input type="text" name="rua" class="form-control" id="creditAddRua" value="{{customerRua}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddNum">Número</label>
+					<input type="text" name="numero" class="form-control" id="creditAddNum" value="{{customerNumero}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddBairro">Bairro</label>
+					<input type="text" name="bairro" class="form-control" id="creditAddBairro" value="{{customerBairro}}">
+				</div>
+			</div>
+			<div class="form-group required">
+				<div class="col-sm-5">
+					<label class="control-label" for="creditAddCidade">Cidade</label>
+					<input type="text" name="cidade" class="form-control" id="creditAddCidade" value="{{customerCidade}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="creditAddCEP">CEP</label>
+					<input type="text" name="cep" class="form-control" id="creditAddCEP" value="{{customerCep}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddEstado">Estado</label>
+					<select class="form-control" name="estado" id="creditAddEstado">
+						<option value="">Escolha...</option>
+						<option value="AC">Acre</option>
+						<option value="AL">Alagoas</option>
+						<option value="AP">Amapá</option>
+						<option value="AM">Amazonas</option>
+						<option value="BA">Bahia</option>
+						<option value="CE">Ceará</option>
+						<option value="DF">Distrito Federal</option>
+						<option value="ES">Espírito Santo</option>
+						<option value="GO">Goiás</option>
+						<option value="MA">Maranhão</option>
+						<option value="MT">Mato Grosso</option>
+						<option value="MS">Mato Grosso do Sul</option>
+						<option value="MG">Minas Gerais</option>
+						<option value="PA">Pará</option>
+						<option value="PB">Paraíba</option>
+						<option value="PR">Paraná</option>
+						<option value="PE">Pernambuco</option>
+						<option value="PI">Piauí</option>
+						<option value="RJ">Rio de Janeiro</option>
+						<option value="RN">Rio Grande do Norte</option>
+						<option value="RS">Rio Grande do Sul</option>
+						<option value="RO">Rondônia</option>
+						<option value="RR">Roraima</option>
+						<option value="SC">Santa Catarina</option>
+						<option value="SP">São Paulo</option>
+						<option value="SE">Sergipe</option>
+						<option value="TO">Tocantins</option>
+					</select>
+				</div>
+			</div>
+			<h4 class="text-justify  payment-description-title">
+				<strong>Dados do cartão:</strong>
+			</h4>
+			<div class="container-fluid bg-info   gerencianet-card">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<div class="option-credit-div">
+							<img id="visa" class="option-credit" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARsAAACyCAMAAABFl5uBAAAAllBMVEUORZX///8AOpEAQJMAP5IAOZAAPZK6yN4JQ5QAPJFKcK0ANo8qXKIAMY33+fwvX6MANI5XerEALozv8/gVSpgoVZ2NosfL1ebg5/GXqMqjtNLT3Oqcrs43W5/q7/ZzjLsAKIpHaKbH0uSxv9jk6fJ6k79ef7UcUp09Y6SEmsJshbZFa6m2wdh+l8KjsM5UdK0AE4UAIIiTYgzZAAAMmklEQVR4nO2d63+ivBLHkQiOtaAW8H7Z9VKtbR/P+f//ueMFJZDfBHDzebqnzffF7gsFkyHMTOaSOo07w/ExiZ2fTJz0x6tMIE76fzRL2q6grx7dF0PC9ZNZlJdNq+vRTxfMFSKv25JlM3DFV4/pL0J4g0w2n4FdMzIUbG+yGQRfPZi/jmBwlU3LtaumCHmts2yirtU1KqIbnWQz8756HH8l3uwkm8S+UQhKGs7Kt7JBkD90xu5Xj+IvxR07R6uJMaLvWHXDQM/Oz95567CSsVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLBYLDzl0Rojzv44tVLxBwvd8ipP5fL7fz+fJLhau1/yXm758t5QK5doEL7xdJ9BNNXc7iaG9X05W09GtJy5cjIat2evOc6u0fhGYlO73GNxZq4T1ZLvrNUsG04WX7q6f+gfw2YAbrPCC95nURpkjWo33gacXT7MXL/9ZF39vXL+PozNiRpFj+NrRrh1vDa/qpb/RAh/OcIG833uaLPSD2cx0BeTUO0LBRvWbFSg5jqcRullhKjrhUAKnc0iXRm8DPnxF68Z3DsPysTSGHX4s3gRfE/6uX5FPwu3st6tS8bxpGiH8JbpilA6GYnTzZ1XWQrxOK0im0Zjw7wcnmkZj+4DGOY/e7+2WaOHLxPzC6cAp3aQp3kP1w1AdhLursmYud25zI/EP7EUagZaKJ9gNtLqHv7f4DSbfWNxaJ+Cqmhab06nzVlEyp/eRMw0U87pq+idtqic7/KRZPCO24N+boe/fZemOwacfhVdUxGXrNiPqcks47WbGPPZO3aXTdPdrVvPMuRH58JJ7Xyg0U4U+rmZSyV5e2XADoR3S+jf+tD2KhDefoDekwa9krImzBr8AmqnczcSuxG7nmPaY0bfhSG4YaKsTnecPeG+uC7YH/YnjffI++ngnP3uKa6waXvORpzVzLRMth/QLKhDGqyAHfXlz13xijz5/kW/hV9c1Z5aM5mj2tZctjDTGN1/RvUc7eG+oaiUz62/Bxzmj0YF34OEUR8DtNFLw+GtC8PVnPEuB3ocw2zG7/4DP19IahP6PhogxCqJbcuHhzyxVSgc+AbiWm0f01Uk2d6/MTHWqunwpU8aZ4F3i26CMHBvQ/qx8bxdNPXzPlpiH1pX0CLFwL3eZTt62y8NyuX2btTb3xTVkptguW35DI4chid/o3sizpDlyblaZlSUXzXqfya7HKOLpNg4817/ger0g7s+uZugfLBu31K9eGGpyRtZwAbZUeESS9wK1QCiZDAHnER6Cdv7XTo5p4AymrNqgcj/gyUhzPAzIhMBAQE08lWaFd1PZCmwjM9YIn+F2ktzmfriHT1+zy7yjiyVUB1txdf+LXYpPaQxQQ0pmCuqrxoGbBYkmFA2JChq9pYn7VIdipNhUZdxB62shOxI+MnnZAySB3t5Ic+oVY8BZjS4x+hORZANooimNisqYEaH80GM090xlYK96xe2YWIBGV7dxsgn4A7C3W7x1G2piedlQAqQXZWOkHbrD6MWph9irP/Ok3teM94edzKIyfkGLoiW/eeIdfGOTGTzGmd2XJDaKdNQd4OY/qndh6NCoAPktg7yKxNvIvjwvbKayVwbK7hxrrrX6yVFHO/ilvmZsdKMeHRSoWOfl7iIblFdK0ExJOp2YTdBqV2f5Ay8r3IMtbKQJetfAR9uGUV7uAq2tvBPhIdP6mfkCWN+cf+qoT4nleFH17rAH/BDkoT0AJWjEuRAIdLfyjwZHrbK4l0PERvzWjldROj7wsg4+MqJmvD8nQLOSvW7y0ZqY5fwr2oOllQsyYN/vyiCuJB1qqwPZnIwlCMZ+GPH+cPZAVsZQExeCPNBvHslLC4a+bkTjpIJ00EDOKg04pgsz54XCbUNL2jVA4a3y2hruloa5he1qQwuLwa40lOkC5/z8iFCkxUjsDwf/JK+bYpQ/6OcdE7ybyskPZ7dk6cR6JYHCJJfUoDiqYjfj/eH8QRYCgZp4WngsAXIO8/FD5JvkiQYdNsl7wgMu/GW3i7KcTPCnLvB9yNYFFN22MAlohQpx53Z5dCFa9ljjC/O812/3VB2tK8GoAUxz3wO9oos2SoVdskBmSnnnoQtZYDXn1A7SKh/X1QE2hWENr0kLeCFW2iz3pKAZmmhJKJECogr5qcUSax1C8ejUgULmBNS2PAIKztztL8zkFgOyMGKqHvdKVJJZujCBKwfNf5O67wR258W3/kGQc3LzX2B2YFX0Hsp2U3fh4LyxcnsgHJSwu7/4IHj0YUYZ0w6olNQIwqyTUk1QwUylvOiqQ26AJIoAW5vw/t6AEo6pEdHg4N81BEIEhj4q6jnqIL8OHkpObl9XH5LSUi5Ffl8WNUSm1lAixgUPc3oxgi7apX8WtSU9owkylsJPYLFpnmIlLAzKZv4d2k30a4bNGASYW3RZsAReloXij8Ntx4KLd1KnX1oKGR7zM0NPT4oqojJMU6dbo+Df+anAaN1EcaugnW/xsTe/sy2rUcrnVmEIRBoHysxwKeO6oBTeeSuOrDsI4sMMjc5rp3ZvW6J2chsiWKgljwMYyo2Z7SaM9rY6uNYalEX10Duir/Oltr/VJm/lkC81wQ8M5eSeD95qM5lfGLGMenindVR1XIAm9142NDde6vSOFPyB0aGci0Cx+oUHi7DV2anPMExgXZ1SMIwH1gjLG6GoLTR6R5oaKsEobOmAxlyb2W7C4MrBewKGE/ji8LFWi7y5DmvQs8pklLBrrPOvNvD+NlXD0CUgKzz7BXYCIfDnsZmq9tQoODJhndV9gXbQjmT360Xmv+qOLjK03SRHXdyrX+BxoYwhDJNXdi98pub4vo0ngbzusIj6FUOxP7QmI7CWwmdVwxJyENkCWJUmTuvdeweQ31cJU94fMklgysihg71BYQ0L2oM657ZuyK2wAYPUr9LA4B4XBVTPT3PwRXVjwYNLsYZpeS5yXaphLPYHi9aKjFDYCe6mNjUMKK4jWF19O5w5rIaZMhzGGBSBwbRSM1XW0YzXTZrBYQowKsH3ptWjpEngAt6iwAJuOTH6u63vL8X6ZqsJrlXElPdHSXmnKy75gWZKqmaLp9ND7PKLpwmjP2loDPp9VVFq8x6VDSxmzAMbDOCGVEqX0/w0u9E48Rmj3sbtZtF1XmXZUD2mlHG5G4Ebk2Bt+yaLSIq0Hm+1bAZusTCW3JcDXq9XdaNrzKxA6X63IrgQRwarfZwTzoQgeU7T2Wsc9Dy3nVbod4LdG2cerz9WXqCvxZT3V+pjMUV0ZWYqH/gKF6vJ4G27XB6W28Ga9xuufht1HvX70mEY2jXAUL7MJ7aIMOUk1U3pGwg5rpHwKgX6OjaGRMP0qt4JcdyefPRoswBYzR7NlNS5AUUA9WB7lmuCS8fvzJg2TnhGRTYmXEZQQnRV5ShhVw9TW3GcnbwRMn8fGBUGyekR3E1SwvH6+sK3fBEnzxhQoG7K+2Pq91O4lAqs45OStrjcX0+qrWAfwPmkFYxw1LcXRHAfQ7tt4NKE0DmTEvUwP6NnnAYz4bMKeZ+lrW4vFqYUjkO8aphyIyozUzA/o2XWu84Hn6ww5dNeyHs19vdpuZbKE0tuSwv7IaTAFl9zjQm3qWiYkxXYgeAtu6EibF0NMGrhvE4d1ac0SDJT9faK0+5tXZALe0k15RGondZU7E8T/GNOzWL64KLMOtTz3sK37Hg2HO9b67LcwM005v0RG/xj+0qgGZLS9FrbV5TM5FmKK+ISL20YGqT1Hzl+i7k5E/xrsU+rrOhaPLUq+n6L2V5OtuGerZHW7CCdUD3fUQJnxUEOPAU+3Vw3RCfZtkp1TtjaivxxfjhGO9CqVlQjZagFjw3+adoqX9C0874Q+b3e++CD31ZNJwfRKz5eVEzXaJQk2QN1NBtDsb+zcLoATT5FvPZVFO1EwvVcv3uYfZzPx0wnEEaj6Wq9fReeB9b97vikUharEnv1GnNHk2J3XHNBU4Xx00n4rtd04iS5nqs6T2LyPZ+brkCUDf+BS/4ecufx6qVusVgsFovFYrFYLBaLxWKxWCwWi8VisVgsFovFYrFYLJZvAvsHRH88sWPoVMTvBz07xnpjvhui75jqjP52uGNnWP/Pr/8IyB86po5h/W5Q0nDM9Th8L7zZSTYR07P8sxHd6CSbRsvIn/z9XtD5pKHzEQEDY90x34bg3Al8OT7hU/NXCH8iFFxO8XbSLjWrczKEd+0fT4/daHU924Zzgcjbp93vtyNJolniu6bOZPi/hYTrJ7Nbu6V0XMtw3H/+2bvy+Lk/lg7S+R/FdcssxDsKTgAAAABJRU5ErkJggg==" alt="">
+							<img id="masterCard" class="option-credit" src="https://w7.pngwing.com/pngs/92/785/png-transparent-mastercard-logo-mastercard-credit-card-payment-visa-nyse-ma-mastercard-logo-text-logo-sign-thumbnail.png" alt="">
+							<img id="americanExpress" class="option-credit" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeN_uQzlxh992SJ_VkaTNBhQxq6rGwyAsShIfRMoXip5dkefb_kFfe2mwIPIqgIHj64pI&usqp=CAU" alt="">
+							<img id="elo" class="option-credit" src="https://www.promoview.com.br/uploads/2017/12/images/07.12/Fischer_cria_acoes_para_a_Elo_iluminar_icones_da_cidade_de_Sao_Paulo_2.jpg" alt="">
+							<img id="hiperCard" class="option-credit" src="https://media.cdnandroid.com/item_images/816483/imagen-hipercard-0big.jpg" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="form-group required">
+					<div class="col-sm-8 card_invalid">
+						<input data-toggle="tooltip" data-placement="top" title="Número de 14 a 16 dígitos de seu cartão" type="text" class="form-control" name="numCartao" id="creditAddNumCartao" placeholder="Número do cartão">
+					</div>
+					<div class="col-sm-2 col-xs-6">
+						<input data-toggle="tooltip" data-placement="top" title="São os três digitos na parte de trás do cartão" type="text" class="form-control" maxlength="3" name="codSeguranca" id="codSeguranca" placeholder="CVV">
+					</div>
+					<div class="col-sm-2 col-xs-6">
+						<input data-toggle="tooltip" data-placement="top" title="Validade do cartão" type="text" class="form-control" id="creditValidadeCartao" name="vencimentoCartao" placeholder="MM/AA">
+					</div>
+				</div>
+				<div class="form-group required">
+					<div class="col-sm-4 ">
+						<label class="control-label" for="parcelas">Parcelas</label>
+						<select name="parcelasCartao" name="parcelas" id="parcelas" class="form-control">
+							<option value="">Insira os dados do seu cartão...</option>
+						</select>
+					</div>
+				</div>
+
+			</div>
+
+			<table class="table table-desconto">
+				<tfoot>
+					<tr>
+						<td colspan="4" class="text-right first" style=""></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr>
+						<td colspan="4" class="text-right">
+							<strong>Total:
+							</strong>
+						</td>
+						<td class="text-right value-total">
+							{{ currency_symbol_left }}
+							{{ total_pedido }}
+							{{ currency_symbol_right }}
+						</td>
+					</tr>
+					
+				</tfoot>
+			</table>
+
+		</div>
+		<div id="pixSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através do pix, a confirmação será feita nos próximos segundos.</strong>
+			</h4>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="namePix">Nome/Razão Social</label>
+					<input type="text" class="form-control" id="namePix" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientPix">CPF/CNPJ</label>
+					<input type="text" class="form-control" id="documentClientPix">
+				</div>
+			</div>
+			{% if discount_pix != 0 %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style="">
+								<strong>Desconto Pix:
+								</strong>
+							</td>
+							<td class="text-right">
+								{{ discount_pix }}%
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total com Desconto:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ discount_total_pix }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% else %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style=""></td>
+							<td class="text-right"></td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ total_pedido }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% endif %}
+		</div>
+
+			<div class="buttons clearfix">
+				<div class="pull-right">
+					<input type="submit" value="{{ button_confirm }}" class="btn btn-primary"/>
+				</div>
+			</div>
+		</div>
+	</form>
 {% else %}
-    <div id="gerencianet-container">
-    {% if sandbox %}
-        <div class="gn-osc-attention-payment" id="wc-gerencianet-messages-sandbox" style="display: block;">
-            <div>{{ gn_warning_sandbox_message }}</div>
-        </div>
-    {% endif %}
-
-    <div class="gn-osc-warning-payment" id="wc-gerencianet-messages">
-        {% if card_option and order_total_card < 500 and billet_option and order_total_billet < 500 %}
-            <div>O valor mínimo para pagar com a Gerencianet é de R$5,00.</div>
-        {% endif %}
-    </div>
-
-    <div style="margin: 5px 0px -2px 0px;">
-        {% if billet_option and order_total_billet >= 500 %}
-            <div id="gn-billet-payment-option" class="gn-osc-payment-option gn-osc-payment-option-selected">
-                <div>
-                    <div id="billet-radio-button" class="gn-osc-left">
-                        <input type="radio" name="paymentMethodRadio" id="paymentMethodBilletRadio" class="gn-osc-radio" value="billet" checked="true" />
-                    </div>
-                    <div class="gn-osc-left gn-osc-icon-gerencianet gn-icon">
-                        <span class="gn-icon-icones-personalizados_boleto"></span>
-                    </div>
-                    <div class="gn-osc-left gn-osc-payment-option-gerencianet">
-                        <strong>Pagar com Boleto Bancário</strong>
-                        {% if discount > 0 %}
-                            <span style="font-size: 14px; line-height: 15px;"><br>{{ discount_formatted }} de desconto</span>
-                        {% endif %}
-                    </div>
-                    <div class="gn-osc-left gn-osc-payment-option-sizer"></div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-        {% endif %}
-        {% if card_option and order_total_card >= 500 %}
-            <div id="gn-card-payment-option" class="gn-osc-payment-option gn-osc-payment-option-unselected">
-                <div>
-                    <div id="card-radio-button" class="gn-osc-left">
-                        <input type="radio" name="paymentMethodRadio" id="paymentMethodCardRadio" class="gn-osc-radio" value="card" />
-                    </div>
-                    <div class="gn-osc-left gn-osc-icon-gerencianet">
-                        <span class="gn-icon-credit-card2"></span>
-                    </div>
-                    <div class="gn-osc-left gn-osc-payment-option-gerencianet">
-                        <strong>Pagar com Cartão de Crédito</strong>
-                        <span style="font-size: 14px; line-height: 15px;"><br>em até {{ max_installments }}</span>
-                    </div>
-                    <div class="gn-osc-left gn-osc-payment-option-sizer"></div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-        {% endif %}
-        <div class="clear"></div>
-    </div>
-    {% if billet_option and order_total_billet >= 500 %}
-        <div id="collapse-payment-billet" class="gn-osc-background" >
-            <div class="panel-body">
-                <div class="gn-osc-row gn-osc-pay-comments">
-                    <p class="gn-left-space-2"><strong>{{ gn_billet_payment_method_comments }}</strong></p>
-                </div>
-                <div class="gn-form">
-                    <div id="billet-data">
-                        <div style="background-color: #F3F3F3; border: 1px solid #F3F3F3;">
-                            <div class="gn-osc-row">
-                                <div class="gn-col-12 gn-cnpj-row">
-                                    <input type="checkbox" name="pay_billet_with_cnpj" id="pay_billet_with_cnpj" value="1" /> Pagar com dados de Pessoa Jurídica
-                                </div>
-                            </div>
-
-                            <div id="pay_cnpj" class="required gn-osc-row">
-                                <div class="gn-col-2 gn-label">
-                                    <label for="gn_billet_cnpj" class="gn-right-padding-1">CNPJ: </label>
-                                </div>
-                                <div class="gn-col-10">
-                                
-                                <div>
-                                    <div class="gn-col-3 required">
-                                        <input type="text" name="gn_billet_cnpj" id="gn_billet_cnpj" class="form-control cnpj-mask" value="" />
-                                    </div>
-                                    <div class="gn-col-8">
-                                        <div class="required">
-                                            <div class="gn-col-4 gn-label">
-                                                <label class=" gn-col-12 gn-right-padding-1" for="gn_billet_corporate_name">Razão Social: </label>
-                                            </div>
-                                            <div class="gn-col-8">
-                                                <input type="text" name="gn_billet_corporate_name" id="gn_billet_corporate_name" class="form-control" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="gn_name_row" class="required gn-osc-row gn-billet-field" >
-                        <div class="gn-col-2 gn-label">
-                            <label for="gn_billet_full_name" class="gn-right-padding-1">Nome: </label>
-                        </div>
-                        <div class="gn-col-10">
-                            <input type="text" name="gn_billet_full_name" id="gn_billet_full_name" value="{{ first_name ~ last_value}}" class="form-control" />
-                        </div>
-                    </div>
-
-
-                    <div id="gn_email_row" class=" required gn-osc-row gn-billet-field" >
-                        <div class="gn-col-2 gn-label">
-                            <label class="gn-col-12 gn-right-padding-1" for="gn_billet_email">Email: </label>
-                        </div>
-                        <div class="gn-col-10">
-                            <input type="text" name="gn_billet_email" value="{{ email }}" id="gn_billet_email" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div id="gn_cpf_phone_row" class="required gn-osc-row gn-billet-field" >
-                        <div class="gn-col-13">
-                            <div id="gn_cpf_area">
-                                <div class="gn-col-2 gn-label">
-                                    <label for="gn_billet_cpf" class="gn-right-padding-1">CPF: </label>
-                                </div>
-                                <div class="gn-col-3 required">
-                                    <input type="text" name="gn_billet_cpf" id="gn_billet_cpf" value="{{ cpf }}" class="form-control cpf-mask" />
-                                </div>
-                            </div>
-                            <div class="gn-col-6">
-                                <div class=" required">
-                                    <div class="gn-col-4 gn-label">
-                                        <label class="gn-col-12 gn-right-padding-1" for="gn_billet_phone_number" >Telefone: </label>
-                                    </div>
-                                    <div class="gn-col-5">
-                                        <input type="text" name="gn_billet_phone_number" id="gn_billet_phone_number" value="{{ phone_number }}" class="form-control phone-mask" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="gn-osc-row" style="padding: 20px;">
-            {% if discount > 0 %}
-                <div class="gn-osc-row" style="border: 1px solid #DEDEDE; border-bottom: 0px; margin: 0px; padding:5px;">
-                    <div class="gn-pull-left">
-                        <strong>DESCONTO DE {{ discount_formatted }} NO BOLETO:</strong>
-                    </div>
-                    <div class="gn-pull-right">
-                        <strong>-{{ discount_total_value }}</strong>
-                    </div>
-                </div>
-            {% endif %}
-            <div class="gn-osc-row" style="border: 1px solid #DEDEDE; margin: 0px; padding:5px;">
-                <div class="gn-pull-left">
-                    <strong>TOTAL:</strong>
-                </div>
-                <div class="gn-pull-right">
-                    <strong>{{ order_total_billet_formatted }}</strong>
-                </div>
-            </div>
-            <div class="gn-osc-row">
-                <div class="gn-pull-right">
-                    <div class="gn-osc-row">
-                        <div class="buttons">
-                            <div class="pull-right">
-                                <input type="submit" id="gn-pay-billet-button" value="Finalizar Pedido e Pagar com Boleto Bancário" class="btn btn-primary" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pull-right gn-loading-request">
-                    <div class="gn-loading-request-row">
-                        <div class="pull-left gn-loading-request-text">
-                            Autorizando, aguarde...
-                        </div>
-                        <div class="pull-left gn-icons">
-                            <div class="spin gn-loading-request-spin-box icon-gerencianet"><div class="gn-icon-spinner6 gn-loading-request-spin-icon"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if card_option and order_total_card >= 500 %} 
-        <div id="collapse-payment-card"  class="panel-collapse {% if billet_option == '1' %} gn-hide {% endif %} gn-osc-background" >
-            <div class="panel-body">
-                <div class="gn-osc-row gn-osc-pay-comments">
-                   <p class="gn-left-space-2"><strong>{{ gn_card_payment_comments }}</strong></p>
-                </div>
-
-                <div class="gn-form">
-                <div id="card-data" >
-                    <div style="background-color: #F3F3F3; border: 1px solid #F3F3F3;">
-                    <div class="gn-osc-row">
-                        <div class="gn-col-12 gn-cnpj-row">
-                            <input type="checkbox" name="pay_card_with_cnpj" id="pay_card_with_cnpj" value="1" />  Pagar com dados de Pessoa Jurídica
-                        </div>
-                    </div>
-
-                    <div id="pay_cnpj_card" class=" required gn-osc-row" >
-                        <div class="gn-col-2 gn-label">
-                        <label class="gn-right-padding-1" for="gn_card_cnpj">CNPJ: </label>
-                        </div>
-                        <div class="gn-col-10">
-                        
-                        <div>
-                          <div class="gn-col-3 required">
-                            <input type="text" name="gn_card_cnpj" id="gn_card_cnpj" class="form-control cnpj-mask" value="" />
-                          </div>
-                          <div class="gn-col-8">
-                            <div class=" required gn-left-space-2">
-                              <div class="gn-col-4 gn-label">
-                                <label class="gn-col-12 gn-right-padding-1" for="gn_card_corporate_name">Razão Social: </label>
-                              </div>
-                              <div class="gn-col-8">
-                                <input type="text" name="gn_card_corporate_name" id="gn_card_corporate_name" class="form-control" value="" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    </div>
-
-                    <div id="gn_card_name_row" class="required gn-osc-row gn-card-field" >
-                      <div class="gn-col-2 gn-label">
-                        <label class="gn-col-12 gn-right-padding-1" for="gn_card_full_name">Nome: </label>
-                      </div>
-                      <div class="gn-col-10">
-                        <input type="text" name="gn_card_full_name" id="gn_card_full_name" value="{{ first_name ~ last_name }}" class="form-control" />
-                      </div>
-                    </div>
-
-                    <div id="gn_card_cpf_phone_row" class="required gn-osc-row gn-card-field" >
-                    
-                      <div id="gn_card_cpf_area">
-                        <div class="gn-col-2 gn-label">
-                            <label for="gn_card_cpf" class="gn-right-padding-1" >CPF: </label>
-                        </div>
-                        <div class="gn-col-4">
-                            <input type="text" name="gn_card_cpf" id="gn_card_cpf" value="{{ cpf }}" class="form-control cpf-mask gn-minimum-size-field" />
-                        </div>
-                      </div>
-
-                      <div class="gn-col-6">
-                        <div class="gn-col-4 gn-label">
-                            <label class="gn-left-space-2 gn-right-padding-1" for="gn_card_phone_number">Telefone: </label>
-                        </div>
-                        <div class="gn-col-8">
-                            <input type="text" name="gn_card_phone_number" value="{{ phone_number }}" id="gn_card_phone_number" class="form-control phone-mask gn-minimum-size-field" />
-                        </div>
-                        
-                      </div>
-                      
-                    </div>
-
-                    <div id="gn_card_birth_row" class=" required gn-osc-row gn-card-field" >
-                      <div class="gn-col-3 gn-label-birth">
-                          <label class="gn-right-padding-1" for="gn_card_birth">Data de nascimento: </label>
-                      </div>
-                      <div class="gn-col-3">
-                          <input type="text" name="gn_card_birth" id="gn_card_birth" value="{{ birth }}" class="form-control birth-mask" />
-                      </div>
-                    </div>
-
-                    <div id="gn_card_email_row" class=" required gn-card-field" >
-                      <div class="gn-col-2">
-                        <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_email">Email: </label>
-                      </div>
-                      <div class="gn-col-10">
-                        <input type="text" name="gn_card_email" value="{{ email }}" id="gn_card_email" class="form-control" />
-                      </div>
-                    </div>
-
-                    <div id="billing-adress" class="gn-section">
-                        <div class="gn-osc-row gn-card-field gn-col-12">
-                            <p>
-                            <strong>ENDEREÇO DE COBRANÇA: </strong>
-                            </p>
-                        </div>
-
-                        <div id="gn_card_street_number_row" class="required gn-osc-row gn-card-field" >
-                            <div class="gn-col-2">
-                                <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_street">Endereço: </label>
-                            </div>
-                            
-                            <div class="gn-col-10">
-                                <div class="gn-col-6 required">
-                                    <input type="text" name="gn_card_street" id="gn_card_street" value="{{ street }}" class="form-control" />
-                                </div>
-                                <div class="gn-col-6">
-                                    <div class=" required gn-left-space-2">
-                                        <div class="gn-col-5">
-                                            <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_street_number">Número: </label>
-                                        </div>
-                                        <div class="gn-col-7">
-                                            <input type="text" name="gn_card_street_number" id="gn_card_street_number" value="{{ number }}" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="gn_card_neighborhood_row" class="gn-osc-row gn-card-field">
-                            <div class="gn-col-2 required">
-                                <label class="gn-col-12 gn-label required gn-right-padding-1" for="gn_card_neighborhood">Bairro: </label>
-                            </div>
-                    
-                            <div class="gn-col-3">
-                                
-                                <input type="text" name="gn_card_neighborhood" id="gn_card_neighborhood" value="{{ neighborhood }}" class="form-control" />
-                            </div>
-                            <div class="gn-col-7">
-                                <div class=" gn-left-space-2">
-                                  <div class="gn-col-5">
-                                  <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_complement">Complemento: </label>
-                                  </div>
-                                  <div class="gn-col-7">
-                                    <input type="text" name="gn_card_complement" id="gn_card_complement" value="{{ complement }}" class="form-control" maxlength="54" />
-                                  </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="gn_card_city_zipcode_row" class="required billing-address-data gn-card-field gn-osc-row" >
-                            <div class="gn-col-2">
-                                <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_zipcode">CEP: </label>
-                            </div>
-                            <div class="gn-col-10">
-                                <div class="gn-col-4 required">
-                                    <input type="text" name="gn_card_zipcode" id="gn_card_zipcode" value="{{ zipcode }}" class="form-control" />
-                                </div>
-                                <div class="gn-col-8">
-                                    <div class=" required gn-left-space-2">
-                                      <div class="gn-col-4">
-                                          <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_city">Cidade: </label>
-                                      </div>
-                                      <div class="gn-col-6">
-                                        <input type="text" name="gn_card_city" id="gn_card_city" value="{{ city }}" class="form-control" />
-                                      </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="gn_card_state_row" class="required billing-address-data gn-card-field gn-osc-row" >
-                            <div class="gn-col-2">
-                                <label class="gn-col-12 gn-label gn-right-padding-1" for="gn_card_state">Estado: </label>
-                            </div>
-                            <div class="gn-col-10">
-                                <select name="gn_card_state" id="gn_card_state" class="form-control gn-form-select">
-                                    <option value=""></option> 
-                                    <option value="AC" {% if state == "AC" or state == "Acre" %} selected {% endif %}>Acre</option>
-                                    <option value="AL" {% if state == "AL" or state == "Alagoas" %} selected {% endif %}>Alagoas</option>
-                                    <option value="AP" {% if state == "AP" or state == "Amapá" %} selected {% endif %}>Amapá</option>  
-                                    <option value="AM" {% if state == "AM" or state == "Amazonas" %} selected {% endif %}>Amazonas</option> 
-                                    <option value="BA" {% if state == "BA" or state == "Bahia" %} selected {% endif %}>Bahia</option>
-                                    <option value="CE" {% if state == "CE" or state == "Ceará" %} selected {% endif %}>Ceará</option> 
-                                    <option value="DF" {% if state == "DF" or state == "Distrito Federal" %} selected {% endif %}>Distrito Federal</option> 
-                                    <option value="ES" {% if state == "ES" or state == "Espírito Santo" %} selected {% endif %}>Espírito Santo</option> 
-                                    <option value="GO" {% if state == "GO" or state == "Goiás" %} selected {% endif %}>Goiás</option> 
-                                    <option value="MA" {% if state == "MA" or state == "Maranhão" %} selected {% endif %}>Maranhão</option> 
-                                    <option value="MT" {% if state == "MT" or state == "Mato Grosso" %} selected {% endif %}>Mato Grosso</option> 
-                                    <option value="MS" {% if state == "MS" or state == "Mato Grosso do Sul" %} selected {% endif %}>Mato Grosso do Sul</option> 
-                                    <option value="MG" {% if state == "MG" or state == "Minas Gerais" %} selected {% endif %}>Minas Gerais</option> 
-                                    <option value="PA" {% if state == "PA" or state == "Pará" %} selected {% endif %}>Pará</option> 
-                                    <option value="PB" {% if state == "PB" or state == "Paraíba" %} selected {% endif %}>Paraíba</option> 
-                                    <option value="PR" {% if state == "PR" or state == "Paraná" %} selected {% endif %}>Paraná</option> 
-                                    <option value="PE" {% if state == "PE" or state == "Pernambuco" %} selected {% endif %}>Pernambuco</option> 
-                                    <option value="PI" {% if state == "PI" or state == "Piauí" %} selected {% endif %}>Piauí</option> 
-                                    <option value="RJ" {% if state == "RJ" or state == "Rio de Janeiro" %} selected {% endif %}>Rio de Janeiro</option> 
-                                    <option value="RN" {% if state == "RN" or state == "Rio Grande do Norte" %} selected {% endif %}>Rio Grande do Norte</option> 
-                                    <option value="RS" {% if state == "RS" or state == "Rio Grande do Sul" %} selected {% endif %}>Rio Grande do Sul</option> 
-                                    <option value="RO" {% if state == "RO" or state == "Rondônia" %} selected {% endif %}>Rondônia</option> 
-                                    <option value="RR" {% if state == "RR" or state == "Roraima" %} selected {% endif %}>Roraima</option> 
-                                    <option value="SC" {% if state == "SC" or state == "Santa Catarina" %} selected {% endif %}>Santa Catarina</option> 
-                                    <option value="SP" {% if state == "SP" or state == "São Paulo" %} selected {% endif %}>São Paulo</option> 
-                                    <option value="SE" {% if state == "SE" or state == "Sergipe" %} selected {% endif %}>Sergipe</option> 
-                                    <option value="TO" {% if state == "TO" or state == "Tocantins" %} selected {% endif %}>Tocantins</option> 
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="gn-section" style="background-color: #F0F0F0; padding: 5px 10px;">
-                        <div class="required gn-osc-row">
-                            <div>
-                                <label class="" for="gn_card_brand">Selecione a bandeira do cartão: </label>
-                            </div>
-                            <div>
-                                <div class="gn-card-brand-selector">
-                                    <input id="none" type="radio" name="gn_card_brand" id="gn_card_brand" value="" checked class="gn-hide" />
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="visa" type="radio" name="gn_card_brand" id="gn_card_brand" value="visa" class="gn-hide" />
-                                        <label class="gn-card-brand gn-visa" for="visa"></label>
-                                    </div>
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="mastercard" type="radio" name="gn_card_brand" id="gn_card_brand" value="mastercard" class="gn-hide" />
-                                        <label class="gn-card-brand gn-mastercard" for="mastercard"></label>
-                                    </div>
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="amex" type="radio" name="gn_card_brand" id="gn_card_brand" value="amex" class="gn-hide" />
-                                        <label class="gn-card-brand gn-amex" for="amex"></label>
-                                    </div>
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="diners" type="radio" name="gn_card_brand" id="gn_card_brand" value="diners" class="gn-hide" />
-                                        <label class="gn-card-brand gn-diners" for="diners"></label>
-                                    </div>
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="elo" type="radio" name="gn_card_brand" id="gn_card_brand" value="elo" class="gn-hide" />
-                                        <label class="gn-card-brand gn-elo" for="elo"></label>
-                                    </div>
-                                    <div class="pull-left gn-card-brand-content">
-                                        <input id="hipercard" type="radio" name="gn_card_brand" id="gn_card_brand" value="hipercard" class="gn-hide" />
-                                        <label class="gn-card-brand gn-hipercard" for="hipercard"></label>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="gn-osc-row required">
-                            <div class="gn-col-6">
-                                <div>
-                                    Número do cartão:
-                                </div>
-                                <div>
-                                    <div class="gn-card-number-input-row" style="margin-right: 20px;">
-                                        <input type="text" name="gn_card_number_card" id="gn_card_number_card" value="" class="form-control gn-input-card-number" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>                            
-                            <div class="gn-col-6">
-                                <div>
-                                    Código de Segurança:
-                                </div>
-                                <div>
-                                    <div class="pull-left gn-cvv-row">
-                                        <input type="text" name="gn_card_cvv" id="gn_card_cvv" value="" class="form-control gn-cvv-input" />
-                                    </div>
-                                    <div class="pull-left">
-                                        <div class="gn-cvv-info">
-                                            <div class="pull-left gn-icon-card-input">
-                                            </div>
-                                            <div class="pull-left gn-osc-cvv-info-description">
-                                                São os três últimos
-                                                dígitos no verso do cartão.
-                                            </div>
-                                            <div class="clear"></div>
-                                        </div>
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                            <div class="clear"></div>
-                            <input type="hidden" name="gn_card_payment_token" id="gn_card_payment_token" value="" />
-                        </div>
-                        <div class="gn-osc-row">
-                            <div class="gn-col-12">
-                                <div>   
-                                    Validade:
-                                </div>
-                                <div class="gn-card-expiration-row">
-                                    <select class="form-control gn-card-expiration-select" name="gn_card_expiration_month" id="gn_card_expiration_month" >
-                                        <option value=""> MM </option>
-                                        <option value="01"> 01 </option>
-                                        <option value="02"> 02 </option>
-                                        <option value="03"> 03 </option>
-                                        <option value="04"> 04 </option>
-                                        <option value="05"> 05 </option>
-                                        <option value="06"> 06 </option>
-                                        <option value="07"> 07 </option>
-                                        <option value="08"> 08 </option>
-                                        <option value="09"> 09 </option>
-                                        <option value="10"> 10 </option>
-                                        <option value="11"> 11 </option>
-                                        <option value="12"> 12 </option>
-                                    </select>
-                                    <div class="gn-card-expiration-divisor">
-                                        /
-                                    </div>
-                                    <select class="form-control gn-card-expiration-select" name="gn_card_expiration_year" id="gn_card_expiration_year" >
-                                        <option value=""> YYYY </option>
-                                        {% set last_year = actual_year + 15 %}
-                                        {% for i in actual_year..last_year %}
-                                            <option value="{{ i }}">{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <div class="clear"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="gn-osc-row required">
-                            <div class="gn-col-12">
-                                <label class="" for="gn_card_installments">Quantidade de parcelas:</label>
-                            </div>
-                            <div class="gn-col-12">
-                                <select name="gn_card_installments" id="gn_card_installments" class="form-control gn-form-select">
-                                    <option value="">Selecione a bandeira do cartão</option> 
-                                </select>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="gn-osc-row" style="padding: 20px;">
-            <div class="gn-osc-row" style="border: 1px solid #DEDEDE; margin: 0px; padding:5px;">
-                <div class="gn-pull-left">
-                    <strong>TOTAL:</strong>
-                </div>
-                <div class="gn-pull-right">
-                    <strong>{{ order_total_card_formatted }}</strong>
-                </div>
-            </div>
-            <div class="gn-osc-row">
-                <div class="gn-pull-right">                
-                    <div class="gn-osc-row">
-                        <div class="buttons">
-                            <div class="pull-right">
-                                <input type="submit" id="gn-pay-card-button" value="Finalizar Pedido e Pagar com Cartão de Crédito" class="btn btn-primary" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pull-right gn-loading-request">
-                    <div class="gn-loading-request-row">
-                        <div class="pull-left gn-loading-request-text">
-                            Autorizando, aguarde...
-                        </div>
-                        <div class="pull-left gn-icons">
-                            <div class="spin gn-loading-request-spin-box icon-gerencianet"><div class="gn-icon-spinner6 gn-loading-request-spin-icon"></div></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-        </div>  
-    </div>
-    {% endif %}
-    </div>
-
-    {{ scriptPaymentToken }}
-
-    <script type="text/javascript">
-        var getPaymentToken;
-        var loaded = true;
-        $gn.ready(function(checkout) {
-            getPaymentToken = checkout.getPaymentToken;
-        });
-
-        var billetActive = "{{ billet_option }}";
-        var cardActive = "{{ card_option }}";
-        var id_charge = 0;
-        var success_url = "{{ success_url }}";
-        var actual_order_id = "{{ actual_order_id }}";
-    </script>
-
-    <script src='{{ base }}catalog/view/javascript/jquery/jquery.maskedinput.js' type='text/javascript'></script>
-    <script src='{{ base }}catalog/view/javascript/gerencianet/checkout-osc.js' type='text/javascript'></script>
-    <link rel="stylesheet" type="text/css" href="{{ base }}catalog/view/javascript/gerencianet/style-osc.css?r={{ random(99998) + 1 }}" />
+	<form class="form-horizontal form-payment-gerencianet" action="{{ action }}" method="post">
+		<div class="buttons clearfix">
+			<div class="pull-right">
+				<input type="submit" value="Ir para pagamento" class="btn btn-primary"/>
+			</div>
+		</div>
+	</form>
 {% endif %}
+
+{{script_cartao}}
+<script src="catalog/view/javascript/payment/transparent/transparent.js"></script>
+<script src="catalog/view/javascript/jquery/jquery.mask.min.js"></script>
+<script src="catalog/view/javascript/payment/bootstrap-datepicker.min.js"></script>
+<script src="catalog/view/javascript/payment/bootstrap-datepicker.pt-BR.min.js"></script>
+<script src="catalog/view/javascript/payment/validation/validation.js"></script>
+<script src="catalog/view/javascript/payment/cartao/cartao.js"></script>

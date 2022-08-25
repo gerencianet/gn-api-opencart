@@ -1,0 +1,79 @@
+
+#gerencianet-container-qrcode{
+    margin-bottom: 15px;
+}
+#gerencianet-container-qrcode .header {
+    margin: auto; 
+    width: 80%; 
+    display: flex; 
+    justify-content: flex-start;
+}
+#gerencianet-container-qrcode .header img {
+    width: 50%; 
+    height: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 45px;
+}
+#gerencianet-container-qrcode section {
+    margin: auto; 
+    width: 80%; 
+    display: flex; 
+    justify-content: space-between; 
+    flex-direction: row; 
+    align-items: center;
+}
+
+#gerencianet-container-qrcode section #qr-code-info {
+    width: 50%;
+}
+
+#gerencianet-container-qrcode section #qr-code-info h1 {
+    font-size: 2.5rem; 
+    margin-bottom: 25px
+}
+#gerencianet-container-qrcode section div#qr-code-info h1 img {
+    width: 20px; 
+    height: 20px
+}
+
+#gerencianet-container-qrcode section div#qr-code-info p {
+    font-size: 1.5rem
+}
+#gerencianet-container-qrcode section div#qr-code-info div {
+    margin-top: 20px
+}
+#gerencianet-container-qrcode section div#qr-code-info div input {
+    cursor: text !important;
+}
+#gerencianet-container-qrcode section div#qr-code-info div button {
+    width: 100%; 
+    font-size: 1.5rem; 
+    background: #DF650D; 
+    color: #FFF; 
+    margin-top: 5px;
+    border: none;
+}
+
+#gerencianet-container-qrcode section div#qr-code-info div button:hover {
+    background: #ff8100;
+}
+
+#gerencianet-container-qrcode section #qr-code img {
+    width: 200px; 
+    height: 200px
+}
+
+@media (max-width: 650px) {
+
+    #qr-code{
+        display: none;
+    }
+    #gerencianet-container-qrcode section #qr-code-info{
+        width: 100%;
+    }
+    #gerencianet-container-qrcode .header img{
+        width:80%;
+        
+    }
+}

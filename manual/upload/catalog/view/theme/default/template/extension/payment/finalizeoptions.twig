@@ -1,0 +1,374 @@
+{{ header }}{{ column_left }}
+
+<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/payment/bootstrap-datepicker.min.css">
+<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/payment/transparentoptions.css">
+<form class="form-horizontal form-payment-gerencianet" action="{{ action }}" method="post">
+	<input type='hidden' id="totalPedido" value={{total_pedido}}>
+	<div class="global-payment-form">
+		<div class="panel panel-default">
+			<div class="panel-heading">Pedido #{{order_id}}</div>
+			<div class="panel-body">
+				<table class='table table-hover'>
+					<thead>
+						<tr>
+							<th class="text-center">Produto</th>
+							<th class="text-center">Quantidade</th>
+							<th >Valor</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for produto in produtos %}
+							<tr class="">
+								<td class="text-center">{{produto.name}}</td>
+								<td class="text-center">{{produto.quantity}}</td>
+								<td >R${{produto.price}}</td>
+							</tr>
+						{% endfor %}
+						{% if frete != 0 %}
+							<tr class="">
+								<td class="text-center" >
+									Frete</td>
+								<td></td>
+								<td >R${{frete}}</td>
+							</tr>
+						{% endif %}
+						<tr class="info">
+								<td class="text-center" colspan="2"><strong>Total</strong></td>
+								<td ><strong>R${{total_pedido}}</strong></td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<img class="img-responsive center-block logo-form" src="https://s3-sa-east-1.amazonaws.com/acervo.gerencianet.com.br/imagens/marca-gerencianet.svg">
+		<br>
+		<div class="container-fluid">
+			<div class="row gerencianet-option-row">
+				{% for  option in  options_payment %}
+					{% if option.text %}
+						<div class="col-sm-4 gerencianet-option-colum">
+							<div class="gerencianet-option-payment-colum" id="{{option.id}}_click">
+								<div class="div-payment-radio">
+									<input type="radio" value="{{option.id}}" name="paymentOption" id="{{option.id}}">
+									<img src="catalog/view/theme/default/image/payment/{{option.img}}" alt="">
+								</div>
+								<div class="div-payment-label">
+									<label for="{{option.id}}">
+										<strong>{{option.text}}</strong>
+									</label>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
+				{% endfor %}
+			</div>
+		</div>
+		<br>
+		<div id="billetSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através do boleto bancário, a confirmação será feita no próximo dia útil após o pagamento.</strong>
+			</h4>
+			<div class="messageValidationBillet"></div>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="nameBillet">Nome/Razão Social</label>
+					<input type="text" name="nomeBoleto" class="form-control" id="nameBillet" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientBillet">CPF/CNPJ</label>
+					<input type="text" name="documentoBoleto" class="form-control" id="documentClientBillet">
+				</div>
+			</div>
+			<div class="form-group ">
+				<div class="col-sm-6">
+					<label class="control-label" for="emailBillet">Email</label>
+					<input type="email" name="emailBoleto" class="form-control" id="emailBillet" value={{customerEmail}}>
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="billetTelefone">Telefone</label>
+					<input type="text" name="telefoneBoleto" class="form-control" id="billetTelefone" value="{{customerTelefone}}">
+				</div>
+			</div>
+			{% if discount_billet != 0 %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style="">
+								<strong>Desconto Boleto:
+								</strong>
+							</td>
+							<td class="text-right">
+								{{ discount_billet }}%
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total com Desconto:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ discount_total_billet }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% else %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style=""></td>
+							<td class="text-right"></td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ total_pedido }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% endif %}
+		</div>
+		<div id="creditSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através de cartão de crédito, o pagamento será processado e a confirmação será feita em até 48  horas.</strong>
+			</h4>
+			<h4 class="text-justify  payment-description-title">
+				<strong>Dados do titular do cartão:</strong>
+			</h4>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="nameCard">Nome/Razão Social</label>
+					<input type="text" name="nomeCartao" class="form-control" id="nameCard" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-6">
+					<label class="control-label" for="emailCard">Email</label>
+					<input type="email" name="emailCartao" class="form-control" id="emailCard" value={{customerEmail}}>
+				</div>
+			</div>
+			<div class="form-group required ">
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientCredit">CPF/CNPJ</label>
+					<input type="text" name="documentoCartao" class="form-control" id="documentClientCredit">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="creditTelefone">Telefone</label>
+					<input type="text" name="telefoneCartao" class="form-control" id="creditTelefone" value="{{customerTelefone}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="data-nascimento">Data de nascimento</label>
+					<div class="input-group date">
+						<input id="data-nascimento" name="nascimento" type="text" class="form-control" placeholder="dd/mm/yyyy">
+						<div class="input-group-addon">
+							<span class="glyphicon glyphicon-th"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h4 class="text-justify  payment-description-title">
+				<strong>Endereço de cobrança:</strong>
+			</h4>
+			<div class="form-group  required">
+
+				<div class="col-sm-6">
+					<label class="control-label" for="creditAddRua">Rua</label>
+					<input type="text" name="rua" class="form-control" id="creditAddRua" value="{{customerRua}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddNum">Número</label>
+					<input type="text" name="numero" class="form-control" id="creditAddNum" value="{{customerNumero}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddBairro">Bairro</label>
+					<input type="text" name="bairro" class="form-control" id="creditAddBairro" value="{{customerBairro}}">
+				</div>
+			</div>
+			<div class="form-group required">
+				<div class="col-sm-5">
+					<label class="control-label" for="creditAddCidade">Cidade</label>
+					<input type="text" name="cidade" class="form-control" id="creditAddCidade" value="{{customerCidade}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="creditAddCEP">CEP</label>
+					<input type="text" name="cep" class="form-control" id="creditAddCEP" value="{{customerCep}}">
+				</div>
+				<div class="col-sm-3">
+					<label class="control-label" for="creditAddEstado">Estado</label>
+					<select class="form-control" name="estado" id="creditAddEstado">
+						<option value="">Escolha...</option>
+						<option value="AC">Acre</option>
+						<option value="AL">Alagoas</option>
+						<option value="AP">Amapá</option>
+						<option value="AM">Amazonas</option>
+						<option value="BA">Bahia</option>
+						<option value="CE">Ceará</option>
+						<option value="DF">Distrito Federal</option>
+						<option value="ES">Espírito Santo</option>
+						<option value="GO">Goiás</option>
+						<option value="MA">Maranhão</option>
+						<option value="MT">Mato Grosso</option>
+						<option value="MS">Mato Grosso do Sul</option>
+						<option value="MG">Minas Gerais</option>
+						<option value="PA">Pará</option>
+						<option value="PB">Paraíba</option>
+						<option value="PR">Paraná</option>
+						<option value="PE">Pernambuco</option>
+						<option value="PI">Piauí</option>
+						<option value="RJ">Rio de Janeiro</option>
+						<option value="RN">Rio Grande do Norte</option>
+						<option value="RS">Rio Grande do Sul</option>
+						<option value="RO">Rondônia</option>
+						<option value="RR">Roraima</option>
+						<option value="SC">Santa Catarina</option>
+						<option value="SP">São Paulo</option>
+						<option value="SE">Sergipe</option>
+						<option value="TO">Tocantins</option>
+					</select>
+				</div>
+			</div>
+			<h4 class="text-justify  payment-description-title">
+				<strong>Dados do cartão:</strong>
+			</h4>
+			<div class="container-fluid bg-info   gerencianet-card">
+				<div class="form-group">
+					<div class="col-sm-4">
+						<div class="option-credit-div">
+							<img id="visa" class="option-credit" src="data:image/png;base64,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" alt="">
+							<img id="masterCard" class="option-credit" src="https://w7.pngwing.com/pngs/92/785/png-transparent-mastercard-logo-mastercard-credit-card-payment-visa-nyse-ma-mastercard-logo-text-logo-sign-thumbnail.png" alt="">
+							<img id="americanExpress" class="option-credit" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeN_uQzlxh992SJ_VkaTNBhQxq6rGwyAsShIfRMoXip5dkefb_kFfe2mwIPIqgIHj64pI&usqp=CAU" alt="">
+							<img id="elo" class="option-credit" src="https://www.promoview.com.br/uploads/2017/12/images/07.12/Fischer_cria_acoes_para_a_Elo_iluminar_icones_da_cidade_de_Sao_Paulo_2.jpg" alt="">
+							<img id="hiperCard" class="option-credit" src="https://media.cdnandroid.com/item_images/816483/imagen-hipercard-0big.jpg" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="form-group required">
+					<div class="col-sm-8 card_invalid">
+						<input data-toggle="tooltip" data-placement="top" title="Número de 14 a 16 dígitos de seu cartão" type="text" class="form-control" name="numCartao" id="creditAddNumCartao" placeholder="Número do cartão">
+					</div>
+					<div class="col-sm-2 col-xs-6">
+						<input data-toggle="tooltip" data-placement="top" title="São os três digitos na parte de trás do cartão" type="text" class="form-control" maxlength="3" name="codSeguranca" id="codSeguranca" placeholder="CVV">
+					</div>
+					<div class="col-sm-2 col-xs-6">
+						<input data-toggle="tooltip" data-placement="top" title="Validade do cartão" type="text" class="form-control" id="creditValidadeCartao" name="vencimentoCartao" placeholder="MM/AA">
+					</div>
+				</div>
+				<div class="form-group required">
+					<div class="col-sm-4 ">
+						<label class="control-label" for="parcelas">Parcelas</label>
+						<select name="parcelasCartao" name="parcelas" id="parcelas" class="form-control">
+							<option value="">Insira os dados do seu cartão...</option>
+						</select>
+					</div>
+				</div>
+
+			</div>
+
+			<table class="table table-desconto">
+				<tfoot>
+					<tr>
+						<td colspan="4" class="text-right first" style=""></td>
+						<td class="text-right"></td>
+					</tr>
+					<tr>
+						<td colspan="4" class="text-right">
+							<strong>Total:
+							</strong>
+						</td>
+						<td class="text-right value-total">
+							{{ currency_symbol_left }}
+							{{ total_pedido }}
+							{{ currency_symbol_right }}
+						</td>
+					</tr>
+					
+				</tfoot>
+			</table>
+
+		</div>
+		<div id="pixSelected">
+			<h4 class="text-justify  payment-description-title">
+				<strong>Optando por pagar através do pix, a confirmação será feita nos próximos segundos.</strong>
+			</h4>
+			<div class="form-group required">
+				<div class="col-sm-6">
+					<label class="control-label" for="namePix">Nome/Razão Social</label>
+					<input type="text" class="form-control" id="namePix" value="{{ customerName}}">
+				</div>
+				<div class="col-sm-4">
+					<label class="control-label" for="documentClientPix">CPF/CNPJ</label>
+					<input type="text" class="form-control" id="documentClientPix">
+				</div>
+			</div>
+			{% if discount_pix != 0 %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style="">
+								<strong>Desconto Pix:
+								</strong>
+							</td>
+							<td class="text-right">
+								{{ discount_pix }}%
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total com Desconto:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ discount_total_pix }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% else %}
+				<table class="table table-desconto">
+					<tfoot>
+						<tr>
+							<td colspan="4" class="text-right first" style=""></td>
+							<td class="text-right"></td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-right">
+								<strong>Total:
+								</strong>
+							</td>
+							<td class="text-right value-total">
+								{{ currency_symbol_left }}
+								{{ total_pedido }}
+								{{ currency_symbol_right }}
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			{% endif %}
+		</div>
+		<div class="row buttons">
+			<div class="pull-right">
+				<input type="submit" value="{{ button_confirm }}" class="btn btn-primary"/>
+			</div>
+		</div>
+	</div>
+</form>
+{{script_cartao}}
+<script src="catalog/view/javascript/payment/transparent/transparent.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.11.2/jquery.mask.min.js"></script>
+<script src="catalog/view/javascript/payment/bootstrap-datepicker.min.js"></script>
+<script src="catalog/view/javascript/payment/bootstrap-datepicker.pt-BR.min.js"></script>
+<script src="catalog/view/javascript/payment/validation/validation.js"></script>
+<script src="catalog/view/javascript/payment/cartao/cartaoTwoSteps.js"></script>
+{{ footer }}
