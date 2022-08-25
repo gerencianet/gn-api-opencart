@@ -2,7 +2,7 @@
 
 :warning: **Este módulo é compatível apenas com as versões do OpenCart 3.0.3.3 (Brasil 1.5.0) ou superior.**:warning:
 
-**Em caso de dúvidas, você pode verificar a [Documentação](https://dev.gerencianet.com.br/docs/opencart-pix) da API na Gerencianet e, necessitando de mais detalhes ou informações, entre em contato conosco, via nossos [Canais de Comunicação](https://gerencianet.com.br/central-de-ajuda).**
+**Em caso de dúvidas, você pode verificar a [Documentação](https://dev.gerencianet.com.br/docs/opencart) da API na Gerencianet e, necessitando de mais detalhes ou informações, entre em contato conosco, via nossos [Canais de Comunicação](https://gerencianet.com.br/central-de-ajuda).**
 
 ## Requisitos
 
